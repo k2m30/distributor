@@ -1,3 +1,4 @@
+#coding: utf-8
 require 'open-uri'
 
 class UrlsController < ApplicationController
@@ -62,48 +63,61 @@ class UrlsController < ApplicationController
       format.json { head :no_content }
     end
   end
-  
+
   def update_prices
     urls = Url.all
     urls.each do |url|
+      #logger.error(url.id)
+      #if url.id == 1584
       regexp = url.site.regexp
-      _url = url.url
-      page = open(_url)
-      text = page.read
+      text = open(url.url).read.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '-'})
       refined_regexp = refine (regexp)
 
       res = text.scan(refined_regexp)
-      result = res.first.first.gsub(" ", "").to_f
-      url.price = result
-      url.save
+      if !res.empty?
+        #debugger
+        result = res.first.first.gsub("&nbsp;", "").gsub(" ", "").to_i
+        url.price = result
+        url.save
+      end
+      logger.error (url.url)
+      logger.error(regexp)
+      logger.error(res)
+      logger.error("\n")
     end
-    
+    update_violators
     redirect_to urls_path
   end
-  
+
   def test_regexp
     @url = Url.where(:id => params[:url_id]).first
     @regexp = @url.site.regexp
 
     url = @url.url
     page = open(url)
-    text = page.read
-    
-    @refined_regexp = refine (@regexp)
+    text = page.read.encode("utf-8")
+
+    @refined_regexp = refine (@regexp).encode("utf-8")
 
     @res = text.scan(@refined_regexp)
     # debugger
-    @result = @res.first.first.gsub(" ", "").to_f
-    @url.price = @result
-    @url.save
+    if !res.nil?
+      @result = @res.first.first.gsub(" ", "").to_f
+      @url.price = @result
+      @url.save
+    end
   end
 
   private
   # Use callbacks to share common setup or constraints between actions.
 
+  def update_violators
+
+  end
+
   def refine (regexp)
     # debugger
-    return Regexp.new (regexp.gsub("\\", ""))
+    return Regexp.new (regexp.encode("utf-8").gsub("\\", ""))
   end
 
 

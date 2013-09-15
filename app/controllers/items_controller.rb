@@ -6,6 +6,16 @@ class ItemsController < ApplicationController
   # GET /items.json
   def index
     @items = Item.all
+    @sites_stripped = []
+    @items.each do |item|
+      item.urls.each do |url|
+
+        @sites_stripped << url.site
+      end
+    end
+
+    @sites = @sites_stripped.uniq
+
   end
 
   # GET /items/1
@@ -64,15 +74,15 @@ class ItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item
-      @item = Item.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_item
+    @item = Item.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def item_params
-      params.require(:item).permit(:name, :group_id, urls_attributes: [:url, :id, :_destroy])
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def item_params
+    params.require(:item).permit(:name, :group_id, urls_attributes: [:url, :id, :_destroy])
+  end
 
 
 end

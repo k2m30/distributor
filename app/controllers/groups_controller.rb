@@ -5,14 +5,22 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.json
   def index
-    @groups = Group.all.where("user_id = ?", current_user.id)
+    @groups = Group.where("user_id = ?", current_user.id)
     @items = []
     
     @groups.each do |group|
       @items << group.items
     end
-    
-    @sites = Site.all
+
+    @sites_search = Site.search(params[:q])
+    @sites = @sites_search.result
+
+     puts (session[:group])
+    session[:group] ||= "none"
+    (@collapse_id ||= []) << session[:group]
+    puts (session[:group])
+
+    #debugger
 
   end
 

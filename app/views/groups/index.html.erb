@@ -1,50 +1,33 @@
 <%- model_class = Group -%>
-<div class="page-header">
-  <h1><%= t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
-</div>
 
-<div class="accordion" id="accordion2">
+<% @groups.each do |group| %>
 
-  <% @groups.each do |group| %>
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<%= group.id %>">
-            <%= group.name %>
-          </a>
-        </div>
-        <div id="collapse<%= group.id %>" class="accordion-body collapse">
-          <div class="accordion-inner">
-            <table class="table table-bordered">
-              <th>Site</th>
-              <% group.items.each do |item| %>
-                  <th>
-                    <%= item.name %>
-                  </th>
-              <% end %>
+    <table class="table table-condensed">
+      <th>Site</th>
+      <% group.items.each do |item| %>
+          <th>
+            <%= item.name %>
+          </th>
+      <% end %>
 
-              <% @sites.each do |site| %>
-                  <tr>
-                    <td><%= site.name %></td>
+      <% @sites.each do |site| %>
+          <tr <%= (site.name=="ydachnik.by") ? " class=\"success\"".html_safe : "" %>>
+            <td><%= site.name %></td>
+            <% group.items.each do |item| %>
+                <td style="white-space: nowrap; text-align: right">
+                  <% if !item.sites.where(:id => site.id).empty? %>
+                      <%- url = item.urls.find_by(site_id: site.id) %>
+                      <%= link_to spaces(url.price), url.url  %>
+                  <% else %>
+                      -
+                  <% end %>
+                </td>
+            <% end %>
+          </tr>
+      <% end %>
 
-                    <% site.urls.each do |url| %>
-                        <% if (url.item.group.id == group.id) %>
-                            <td>
-                              <%= link_to spaces(url.price), url.url %>
-                            </td>
-                        <% end %>
-                    <% end %>
-
-                  </tr>
-              <% end %>
-
-            </table>
-          </div>
-        </div>
-      </div>
-
-  <% end %>
-
-</div>
+    </table>
+<% end %>
 
 
 

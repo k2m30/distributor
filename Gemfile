@@ -37,7 +37,12 @@ gem 'devise'
 gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
+
+gem 'ransack'
+gem 'quiet_assets', group: :development
+
 # Use ActiveModel has_secure_password
+
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 # Use unicorn as the app server
@@ -48,3 +53,4 @@ gem 'twitter-bootstrap-rails'
 
 # Use debugger
 gem 'debugger', group: [:development, :test]
+
