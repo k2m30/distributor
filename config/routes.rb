@@ -9,6 +9,7 @@ Distibutor::Application.routes.draw do
   end
   collection do
     get 'update_prices' => 'urls#update_prices'
+    get 'update_violators' => 'urls#update_violators'
   end
   end
 

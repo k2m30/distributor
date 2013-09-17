@@ -11,13 +11,14 @@
       <% end %>
 
       <% @sites.each do |site| %>
-          <tr <%= (site.name=="ydachnik.by") ? " class=\"success\"".html_safe : "" %>>
-            <td><%= site.name %></td>
+          <tr <%= (site.standard?) ? " class=\"success\"".html_safe : "" %>>
+            <td class="tooltip_cell" data-toggle="tooltip" data-placement="top" title="<%= site.name %>" ><%= site.name %></td>
             <% group.items.each do |item| %>
                 <td style="white-space: nowrap; text-align: right">
                   <% if !item.sites.where(:id => site.id).empty? %>
                       <%- url = item.urls.find_by(site_id: site.id) %>
-                      <%= link_to spaces(url.price), url.url  %>
+                      <%- link_class = (!url.violator?) ? "muted" : "text-error"  %>
+                      <%= link_to spaces(url.price), url.url, class: link_class, target: "_blank"  %>
                   <% else %>
                       -
                   <% end %>

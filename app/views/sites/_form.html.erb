@@ -1,20 +1,26 @@
-<%= form_for @site, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :name, :class => 'text_field' %>
+<%= form_for @site, :html => {:class => 'form-horizontal'} do |f| %>
+    <div class="control-group">
+      <%= f.label :name, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :name, :class => 'text_field' %>
+      </div>
     </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :regexp, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :regexp, :class => 'text_field' %>
+    <div class="control-group">
+      <%= f.label :regexp, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :regexp, :class => 'text_field' %>
+      </div>
     </div>
-  </div>
+    <div class="control-group">
+      <%= f.label :standard, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :standard, :class => 'check_box' %>
+      </div>
+    </div>
 
-  <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                sites_path, :class => 'btn' %>
-  </div>
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  sites_path, :class => 'btn' %>
+    </div>
 <% end %>

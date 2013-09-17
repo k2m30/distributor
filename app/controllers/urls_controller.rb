@@ -2,6 +2,7 @@
 require 'open-uri'
 
 class UrlsController < ApplicationController
+  before_filter :authenticate_user!
   before_action :set_url, only: [:show, :edit, :update, :destroy]
 
   # GET /urls
@@ -108,11 +109,41 @@ class UrlsController < ApplicationController
     end
   end
 
+  def update_violators
+    items = Item.all
+    standard_site = Site.where(:standard => true)
+    if standard_site.nil? || standard_site.empty?
+      return
+    end
+
+    standard_site = standard_site.first
+    items.each do |item|
+      standard_price = get_price(item, standard_site)
+      if !standard_price.nil?
+        item.urls.each do |url|
+          if !url.price.nil?
+            logger.error(url.price)
+            url.violator = (url.price < standard_price) ? true : false
+            url.save
+          end
+        end
+      end
+    end
+    redirect_to urls_path
+  end
+
+
   private
   # Use callbacks to share common setup or constraints between actions.
 
-  def update_violators
 
+  def get_price (item, site)
+    common_url = item.urls & site.urls
+    if !(common_url).empty?
+      return common_url.first.price
+    else
+      return nil
+    end
   end
 
   def refine (regexp)

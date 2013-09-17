@@ -34,29 +34,6 @@
   </tbody>
 </table>
 
-<table class="table table-striped">
-  <thead>
-
-  <tr>
-    <th>Site</th>
-    <% @items.each do |item| %>
-
-        <th><%= item.name %></th>
-
-    <% end %>
-  </tr>
-  </thead>
-  <tbody>
-       <% @sites.each do |site| %>
-          <tr>
-            <td><%= site.name %></td>
-
-          </tr>
-
-        <% end %>
-  </tbody>
-</table>
-
 
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_item_path,

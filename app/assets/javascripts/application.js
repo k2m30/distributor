@@ -149,3 +149,7 @@ $(function () {
 
     });
 });
+
+$(document).ready(function () {
+    $('.tooltip_cell').tooltip({container: 'body'})
+});

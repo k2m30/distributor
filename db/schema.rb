@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130915110336) do
+ActiveRecord::Schema.define(version: 20130917095357) do
 
   create_table "groups", force: true do |t|
     t.string   "name"
@@ -27,12 +27,25 @@ ActiveRecord::Schema.define(version: 20130915110336) do
     t.datetime "updated_at"
   end
 
+  create_table "settings", force: true do |t|
+    t.decimal  "ban_time"
+    t.datetime "last_updated"
+    t.decimal  "allowed_error"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "sites", force: true do |t|
     t.string   "name"
     t.string   "regexp"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "standard"
+    t.boolean  "violator"
+    t.string   "email"
+    t.string   "company_name"
+    t.datetime "out_of_ban_time"
   end
 
   create_table "urls", force: true do |t|
@@ -43,6 +56,7 @@ ActiveRecord::Schema.define(version: 20130915110336) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "violator"
+    t.decimal  "delta"
   end
 
   create_table "users", force: true do |t|

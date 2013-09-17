@@ -2,6 +2,16 @@
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </div>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_url_path,
+            :class => 'btn btn-primary' %>
+<%= link_to t('.update_prices', :default => t("helpers.links.update_prices")),
+            update_prices_urls_path, :class => 'btn btn-primary' %>
+<%= link_to t('.update_violators', :default => t("helpers.links.update_violators")),
+            update_violators_urls_path, :class => 'btn btn-primary' %>
+
+
 <table class="table table-condensed">
   <thead>
     <tr>
@@ -39,8 +49,3 @@
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_url_path,
-            :class => 'btn btn-primary' %>
-<%= link_to t('.update_prices', :default => t("helpers.links.update_prices")),
-            update_prices_urls_path, :class => 'btn btn-primary' %>			
