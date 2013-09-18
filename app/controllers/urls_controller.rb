@@ -70,23 +70,38 @@ class UrlsController < ApplicationController
     urls.each do |url|
       #logger.error(url.id)
       #if url.id == 1584
-      regexp = url.site.regexp
-      text = open(url.url).read.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '-'})
-      refined_regexp = refine (regexp)
 
-      res = text.scan(refined_regexp)
-      if !res.empty?
-        #debugger
-        result = res.first.first.gsub("&nbsp;", "").gsub(" ", "").to_i
-        url.price = result
+      begin
+        regexp = url.site.regexp
+        text = open(url.url).read.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '-'})
+        refined_regexp = refine (regexp)
+
+        res = text.scan(refined_regexp)
+        if !res.empty?
+          #debugger
+          result = res.first.first.gsub("&nbsp;", "").gsub(" ", "").to_i
+          url.price = result
+          url.save
+        end
+        logger.error (url.url)
+        logger.error(regexp)
+        logger.error(res)
+        logger.error("\n")
+
+      rescue
+        url.price = 0
         url.save
+        logger.error(url.url)
+        logger.error("#{$!}")
       end
-      logger.error (url.url)
-      logger.error(regexp)
-      logger.error(res)
-      logger.error("\n")
+
+
     end
-    update_violators
+
+    update_violators (false)
+    current_user.settings.last_updated = Time.now
+    current_user.settings.save
+    flash[:notice] = "Цены обновлены"
     redirect_to urls_path
   end
 
@@ -109,7 +124,17 @@ class UrlsController < ApplicationController
     end
   end
 
-  def update_violators
+  def update_violators (redirect_to_root=true)
+    sites = Site.all
+    sites.each do |site|
+      if !site.out_of_ban_time.nil?
+        if Time.now > site.out_of_ban_time
+          site.violator = false
+          site.save
+        end
+      end
+    end
+
     items = Item.all
     standard_site = Site.where(:standard => true)
     if standard_site.nil? || standard_site.empty?
@@ -122,14 +147,31 @@ class UrlsController < ApplicationController
       if !standard_price.nil?
         item.urls.each do |url|
           if !url.price.nil?
-            logger.error(url.price)
-            url.violator = (url.price < standard_price) ? true : false
+            #logger.error(url.price)
+            url.violator = (url.price < (standard_price - current_user.settings.allowed_error)) ? true : false
+
+            if url.violator?
+              if !url.site.violator?
+                site = url.site
+                site.violator = true
+                site.out_of_ban_time = Time.now + 1.days
+                logger.error("--")
+                site.save
+              end
+            end
+
             url.save
           end
+
         end
       end
     end
-    redirect_to urls_path
+
+    flash[:notice] = "Нарушители обновлены"
+    if redirect_to_root
+      redirect_to root_path
+    end
+
   end
 
 
@@ -156,7 +198,7 @@ class UrlsController < ApplicationController
     @url = Url.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+# Never trust parameters from the scary internet, only allow the white list through.
   def url_params
     params.require(:url).permit(:url, :price)
   end

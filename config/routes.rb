@@ -1,4 +1,6 @@
 Distibutor::Application.routes.draw do
+  resources :settings
+
   resources :items do
 
   end
@@ -13,7 +15,13 @@ Distibutor::Application.routes.draw do
   end
   end
 
-  resources :sites
+  resources :sites do
+    collection do
+      get 'stoplist' => 'sites#stop_list'
+    end
+
+  end
+
 
   resources :groups
 

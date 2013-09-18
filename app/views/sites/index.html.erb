@@ -8,17 +8,17 @@
       <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:regexp) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%= model_class.human_attribute_name(:company_name) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @sites.each do |site| %>
-      <tr>
+      <tr <%= (site.violator?) ? " class=\"error\"".html_safe : ""  %>"" >
         <td><%= link_to site.id, site_path(site) %></td>
         <td><%= site.name %></td>
         <td><%= site.regexp %></td>
-        <td><%=l site.created_at %></td>
+        <td><%= site.company_name %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_site_path(site), :class => 'btn btn-mini' %>

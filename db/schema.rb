@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130917095357) do
+ActiveRecord::Schema.define(version: 20130917103531) do
 
   create_table "groups", force: true do |t|
     t.string   "name"
@@ -28,9 +28,10 @@ ActiveRecord::Schema.define(version: 20130917095357) do
   end
 
   create_table "settings", force: true do |t|
-    t.decimal  "ban_time"
+    t.decimal  "ban_time",      default: 24.0
     t.datetime "last_updated"
-    t.decimal  "allowed_error"
+    t.decimal  "allowed_error", default: 2000.0
+    t.decimal  "update_time",   default: 5.0
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"

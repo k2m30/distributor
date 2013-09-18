@@ -1,7 +1,17 @@
 # coding: utf-8
-[Site, Item, Url].each do |table|
+[Group, Site, Item, Url].each do |table|
   table.delete_all
 end
+############################# GROUPS ########################
+group = Group.new
+group.name = "MTD"
+group.user = User.all[0]
+group.save
+
+############################# SETTINGS ########################
+s = Settings.new
+s.user = User.all[0]
+s.save
 
 ############################# SITES ########################
 site = Site.new

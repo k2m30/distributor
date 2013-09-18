@@ -15,10 +15,7 @@ class GroupsController < ApplicationController
     @sites_search = Site.search(params[:q])
     @sites = @sites_search.result
 
-     puts (session[:group])
-    session[:group] ||= "none"
-    (@collapse_id ||= []) << session[:group]
-    puts (session[:group])
+    #flash[:notice] = time_ago_in_words(current_user.settings.last_updated)
 
     #debugger
 

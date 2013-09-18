@@ -1,0 +1,24 @@
+<%- model_class = Site -%>
+<div class="page-header">
+  <h1>Стоп лист</h1>
+</div>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th><%= model_class.human_attribute_name(:name) %></th>
+    <th><%= model_class.human_attribute_name(:company_name) %></th>
+    <th><%= model_class.human_attribute_name(:email) %></th>
+    <th><%= model_class.human_attribute_name(:out_of_ban_time) %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @sites.each do |site| %>
+      <tr>
+        <td><%= site.name %></td>
+        <td><%= site.company_name %></td>
+        <td><%= site.email %></td>
+        <td><%= distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
