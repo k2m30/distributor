@@ -12,6 +12,8 @@ class SitesController < ApplicationController
   # GET /sites/1
   # GET /sites/1.json
   def show
+    @site.regexp = Regexp.new(@site.regexp.to_s).to_s
+    @site.save
   end
 
   # GET /sites/new
@@ -75,6 +77,6 @@ class SitesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def site_params
-      params.require(:site).permit(:name, :regexp, :standard, :company_name, :out_of_ban_time)
+      params.require(:site).permit(:name, :regexp, :standard, :company_name, :out_of_ban_time, :email)
     end
 end

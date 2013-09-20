@@ -27,19 +27,16 @@
 
       <div class="nav-collapse">
         <ul class="nav">
-          <li><%= link_to "Stoplist", stoplist_sites_path %></li>
-          <li><%= link_to "Items", items_path %></li>
-          <li><%= link_to "Sites", sites_path %></li>
-          <li><%= link_to "Urls", urls_path %></li>
-          <li><%= link_to "Settings", settings_path %></li>
-          <li><%= link_to "Contact Us" %></li>
-
+          <li><%= link_to (t "nav.stoplist"), stoplist_sites_path %></li>
+          <li><%= link_to (t "nav.sites"), sites_path %></li>
+          <li><%= link_to (t "nav.urls"), urls_path %></li>
+          <li><%= link_to (t "nav.settings"), settings_path %></li>
 
           <% if user_signed_in? %>
-              <li><%= link_to('Logout', destroy_user_session_path, :method => :delete) %></li>
+              <li><%= link_to((t 'nav.logout'), destroy_user_session_path, :method => :delete) %></li>
           <% else %>
-              <li><%= link_to('Login', new_user_session_path) %></li>
-              <li><%= link_to('Register', new_user_registration_path) %></li>
+              <li><%= link_to(t('nav.login'), new_user_session_path) %></li>
+              <li><%= link_to(t('nav.register'), new_user_registration_path) %></li>
           <% end %>
 
         </ul>

@@ -9,8 +9,10 @@ class GroupsController < ApplicationController
     @items = []
     
     @groups.each do |group|
-      @items << group.items
+      @items << group.items.order("id DESC")
     end
+
+
 
     @sites_search = Site.search(params[:q])
     @sites = @sites_search.result

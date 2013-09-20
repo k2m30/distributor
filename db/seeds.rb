@@ -9,9 +9,9 @@ group.user = User.all[0]
 group.save
 
 ############################# SETTINGS ########################
-s = Settings.new
-s.user = User.all[0]
-s.save
+#s = Settings.new
+#s.user = User.all.first
+#s.save
 
 ############################# SITES ########################
 site = Site.new
@@ -41,6 +41,7 @@ puts site.inspect
 site = Site.new
 site.name = "ydachnik.by"
 site.regexp = "<div class=\"cat_price_product\">Цена:(.*)руб.</div>"
+site.standard = true
 site.save
 puts site.inspect
 
@@ -58,7 +59,7 @@ puts site.inspect
 
 site = Site.new
 site.name = "gepard.by"
-site.regexp = "-usd\">\.?\n\t\t\t\t\t\t\t\t\t(.*)руб\."
+site.regexp = "[\"n]>.?\n\t\t\t\t\t\t\t\t\t(.*)руб."
 site.save
 puts site.inspect
 
@@ -84,7 +85,7 @@ puts site.inspect
 ################################ ITEMS  MTD 990 AST ###################
 item = Item.new
 item.name = "MTD 990 AST"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/benzinovyj-trimmer-mtd-990-ast"
@@ -138,7 +139,7 @@ item.save
 ################################ ITEMS  MTD 827 AST ###################
 item = Item.new
 item.name = "MTD 827 AST"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://vitrina.shop.by/7205/Trimmery-benzinovyye-/Trimmer-benzinovyy-MTD-827-AST/"
@@ -172,7 +173,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/garden-trimmers/mtd/trimmer_benzinovyy_mtd_827/"
+url.url = "http://www.suseki.by/catalog/garden-trimmers/mtd/trimmer-benzinovyy-mtd-827/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -189,7 +190,7 @@ item.save
 ################################ ITEMS  MTD 1033 AST ###################
 item = Item.new
 item.name = "MTD 1033 AST"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://vitrina.shop.by/7205/Trimmery-benzinovyye-/Trimmery-benzinovyye-mtd-/Trimmer-benzinovyy-MTD-710-AST/"
@@ -220,7 +221,7 @@ item.save
 ################################ ITEMS MTD 1043 AST###################
 item = Item.new
 item.name = "MTD 1043 AST"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://vitrina.shop.by/GAZONOKOSILKI-I-TRIMMERY/Trimmery-benzinovyye/Trimmery-benzinovyye-mtd/8434/"
@@ -251,7 +252,7 @@ item.save
 ################################ ITEMS MTD 32 E###################
 item = Item.new
 item.name = "MTD 32 E"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://vitrina.shop.by/7205/Gazonokosilki-elektricheskiye-/Gazonokosilki-elektricheskiye-MTD-/Gazonokosilka-elektricheskaya-MTD-SMART-32-E/"
@@ -284,7 +285,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_smart_32_e/?sphrase_id=27213"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-smart-32-e/?sphrase_id=27213"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -294,7 +295,7 @@ item.save
 ################################ ITEMS MTD 38 E###################
 item = Item.new
 item.name = "MTD 38 E"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://vitrina.shop.by/GAZONOKOSILKI-I-TRIMMERY/Gazonokosilki-elektricheskiye/Gazonokosilka-elektricheskaya-MTD-SMART-38-E/"
@@ -333,7 +334,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_smart_38_e/"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-smart-38-e/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -343,7 +344,7 @@ item.save
 ################################ ITEMS MTD 395 PO###################
 item = Item.new
 item.name = "MTD 395 PO"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/gazonokosilka-nesamohodnaya-benzinovaya-mtd-395-po"
@@ -388,7 +389,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_benzinovaya_mtd_395_po/?sphrase_id=27211"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-benzinovaya-mtd-395-po/?sphrase_id=27211"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -404,7 +405,7 @@ item.save
 ################################ ITEMS MTD 46 PO###################
 item = Item.new
 item.name = "MTD 46 PO"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/gazonokosilka-nesamohodnaya-benzinovaya-mtd-46-po"
@@ -449,7 +450,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_46_po_smart/"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-46-po-smart/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -465,7 +466,7 @@ item.save
 ################################ ITEMS MTD 46 PB###################
 item = Item.new
 item.name = "MTD 46 PB"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/-gazonokosilka-nesamohodnaya-benzinovaya-mtd-46-pb"
@@ -510,7 +511,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_46_pb_optima/"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-46-pb-optima/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -526,7 +527,7 @@ item.save
 ################################ ITEMS MTD 46 SPO###################
 item = Item.new
 item.name = "MTD 46 SPO"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/gazonokosilka-samohodnaya-benzinovaya-mtd-46-spo"
@@ -571,7 +572,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_46_spo_smart/"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-46-spo-smart/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -587,7 +588,7 @@ item.save
 ################################ ITEMS MTD 46 SPB###################
 item = Item.new
 item.name = "MTD 46 SPB"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/gazonokosilka-samohodnaya-benzinovaya-mtd-46-spb"
@@ -632,7 +633,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_46_spb_optima/?sphrase_id=27216"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-46-spb-optima/?sphrase_id=27216"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -648,7 +649,7 @@ item.save
 ################################ ITEMS MTD 46 SPB HW###################
 item = Item.new
 item.name = "MTD 46 SPB HW"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/gazonokosilka-samohodnaya-benzinovaya-mtd-46-spb-hw"
@@ -693,7 +694,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_46_spb_hw_optima/?sphrase_id=27216"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-46-spb-hw-optima/?sphrase_id=27216"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -703,7 +704,7 @@ item.save
 ################################ ITEMS MTD 51 BO###################
 item = Item.new
 item.name = "MTD 51 BO"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/gazonokosilka-nesamohodnaya-benzinovaya-mtd-51-bo"
@@ -748,7 +749,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_benzinovaya_mtd_51_bo/?sphrase_id=27221"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-benzinovaya-mtd-51-bo/?sphrase_id=27221"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -764,7 +765,7 @@ item.save
 ################################ ITEMS MTD 53 SPO###################
 item = Item.new
 item.name = "MTD 53 SPO"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/benzinovaya-samohodnaya-gazonokosilka-mtd-53-spo"
@@ -809,7 +810,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_53_spo_smart/"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-53-spo-smart/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -825,7 +826,7 @@ item.save
 ################################ ITEMS MTD 53 SPB###################
 item = Item.new
 item.name = "MTD 53 SPB"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://vitrina.shop.by/GAZONOKOSILKI-I-TRIMMERY/Gazonokosilka-benzinovaya-MTD-SMART-53-SPB/"
@@ -864,7 +865,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_53_spb_optima/"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-53-spb-optima/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -880,7 +881,7 @@ item.save
 ################################ ITEMS MTD 53 SPB HW###################
 item = Item.new
 item.name = "MTD 53 SPB HW"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/benzinovaya-samohodnaya-gazonokosilka-mtd-53-spb-hw"
@@ -925,7 +926,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_53_spb_hw_optima/"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-53-spb-hw-optima/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -935,7 +936,7 @@ item.save
 ################################ ITEMS MTD 53 SPK HW###################
 item = Item.new
 item.name = "MTD 53 SPK HW"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/gazonokosilka-samohodnaya-benzinovaya-mtd-53-spk-hw"
@@ -974,7 +975,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_53_spk_hw_advance/"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-53-spk-hw-advance/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -984,7 +985,7 @@ item.save
 ################################ ITEMS MTD 53 SPKV HW###################
 item = Item.new
 item.name = "MTD 53 SPKV HW"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://vitrina.shop.by/GAZONOKOSILKI-I-TRIMMERY/Gazonokosilka-benzinovaya-MTD-ADVANCE-53-SPKV-HW/"
@@ -1023,7 +1024,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka_mtd_53_spkv_hw_advance/"
+url.url = "http://www.suseki.by/catalog/gazonokosilki/mtd/gazonokosilka-mtd-53-spkv-hw-advance/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -1033,7 +1034,7 @@ item.save
 ################################ ITEMS MTD SMART RC 125###################
 item = Item.new
 item.name = "MTD SMART RC 125"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/mini-traktor-sadovyj-mtd-rc-125"
@@ -1088,7 +1089,7 @@ item.save
 ################################ ITEMS MTD OPTIMA LE 155H###################
 item = Item.new
 item.name = "MTD OPTIMA LE 155H"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/mini-traktor-sadovyj-mtd-le-155-h"
@@ -1131,7 +1132,7 @@ item.save
 ################################ ITEMS MTD OPTIMA LN 200 H###################
 item = Item.new
 item.name = "MTD OPTIMA LN 200 H"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/mini-traktor-sadovyj-mtd-ln-200-h"
@@ -1174,7 +1175,7 @@ item.save
 ################################ ITEMS MTD Т/205###################
 item = Item.new
 item.name = "MTD Т/205"
-item.group_id = 1
+item.group_id = group.id
 
 url = Url.new
 url.url = "http://50.by/products/kultivator-benzinovyj-mtd-t205"
@@ -1219,7 +1220,7 @@ item.urls << url
 url.save
 
 url = Url.new
-url.url = "http://www.suseki.by/catalog/kultivatory/mtd/kultivator_benzinovyy_mtd_t205/"
+url.url = "http://www.suseki.by/catalog/kultivatory/mtd/kultivator-benzinovyy-mtd-t205/"
 url.site_id = Site.where("name = ?", "suseki.by").first.id
 item.urls << url
 url.save
@@ -1232,6 +1233,268 @@ url.save
 
 url = Url.new
 url.url = "http://www.mirbt.by/vse_dlya_doma/kultivatory/mtd/mdt_t205/"
+url.site_id = Site.where("name = ?", "7sotok.by").first.id
+item.urls << url
+url.save
+
+item.save
+
+################################ ITEMS MTD Т/245###################
+item = Item.new
+item.name = "MTD Т/245"
+item.group_id = group.id
+
+url = Url.new
+url.url = "http://50.by/products/kultivator-benzinovyj-mtd-t245"
+url.site_id = Site.where("name = ?", "50.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://vitrina.shop.by/7205/Kultivatory/Kultivator-benzinovyy-MTD-T-245/"
+url.site_id = Site.where("name = ?", "vitrina.shop.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://krama.by/sadovaya-tehnika/Kak-vybrat-kultivator/kultivatory_MTD/6991/"
+url.site_id = Site.where("name = ?", "krama.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://stroitel.shop.by/Dacha_Sad_Ogorod/Motobloki_traktora/Motobloki_Traktora_mtd/4407/"
+url.site_id = Site.where("name = ?", "stroitel.shop.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.ydachnik.by/catalog/?id=115"
+url.site_id = Site.where("name = ?", "ydachnik.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://mir-mtd.by/catalog/product/mtd/mtd/mtd_t_245.html"
+url.site_id = Site.where("name = ?", "mir-mtd.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://gepard.by/sadovaya-tehnika/kultivatory/kultivator-mtd-t-245"
+url.site_id = Site.where("name = ?", "gepard.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.suseki.by/catalog/kultivatory/mtd/kultivator-benzinovyy-mtd-t245/"
+url.site_id = Site.where("name = ?", "suseki.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.mirbt.by/vse_dlya_doma/kultivatory/mtd/26112/"
+url.site_id = Site.where("name = ?", "mirbt.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://7sotok.by/pages/product/view/234"
+url.site_id = Site.where("name = ?", "7sotok.by").first.id
+item.urls << url
+url.save
+
+item.save
+
+################################ ITEMS MTD T/330 M###################
+item = Item.new
+item.name = "MTD T/330 M"
+item.group_id = group.id
+
+url = Url.new
+url.url = "http://50.by/products/kultivator-mtd-t330-m"
+url.site_id = Site.where("name = ?", "50.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://vitrina.shop.by/7205/Kultivatory/Kultivator-benzinovyy-MTD-T-330-M/"
+url.site_id = Site.where("name = ?", "vitrina.shop.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://krama.by/sadovaya-tehnika/Kak-vybrat-kultivator/kultivatory_MTD/8776/"
+url.site_id = Site.where("name = ?", "krama.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://stroitel.shop.by/Dacha_Sad_Ogorod/Motobloki_traktora/Motobloki_Traktora_mtd/4409/"
+url.site_id = Site.where("name = ?", "stroitel.shop.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.ydachnik.by/catalog/?id=116"
+url.site_id = Site.where("name = ?", "ydachnik.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://mir-mtd.by/catalog/product/mtd/mtd/mtd_t_330_m.html"
+url.site_id = Site.where("name = ?", "mir-mtd.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://gepard.by/sadovaya-tehnika/kultivatory/kultivator-mtd-t-330-m"
+url.site_id = Site.where("name = ?", "gepard.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.suseki.by/catalog/kultivatory/mtd/kultivator-benzinovyy-mtd-t-330-m/"
+url.site_id = Site.where("name = ?", "suseki.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.mirbt.by/vse_dlya_doma/kultivatory/mtd/mdt_t330/"
+url.site_id = Site.where("name = ?", "mirbt.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://7sotok.by/pages/product/search/4/330"
+url.site_id = Site.where("name = ?", "7sotok.by").first.id
+item.urls << url
+url.save
+
+item.save
+
+################################ ITEMS MTD T/330 B###################
+item = Item.new
+item.name = "MTD T/330 B"
+item.group_id = group.id
+
+url = Url.new
+url.url = "http://50.by/products/kultivator-mtd-t-330-b-700"
+url.site_id = Site.where("name = ?", "50.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://vitrina.shop.by/7205/Kultivatory/Kultivator-benzinovyy-MTD-T-330/"
+url.site_id = Site.where("name = ?", "vitrina.shop.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://krama.by/sadovaya-tehnika/Kak-vybrat-kultivator/kultivatory_MTD/20082/"
+url.site_id = Site.where("name = ?", "krama.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://stroitel.shop.by/Dacha_Sad_Ogorod/Motobloki_traktora/Motobloki_Traktora_mtd/"
+url.site_id = Site.where("name = ?", "stroitel.shop.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.ydachnik.by/catalog/?id=1347"
+url.site_id = Site.where("name = ?", "ydachnik.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://mir-mtd.by/catalog/product/mtd/mtd/mtd_t_330_m_bs.html"
+url.site_id = Site.where("name = ?", "mir-mtd.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://gepard.by/sadovaya-tehnika/kultivatory/kultivator-mtd-t-330"
+url.site_id = Site.where("name = ?", "gepard.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.suseki.by/catalog/kultivatory/mtd/kultivator-benzinovyy-mtd-t-330-b-700/"
+url.site_id = Site.where("name = ?", "suseki.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://7sotok.by/pages/product/view/241"
+url.site_id = Site.where("name = ?", "7sotok.by").first.id
+item.urls << url
+url.save
+
+item.save
+
+################################ ITEMS MTD T/380 M###################
+item = Item.new
+item.name = "MTD T/380 M"
+item.group_id = group.id
+
+url = Url.new
+url.url = "http://50.by/products/kultivator-mtd-t380-m"
+url.site_id = Site.where("name = ?", "50.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://vitrina.shop.by/7205/Kultivatory/Kultivator-benzinovyy-MTD-T-380-M/"
+url.site_id = Site.where("name = ?", "vitrina.shop.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://krama.by/sadovaya-tehnika/Kak-vybrat-kultivator/kultivatory_MTD/9382/"
+url.site_id = Site.where("name = ?", "krama.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://stroitel.shop.by/Dacha_Sad_Ogorod/Motobloki_traktora/Motobloki_Traktora_mtd/9145/"
+url.site_id = Site.where("name = ?", "stroitel.shop.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.ydachnik.by/catalog/?id=483"
+url.site_id = Site.where("name = ?", "ydachnik.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://mir-mtd.by/catalog/product/mtd/mtd/mtd_t_380_m.html"
+url.site_id = Site.where("name = ?", "mir-mtd.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://gepard.by/sadovaya-tehnika/kultivatory/kultivator-mtd-t-380-m"
+url.site_id = Site.where("name = ?", "gepard.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.suseki.by/catalog/kultivatory/mtd/kultivator-benzinovyy-mtd-t-380-m/"
+url.site_id = Site.where("name = ?", "suseki.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://www.mirbt.by/vse_dlya_doma/kultivatory/mtd/mdt_t380/"
+url.site_id = Site.where("name = ?", "mirbt.by").first.id
+item.urls << url
+url.save
+
+url = Url.new
+url.url = "http://7sotok.by/pages/product/search/4/380"
 url.site_id = Site.where("name = ?", "7sotok.by").first.id
 item.urls << url
 url.save

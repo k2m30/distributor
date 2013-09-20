@@ -66,7 +66,8 @@ class UrlsController < ApplicationController
   end
 
   def update_prices
-    urls = Url.all
+    urls = params[:site].nil? ? Url.all : Site.find(params[:site]).urls.all
+
     urls.each do |url|
       #logger.error(url.id)
       #if url.id == 1584
@@ -200,7 +201,7 @@ class UrlsController < ApplicationController
 
 # Never trust parameters from the scary internet, only allow the white list through.
   def url_params
-    params.require(:url).permit(:url, :price)
+    params.require(:url).permit(:url, :price, :site)
   end
 
 

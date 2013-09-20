@@ -1,11 +1,11 @@
 <%- model_class = Group -%>
 
-<div class="muted">Prices updated <%= time_ago_in_words(current_user.settings.last_updated) %> ago</div>
+<div class="muted"><%= t "tips.prices_updated" %> <%= time_ago_in_words(current_user.settings.last_updated) %> <%= t "tips.ago" %></div>
 <% @groups.each do |group| %>
 
     <table class="table table-condensed">
-      <th>Site</th>
-      <% group.items.each do |item| %>
+      <th style="vertical-align:bottom"> <%= t "groups.index.site" %> </th>
+      <% group.items.order("id DESC").each do |item| %>
           <th>
             <%= item.name %>
           </th>
@@ -14,7 +14,7 @@
       <% @sites.each do |site| %>
           <tr <%= (site.standard?) ? " class=\"success\"".html_safe : "" %>>
             <td class="tooltip_cell" data-toggle="tooltip" data-placement="top" title="<%= site.company_name %>" ><%= site.name %></td>
-            <% group.items.each do |item| %>
+            <% group.items.order("id DESC").each do |item| %>
                 <td style="white-space: nowrap; text-align: right">
                   <% if !item.sites.where(:id => site.id).empty? %>
                       <%- url = item.urls.find_by(site_id: site.id) %>
@@ -30,9 +30,3 @@
 
     </table>
 <% end %>
-
-
-
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_group_path,
-            :class => 'btn btn-primary' %>

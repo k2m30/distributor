@@ -1,0 +1,18 @@
+ru:
+  helpers:
+    actions: "Действия"
+    links:
+      back: "Назад"
+      cancel: "Отмена"
+      confirm: "Вы уверены?"
+      destroy: "Удалить"
+      new: "Создать"
+      edit: "Редактировать"
+      update_prices: "Обновить цены"
+      update_violators: "Обновить список нарушителей"
+      test: "Тест"
+    titles:
+      edit: "Редактировать %{model}"
+      save: "Сохранить %{model}"
+      new: "Создать %{model}"
+      delete: "Удалить %{model}"
