@@ -10,7 +10,7 @@ group.save
 
 ############################# SETTINGS ########################
 #s = Settings.new
-#s.user = User.all.first
+#s.user = User.all[0]
 #s.save
 
 ############################# SITES ########################

@@ -1,6 +1,9 @@
 <%- model_class = Group -%>
+<% if !current_user.settings.nil? && !current_user.settings.last_updated.nil? %>
+    <div class="muted"><%= t "tips.prices_updated" %> <%= time_ago_in_words(current_user.settings.last_updated) %> <%= t "tips.ago" %></div>
+<% end %>
 
-<div class="muted"><%= t "tips.prices_updated" %> <%= time_ago_in_words(current_user.settings.last_updated) %> <%= t "tips.ago" %></div>
+
 <% @groups.each do |group| %>
 
     <table class="table table-condensed">
