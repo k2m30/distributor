@@ -1,0 +1,28 @@
+<%- model_class = Settings -%>
+<div class="page-header">
+  <h2><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h2>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:ban_time) %></th>
+      <th><%= model_class.human_attribute_name(:allowed_error) %></th>
+      <th><%= model_class.human_attribute_name(:update_time) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @settings.each do |settings| %>
+      <tr>
+        <td><%= settings.ban_time %></td>
+        <td><%= settings.allowed_error %></td>
+        <td><%= settings.update_time %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_setting_path(settings), :class => 'btn btn-mini' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
