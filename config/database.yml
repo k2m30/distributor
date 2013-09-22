@@ -25,7 +25,7 @@
 #  timeout: 5000
 
 development:
-  adapter: postgresql
+  adapter: sqlite3
   encoding: unicode
   database: distributor_development
   pool: 5
@@ -44,4 +44,4 @@ production:
   database: distributor_production
   pool: 5
   username: distributor
-  password:
+  password: 12345678
