@@ -19,4 +19,4 @@
 #.DS_store
 .DS_Store
 
-
+/config/database.yml
