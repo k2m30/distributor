@@ -39,9 +39,9 @@ test:
   username: distributor
   password:
 production:
-  adapter: postgresql
-  encoding: unicode
-  database: distributor_production
-  pool: 5
-  username: distributor
-  password: 12345678
+    adapter: sqlite3
+    encoding: unicode
+    database: distributor_production
+    pool: 5
+    username: distributor
+    password:
