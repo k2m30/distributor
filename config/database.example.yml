@@ -25,21 +25,21 @@
 #  timeout: 5000
 
 development:
-  adapter: sqlite3
+  adapter: postgresql
   encoding: unicode
   database: distributor_development
   pool: 5
   username: distributor
   password:
 test:
-  adapter: sqlite3
+  adapter: postgresql
   encoding: unicode
   database: distributor_test
   pool: 5
   username: distributor
   password:
 production:
-  adapter: sqlite3
+  adapter: postgresql
   encoding: unicode
   database: distributor_production
   pool: 5
