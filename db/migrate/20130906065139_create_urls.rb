@@ -3,6 +3,7 @@ class CreateUrls < ActiveRecord::Migration
     create_table :urls do |t|
       t.string :url
       t.decimal :price
+      t.string :tmp      
       t.belongs_to :site
       t.belongs_to :item
 

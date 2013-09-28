@@ -12,8 +12,6 @@ class GroupsController < ApplicationController
       @items << group.items.order("id DESC")
     end
 
-
-
     @sites_search = Site.search(params[:q])
     @sites = @sites_search.result
 

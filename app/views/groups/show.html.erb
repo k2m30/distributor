@@ -1,23 +1,34 @@
 <%- model_class = Group -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
-</div>
+<% if !current_user.settings.nil? && !current_user.settings.last_updated.nil? %>
+    <div class="muted"><%= t "tips.prices_updated" %> <%= time_ago_in_words(current_user.settings.last_updated) %> <%= t "tips.ago" %></div>
+<% end %>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
-  <dd><%= @group.name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>
-  <dd><%= @group.user_id %></dd>
-</dl>
 
-<div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              groups_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_group_path(@group), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              group_path(@group),
-              :method => 'delete',
-              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger' %>
-</div>
+<%- group = @group %>
+
+    <table class="table table-condensed">
+      <th style="vertical-align:bottom"> <%= t "groups.index.site" %> </th>
+      <% group.items.order("id DESC").each do |item| %>
+          <th>
+            <%= item.name %>
+          </th>
+      <% end %>
+
+      <% @sites.each do |site| %>
+          <tr <%= (site.standard?) ? " class=\"success\"".html_safe : "" %>>
+            <td class="tooltip_cell" data-toggle="tooltip" data-placement="top" title="<%= site.company_name %>" ><%= site.name %></td>
+            <% group.items.order("id DESC").each do |item| %>
+                <td style="white-space: nowrap; text-align: right">
+                  <% if !item.sites.where(:id => site.id).empty? %>
+                      <%- url = item.urls.find_by(site_id: site.id) %>
+                      <%- link_class = (!url.violator?) ? "muted" : "text-error"  %>
+                      <%= link_to spaces(url.price), url.url, class: link_class, target: "_blank"  %>
+                  <% else %>
+                      -
+                  <% end %>
+                </td>
+            <% end %>
+          </tr>
+      <% end %>
+
+    </table>

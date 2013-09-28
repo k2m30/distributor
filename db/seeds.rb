@@ -17,24 +17,28 @@ group.save
 site = Site.new
 site.name = "50.by"
 site.regexp = "<span class=\"price\">(.*)<span class=\"currency\">руб.</span></span>"
+site.groups << group
 site.save
 puts site.inspect
 
 site = Site.new
 site.name = "vitrina.shop.by"
 site.regexp = "\" title=\"купить\">(.*)руб.</a>"
+site.groups << group
 site.save
 puts site.inspect
 
 site = Site.new
 site.name = "krama.by"
 site.regexp = "\t\t\t\t\t\t\t\t\.?(.*)руб"
+site.groups << group
 site.save
 puts site.inspect
 
 site = Site.new
 site.name = "stroitel.shop.by"
 site.regexp = "class=\"ye\">(.*)руб.</"
+site.groups << group
 site.save
 puts site.inspect
 
@@ -42,6 +46,7 @@ site = Site.new
 site.name = "ydachnik.by"
 site.regexp = "<div class=\"cat_price_product\">Цена:(.*)руб.</div>"
 site.standard = true
+site.groups << group
 site.save
 puts site.inspect
 
@@ -54,30 +59,35 @@ puts site.inspect
 site = Site.new
 site.name = "mir-mtd.by"
 site.regexp = "<br>\.?(.*)&nbsp;"
+site.groups << group
 site.save
 puts site.inspect
 
 site = Site.new
 site.name = "gepard.by"
 site.regexp = "[\"n]>.?\n\t\t\t\t\t\t\t\t\t(.*)руб."
+site.groups << group
 site.save
 puts site.inspect
 
 site = Site.new
 site.name = "suseki.by"
 site.regexp = "<div class=\"price\">(.*) <span>руб.</span></div>"
+site.groups << group
 site.save
 puts site.inspect
 
 site = Site.new
 site.name = "mirbt.by"
 site.regexp = "<span class=\"secondPrice\">(.*)руб.</span>"
+site.groups << group
 site.save
 puts site.inspect
 
 site = Site.new
 site.name = "7sotok.by"
 site.regexp = "price\">.\?.\?\n\t\t\t\t<span>(.*)руб</span>"
+site.groups << group
 site.save
 puts site.inspect
 

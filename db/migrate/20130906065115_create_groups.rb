@@ -6,5 +6,9 @@ class CreateGroups < ActiveRecord::Migration
       t.belongs_to :user
       t.timestamps
     end
+    create_table :groups_sites do |t|
+          t.belongs_to :site
+          t.belongs_to :group
+    end
   end
 end
