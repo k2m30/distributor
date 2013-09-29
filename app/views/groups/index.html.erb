@@ -14,7 +14,7 @@
           </th>
       <% end %>
 
-      <% @sites.each do |site| %>
+      <% group.sites.each do |site| %>
           <tr <%= (site.standard?) ? " class=\"success\"".html_safe : "" %>>
             <td class="tooltip_cell" data-toggle="tooltip" data-placement="top" title="<%= site.company_name %>" ><%= site.name %></td>
             <% group.items.order("id DESC").each do |item| %>

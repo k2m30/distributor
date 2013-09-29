@@ -72,7 +72,16 @@ class ItemsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+	
+	def refine_items
+		items = Item.all
+		items.each do |item|
+			name = item.name.gsub("Е","E").gsub("Н","H").gsub("О","O").gsub("Р","P").gsub("А","A").gsub("В","B").gsub("С","C").gsub("М","M").gsub("Т","T").gsub("К","K").gsub("Х","X")
+			item.name = name
+			item.save
+		end
+		redirect_to items_path
+	end
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_item

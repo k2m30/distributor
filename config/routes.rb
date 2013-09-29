@@ -2,7 +2,9 @@ Distibutor::Application.routes.draw do
   resources :settings
 
   resources :items do
-
+    collection do
+      get 'refine_items' => 'items#refine_items'
+    end
   end
 
   resources :urls do
@@ -12,6 +14,7 @@ Distibutor::Application.routes.draw do
   collection do
     get 'update_prices' => 'urls#update_prices'
     get 'update_violators' => 'urls#update_violators'
+    get 'find_urls' => 'urls#find_urls'
   end
   end
 
@@ -30,7 +33,7 @@ Distibutor::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'groups#index'
+  root 'sites#stop_list'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

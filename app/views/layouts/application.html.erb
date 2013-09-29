@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Distibutor</title>
+  <title>B2B Soft</title>
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
   <![endif]-->
@@ -21,12 +21,18 @@
         <span class="icon-bar"></span>
       </a>
 
-      <%= link_to "Distributor", root_path, class: "brand" %>
+      <%= link_to "B2B Soft", root_path, class: "brand" %>
 
 
 
       <div class="nav-collapse">
         <ul class="nav">
+			<% if user_signed_in? %>
+				<% current_user.groups.each do |group|  %>
+			
+				<li><%= link_to group.name, group_path(group) %></li>
+				<% end %>
+			<% end %>
           <li><%= link_to (t "nav.stoplist"), stoplist_sites_path %></li>
           <li><%= link_to (t "nav.sites"), sites_path %></li>
           <li><%= link_to (t "nav.urls"), urls_path %></li>

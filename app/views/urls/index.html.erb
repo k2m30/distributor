@@ -10,6 +10,9 @@
             update_prices_urls_path, :class => 'btn btn-primary' %>
 <%= link_to t('.update_violators', :default => t("helpers.links.update_violators")),
             update_violators_urls_path, :class => 'btn btn-primary' %>
+<%= link_to t('.find_urls', :default => t("helpers.links.find_urls")),
+			            find_urls_urls_path, :class => 'btn btn-primary' %>
+			
 </p>
 
 <table class="table table-condensed">
@@ -27,7 +30,7 @@
     <% @urls.each do |url| %>
       <tr  <%= (url.price.nil? || url.url.scan(url.site.name).empty? || url.price.zero? )? " class=\"error\"".html_safe : "" %>>
 
-        <td><%= link_to url.url, url_path(url) %></td>
+        <td><%= link_to url.url, url.url, target: "_blank" %></td>
         <td> <%= url.price %></td>
         <td><%= url.site.name %></td>
         <td><%= url.item.name %></td>
