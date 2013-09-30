@@ -6,6 +6,9 @@
   <thead>
   <tr>
     <th><%= model_class.human_attribute_name(:name) %></th>
+	<th><%= model_class.human_attribute_name(:group) %></th>
+	<th><%= model_class.human_attribute_name(:css) %></th>
+	<th> Всего / Найдено ссылок / Корректных</th>
     <th><%= model_class.human_attribute_name(:company_name) %></th>
     <th><%= model_class.human_attribute_name(:email) %></th>
     <th><%= model_class.human_attribute_name(:out_of_ban_time) %></th>
@@ -17,7 +20,10 @@
   <% @sites.each do |site| %>
       <tr <%= (site.violator?) ? " class=\"error\"".html_safe : "" %>"" >
       <td><%= link_to site.name, site_path(site) %></td>
-      <td><%= site.company_name %></td>
+	  <td><%= site.groups[0].name %></td>
+	  <td><%= site.css %></td>
+	  <td><%= site.groups[0].items.count %> / <%= site.urls.count %> / <%= site.urls.where("price > ?", 1).count %></td>
+	  <td><%= site.company_name %></td>
       <td><%= site.email %></td>
       <td><%= (site.out_of_ban_time.nil?) ? "-" : distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
 

@@ -76,24 +76,18 @@ class UrlsController < ApplicationController
       #if url.id == 1584
 
       begin
-        regexp = url.site.regexp
-        text = open(url.url).read.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '-'})
-        refined_regexp = refine (regexp)
-
-        res = text.scan(refined_regexp)
-        if !res.empty?
-          #debugger
-          result = res.first.first.gsub("&nbsp;", "").gsub(" ", "").to_i
-          url.price = result
-          url.save
-        end
-        logger.error (url.url)
-        logger.error(regexp)
-        logger.error(res)
-        logger.error("\n")
-
+        uri = URI.parse(url.url) #.encode("utf-8"))
+        puts "---"
+        puts uri
+        page = open(uri, "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36 OPR/16.0.1196.73", "Accept" => "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Cache-Control" => "max-age=0")
+        html = Nokogiri::HTML page
+        price = html.at_css(url.site.css).content.gsub(/\u00a0|\s/,"")
+				puts price
+        price = price.mb_chars.downcase.to_s[/\d+\D*руб/].gsub("руб","")[/\d+/]
+				url.price = price
+				url.save
       rescue
-        url.price = 0
+        url.price = -1
         url.save
         logger.error(url.url)
         logger.error("#{$!}")
@@ -102,11 +96,11 @@ class UrlsController < ApplicationController
 
     end
 
-    update_violators (false)
-    current_user.settings.last_updated = Time.now
-    current_user.settings.save
-    flash[:notice] = "Цены обновлены"
-    redirect_to urls_path
+    #update_violators (false)
+    #current_user.settings.last_updated = Time.now
+    #current_user.settings.save
+    #flash[:notice] = "Цены обновлены"
+    redirect_to sites_path
   end
 
   def update_violators (redirect_to_root=true)
@@ -133,7 +127,7 @@ class UrlsController < ApplicationController
         item.urls.each do |url|
           if !url.price.nil?
             #logger.error(url.price)
-            url.violator = (url.price < (standard_price - current_user.settings.allowed_error)) ? true : false
+            url.violator = (url.price < (standard_price - current_user.settings.allowed_error) && url.price > 0) ? true : false
 
             if url.violator?
               if !url.site.violator?

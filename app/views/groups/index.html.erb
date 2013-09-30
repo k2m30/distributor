@@ -22,7 +22,8 @@
                   <% if !item.sites.where(:id => site.id).empty? %>
                       <%- url = item.urls.find_by(site_id: site.id) %>
                       <%- link_class = (!url.violator?) ? "muted" : "text-error"  %>
-                      <%= link_to spaces(url.price), url.url, class: link_class, target: "_blank"  %>
+					  <%-  link_content = url.price>0 ? url.price : "не найден" %>
+                      <%= link_to link_content, url.url, class: link_class, target: "_blank"  %>
                   <% else %>
                       -
                   <% end %>

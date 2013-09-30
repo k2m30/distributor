@@ -1,7 +1,31 @@
-## coding: utf-8
-#require 'rubygems'
-#require 'open-uri'
-#require 'rubyXL'
+# coding: utf-8
+require 'rubygems'
+require 'open-uri'
+require 'rubyXL'
+
+############################## site_css_xpath ########################
+group = "GROUP"
+site = "SITE"
+css = "CSS"
+xpath = "XPATH"
+cssname = "CSSNAME"
+
+file = RubyXL::Parser.parse("site_css_xpath.xlsx")
+
+table_site = file[0].get_table([group, site, css, xpath,cssname])
+#puts table_site.inspect
+table_site.values[0].each do |hash|
+  if !hash.empty?
+    site_array = Site.where("name = ?", hash[site])
+    site_array.each do |site_base|
+      site_base.css = hash[css]
+      site_base.xpath = hash[xpath]
+      #site_base.cssname = hash[cssname]
+      puts site_base.name + ' ' + site_base.css
+      site_base.save
+    end
+  end
+end
 #
 #[Group, Site, Item, Url].each do |table|
 #  table.delete_all
