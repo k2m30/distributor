@@ -3,29 +3,117 @@ require 'rubygems'
 require 'open-uri'
 require 'rubyXL'
 
-############################## site_css_xpath ########################
-group = "GROUP"
-site = "SITE"
-css = "CSS"
-xpath = "XPATH"
-cssname = "CSSNAME"
+####################### import ###############
+a = 0
+p "Started"
+workbook = RubyXL::Parser.parse("import.xlsx")
 
-file = RubyXL::Parser.parse("site_css_xpath.xlsx")
+sheets = [workbook.worksheets[0]]
+sheets.each do |sheet|
+  group = Group.where(name: sheet[0][0].value).first
+  data = sheet.extract_data
+  data[1..data.size].each_with_index do |row, i|
+    row[1..row.size].each_with_index do |col, j|
+      site = group.sites.where(name: sheet[0][j+1].value).first
+      # p "---" + sheet[0][j+1].value
+      if site.nil?
+        p "-" + sheet[0][j+1].value.to_s
+      end
 
-table_site = file[0].get_table([group, site, css, xpath,cssname])
-#puts table_site.inspect
-table_site.values[0].each do |hash|
-  if !hash.empty?
-    site_array = Site.where("name = ?", hash[site])
-    site_array.each do |site_base|
-      site_base.css = hash[css]
-      site_base.xpath = hash[cssname]
-      #site_base.cssname = hash[cssname]
-      puts site_base.name + ' ' + site_base.css
-      site_base.save
+      item = Item.where(name: sheet[i+1][0].value).first #item
+      if item.nil?
+        p sheet[i+1][0].value
+      end
+
+      cell_value = sheet[i+1][j+1].value
+      url = (item.nil? || site.nil?) ? nil : get_url(item, site)
+
+      if !url.nil?
+        url.url = cell_value #url
+        url.site = Site.where(name: site.name).first
+
+        if !item.sites.include?(url.site)
+          item.sites << url.site
+          item.save
+        end
+        if !url.site.items.include?(item)
+          url.site << item
+          url.site.save
+        end
+        if !url.site.groups.include?(item.group)
+          url.site.groups << item.group
+          url.site.save
+        end
+        a += 1
+        url.save
+
+
+        if url.site.name == "ydachnik.by"
+          puts "----"
+          puts url.id, url.item.name, cell_value
+          p url.site.urls.find(url.id).url
+          p url.item.urls.find(url.id).url, url.url
+          puts "----"
+        end
+
+        if url.url == "X" || url.url == "[]" || url.url.nil?
+          site.urls -=[url]
+          item.urls -=[url]
+          url.delete
+        end
+
+      else
+
+        if !(cell_value == "X" || cell_value == "[]" || cell_value.nil?)
+          url = Url.new
+          url.site = site
+          url.item = item
+          url.url = cell_value
+          url.save
+        end
+
+      end
+
     end
   end
+
 end
+
+Url.all.each do |url|
+  if !url.site.groups.include?(url.item.group)
+    url.site.groups << url.item.group
+    url.site.save
+  end
+end
+
+p a
+p "Finished"
+
+
+
+############################## site_css_xpath ########################
+# group = "GROUP"
+# site = "SITE"
+# css = "CSS"
+# xpath = "XPATH"
+# cssname = "CSSNAME"
+#
+# file = RubyXL::Parser.parse("site_css_xpath.xlsx")
+#
+# table_site = file[0].get_table([group, site, css, xpath,cssname])
+# #puts table_site.inspect
+# table_site.values[0].each do |hash|
+#   if !hash.empty?
+#     site_array = Site.where("name = ?", hash[site])
+#     site_array.each do |site_base|
+#       site_base.css = hash[css]
+#       site_base.xpath = hash[cssname]
+#       #site_base.cssname = hash[cssname]
+#       puts site_base.name + ' ' + site_base.css
+#       site_base.save
+#     end
+#   end
+# end
 #
 #[Group, Site, Item, Url].each do |table|
 #  table.delete_all
