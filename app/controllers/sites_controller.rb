@@ -1,10 +1,12 @@
+require 'actionpack/page_caching'
+require 'actionpack/action_caching'
 require 'rubyXL'
 require 'axlsx'
 
 class SitesController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_site, only: [:show, :edit, :update, :destroy]
-
+  # caches_page :index, :stop_list
   # GET /sites
   # GET /sites.json
   def index

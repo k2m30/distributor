@@ -49,6 +49,9 @@ gem 'nokogiri'
 gem 'rubyzip',  '~> 0.9.9'
 
 gem 'axlsx'
+gem 'rack-mini-profiler'
+gem 'actionpack-page_caching'
+gem 'actionpack-action_caching'
 
 # Use ActiveModel has_secure_password
 

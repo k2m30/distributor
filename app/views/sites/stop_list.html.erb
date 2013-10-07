@@ -5,7 +5,7 @@
 <% @sites.each do |site| %>
     <table class="table table-striped">
       <tbody>
-
+ <% cache "stop_list" do %>
       <tr>
         <td><%= site.company_name %></td>
         <td><%= site.name %></td>
@@ -14,6 +14,7 @@
       </tr>
       </tbody>
     </table>
+
 
 
     <table class="table table-striped">
@@ -41,7 +42,7 @@
             <% end %>
           </tr>
       <% end %>
-
+    <% end %>
       </tr>
       </tbody>
     </table>
