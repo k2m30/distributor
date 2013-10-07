@@ -118,7 +118,7 @@ class SitesController < ApplicationController
   def import
     a = 0
     p "Started"
-    workbook = RubyXL::Parser.parse("/Users/Mikhail/RubymineProjects/distibutor/import.xlsx")
+    workbook = RubyXL::Parser.parse("import.xlsx")
 
     sheets = [workbook.worksheets[0]]
     sheets.each do |sheet|

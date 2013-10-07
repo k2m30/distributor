@@ -19,7 +19,7 @@ table_site.values[0].each do |hash|
     site_array = Site.where("name = ?", hash[site])
     site_array.each do |site_base|
       site_base.css = hash[css]
-      site_base.xpath = hash[xpath]
+      site_base.xpath = hash[cssname]
       #site_base.cssname = hash[cssname]
       puts site_base.name + ' ' + site_base.css
       site_base.save
