@@ -37,7 +37,7 @@ sheets.each do |sheet|
           item.save
         end
         if !url.site.items.include?(item)
-          url.site << item
+          url.site.items << item
           url.site.save
         end
         if !url.site.groups.include?(item.group)
@@ -46,15 +46,6 @@ sheets.each do |sheet|
         end
         a += 1
         url.save
-
-
-        if url.site.name == "ydachnik.by"
-          puts "----"
-          puts url.id, url.item.name, cell_value
-          p url.site.urls.find(url.id).url
-          p url.item.urls.find(url.id).url, url.url
-          puts "----"
-        end
 
         if url.url == "X" || url.url == "[]" || url.url.nil?
           site.urls -=[url]
