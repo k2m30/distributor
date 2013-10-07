@@ -26,7 +26,7 @@ sheets.each do |sheet|
       end
 
       cell_value = sheet[i+1][j+1].value
-      url = (item.nil? || site.nil?) ? nil : get_url(item, site)
+      url = (item.nil? || site.nil?) ? nil : (item.urls & site.urls).first
 
       if !url.nil?
         url.url = cell_value #url
