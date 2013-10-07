@@ -13,23 +13,18 @@
 </dl>
 
 <table class="table table-condensed">
-	<th>Производитель</th>
-  <th>Позиция</th>
+	<th>Позиция</th>
 	<th>Цена сайта</th>
 	<th>Эталон</th>
 	<th>Дельта</th>
 
-<% @site.urls.each do |url| %>
+<% @violating_urls.each do |url| %>
 <tr>
-	<td><%= url.item.group.name %></td>
-  <td><%= url.item.name %></td>
+	<td><%= url.item.name %></td>
 	<td><%= link_to spaces(url.price), url.url %></td>
-    <%- standard_site = url.item.group.sites.where(standard: true).first %>
-    <%- standard_url = (standard_site.urls & url.item.urls).first  %>
-	<% if !standard_url.nil? && !standard_url.price.nil?%>
-    <td><%= link_to spaces(standard_url.price), standard_url.url %></td>
-    <td><%= "%.1f" % ((standard_url.price/url.price - 1)*100) %>%</td>
-  <% end %>
+	<%- standard_url = (@standard_site.urls & url.item.urls).first  %>
+	<td><%= link_to spaces(standard_url.price), standard_url.url %></td>
+	<td><%= "%.1f" % ((standard_url.price/url.price - 1)*100) %>%</td>
 
 </tr>
 <% end %>

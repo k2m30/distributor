@@ -48,6 +48,8 @@ gem 'rubyXL'
 gem 'nokogiri'
 gem 'rubyzip',  '~> 0.9.9'
 
+gem 'axlsx'
+
 # Use ActiveModel has_secure_password
 
 # gem 'bcrypt-ruby', '~> 3.0.0'

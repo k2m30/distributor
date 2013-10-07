@@ -18,7 +18,7 @@
 <table class="table table-condensed">
   <thead>
     <tr>
-
+      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:url) %></th>
       <th><%= model_class.human_attribute_name(:price) %></th>
       <th><%= model_class.human_attribute_name(:site_id) %></th>
@@ -28,8 +28,8 @@
   </thead>
   <tbody>
     <% @urls.each do |url| %>
-      <tr  <%= (url.price.nil? || url.url.scan(url.site.name).empty? || url.price.zero? )? " class=\"error\"".html_safe : "" %>>
-
+      <tr  <%= (url.url.nil? || url.price.nil? || url.url.scan(url.site.name).empty? || url.price.zero? )? " class=\"error\"".html_safe : "" %>>
+        <td> <%= url.id %></td>
         <td><%= link_to url.url, url.url, target: "_blank" %></td>
         <td> <%= url.price %></td>
         <td><%= url.site.name %></td>

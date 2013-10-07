@@ -2,6 +2,28 @@
 <div class="page-header">
   <h2><%= t '.title', :default => model_class.model_name.human.pluralize.titleize %></h2>
 </div>
+
+<p>
+<%= link_to t('.import', :default => t("helpers.links.import")),
+            import_sites_path, :class => 'btn btn-primary' %>
+  <%= link_to t('.export', :default => t("helpers.links.export")),
+              export_sites_path, :class => 'btn btn-primary' %>
+
+
+</p>
+<p><%= link_to t('.new', :default => t("helpers.links.new")),
+               new_url_path,
+               :class => 'btn btn-primary' %>
+  <%= link_to t('.update_prices', :default => t("helpers.links.update_prices")),
+              update_prices_urls_path, :class => 'btn btn-primary' %>
+  <%= link_to t('.update_violators', :default => t("helpers.links.update_violators")),
+              update_violators_urls_path, :class => 'btn btn-primary' %>
+  <%= link_to t('.find_urls', :default => t("helpers.links.find_urls")),
+              find_urls_urls_path, :class => 'btn btn-primary' %>
+
+</p>
+
+
 <table class="table table-striped">
   <thead>
   <tr>
@@ -17,12 +39,14 @@
   </tr>
   </thead>
   <tbody>
-  <% @sites.each do |site| %>
+  <% @sites.order(:name).each do |site| %>
       <tr <%= (site.violator?) ? " class=\"error\"".html_safe : "" %>"" >
       <td><%= link_to site.name, site_path(site) %></td>
-	  <td><%= site.groups[0].name %></td>
+	  <td><% site.groups.each do |group|%>
+	      <%= group.name %> 
+	      <% end %></td>
 	  <td><%= site.css %></td>
-	  <td><%= site.groups[0].items.count %> / <%= site.urls.count %> / <%= site.urls.where("price > ?", 1).count %></td>
+	  <td><%= site.items.count %> / <%= site.urls.count %> / <%= site.urls.where("price > ?", -2).count %></td>
 	  <td><%= site.company_name %></td>
       <td><%= site.email %></td>
       <td><%= (site.out_of_ban_time.nil?) ? "-" : distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>

@@ -11,7 +11,13 @@ class UrlsController < ApplicationController
   # GET /urls
   # GET /urls.json
   def index
-    @urls = Url.all
+    group = Group.where(name: "MTD").first
+    items = group.items
+    @urls = []
+    items.each do |item|
+      @urls += item.urls
+    end
+
   end
 
   # GET /urls/1
@@ -82,10 +88,13 @@ class UrlsController < ApplicationController
         page = open(uri, "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36 OPR/16.0.1196.73", "Accept" => "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Cache-Control" => "max-age=0")
         html = Nokogiri::HTML page
         price = html.at_css(url.site.css).content.gsub(/\u00a0|\s/,"")
-				puts price
-        price = price.mb_chars.downcase.to_s[/\d+\D*руб/].gsub("руб","")[/\d+/]
-				url.price = price
-				url.save
+        p price
+        r = Regexp.new(url.site.regexp)
+        price = price.mb_chars.downcase.to_s[r]#[/\d+\D*руб/].gsub("руб","")[/\d+/]
+        p r
+        p price
+        url.price = price
+        url.save if url.changed?
       rescue
         url.price = -1
         url.save
@@ -96,10 +105,10 @@ class UrlsController < ApplicationController
 
     end
 
-    #update_violators (false)
-    #current_user.settings.last_updated = Time.now
-    #current_user.settings.save
-    #flash[:notice] = "Цены обновлены"
+    update_violators (false)
+    current_user.settings.last_updated = Time.now
+    current_user.settings.save
+    flash[:notice] = "Цены обновлены"
     redirect_to sites_path
   end
 
@@ -109,39 +118,50 @@ class UrlsController < ApplicationController
       if !site.out_of_ban_time.nil?
         if Time.now > site.out_of_ban_time
           site.violator = false
-          site.save
+          if !site.regexp.class == Regexp
+            site.regexp = Regexp.new(site.regexp)
+          end
+          site.save if site.changed?
         end
       end
     end
 
     items = Item.all
-    standard_site = Site.where(:standard => true)
-    if standard_site.nil? || standard_site.empty?
-      return
-    end
+    Group.all.each do |group|
 
-    standard_site = standard_site.first
-    items.each do |item|
-      standard_price = get_price(item, standard_site)
-      if !standard_price.nil?
-        item.urls.each do |url|
-          if !url.price.nil?
-            #logger.error(url.price)
-            url.violator = (url.price < (standard_price - current_user.settings.allowed_error) && url.price > 0) ? true : false
 
-            if url.violator?
-              if !url.site.violator?
-                site = url.site
-                site.violator = true
-                site.out_of_ban_time = Time.now + 1.days
-                logger.error("--")
-                site.save
+      standard_site = group.sites.where(:standard => true)
+      if standard_site.nil? || standard_site.empty?
+        return
+      end
+
+      standard_site = standard_site.first
+      items.each do |item|
+        standard_price = get_price(item, standard_site)
+        if !standard_price.nil?
+          item.urls.each do |url|
+            if !url.price.nil?
+              #logger.error(url.price)
+              url.violator = (url.price < (standard_price - current_user.settings.allowed_error) && url.price > 0) ? true : false
+
+              if url.violator?
+                if !url.site.violator?
+                  site = url.site
+                  site.violator = true
+                  site.out_of_ban_time = Time.now + 1.days
+                  logger.error("--")
+                  if !site.regexp.class == Regexp
+                    site.regexp = Regexp.new(site.regexp)
+                  end
+
+                  site.save if site.changed?
+                end
               end
+
+              url.save if url.changed?
             end
 
-            url.save
           end
-
         end
       end
     end
@@ -241,18 +261,7 @@ class UrlsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
 
-  def get_price (item, site)
-    common_url = item.urls & site.urls
-    if !(common_url).empty?
-      return common_url.first.price
-    else
-      return nil
-    end
-  end
 
-  def get_url (item, site)
-    return item.urls & site.urls
-  end
 
   def refine (regexp)
     # debugger
@@ -266,7 +275,7 @@ class UrlsController < ApplicationController
 
 # Never trust parameters from the scary internet, only allow the white list through.
   def url_params
-    params.require(:url).permit(:url, :price, :site)
+    params.require(:url).permit!#(:url, :price, :site, :item)
   end
 
 

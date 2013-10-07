@@ -2,23 +2,53 @@
 <div class="page-header">
   <h2>Стоп лист</h2>
 </div>
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th><%= model_class.human_attribute_name(:name) %></th>
-    <th><%= model_class.human_attribute_name(:company_name) %></th>
-    <th><%= model_class.human_attribute_name(:email) %></th>
-    <th><%= model_class.human_attribute_name(:out_of_ban_time) %></th>
-  </tr>
-  </thead>
-  <tbody>
-  <% @sites.each do |site| %>
+<% @sites.each do |site| %>
+    <table class="table table-striped">
+      <tbody>
+
       <tr>
-        <td><%= site.name %></td>
         <td><%= site.company_name %></td>
-        <td><%= site.email %></td>
-        <td><%= distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
+        <td><%= site.name %></td>
+        <td>email: <%= site.email %></td>
+        <td>В стоплисте еще <%= distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
       </tr>
-  <% end %>
-  </tbody>
-</table>
+      </tbody>
+    </table>
+
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Бренд</th>
+        <th>Позиция</th>
+        <th>Цена сайта</th>
+        <th>Эталон</th>
+        <th>Разница, руб.</th>
+        <th>Разница, %</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% site.urls.where(violator: true).each do |url| %>
+          <tr>
+            <td><%= url.item.group.name %></td>
+            <td><%= url.item.name %></td>
+            <td><%= link_to spaces(url.price), url.url %></td>
+            <%- standard_url = (site.groups[0].sites.where(standard: true).first.urls & url.item.urls).first %>
+            <% if !standard_url.nil? %>
+            <td><%= link_to spaces((standard_url.nil?) ? 0 : standard_url.price ), (standard_url.nil?) ? "" : standard_url.url %></td>
+            <td><%= spaces(standard_url.price - url.price) %></td>
+            <td><%= "%.1f" % ((standard_url.price/url.price - 1)*100) %>%</td>
+            <% end %>
+          </tr>
+      <% end %>
+
+      </tr>
+      </tbody>
+    </table>
+    <hr>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+<% end %>

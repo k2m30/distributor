@@ -21,6 +21,8 @@ Distibutor::Application.routes.draw do
   resources :sites do
     collection do
       get 'stoplist' => 'sites#stop_list'
+      get 'export' => 'sites#export'
+      get 'import' => 'sites#import'
     end
 
   end
