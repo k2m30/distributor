@@ -28,7 +28,8 @@
       <div class="nav-collapse">
         <ul class="nav">
 			<% if user_signed_in? %>
-				<% current_user.groups.each do |group|  %>
+				<%# current_user.groups.each do |group|  %>
+        <% Group.all.each do |group|  %>
 			
 				<li><%= link_to group.name, group_path(group) %></li>
 				<% end %>

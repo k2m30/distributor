@@ -126,6 +126,8 @@ class UrlsController < ApplicationController
         end
       end
     end
+    handle_asynchronously :update_violators
+    
 
     items = Item.all
     Group.all.each do |group|
