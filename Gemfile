@@ -46,6 +46,7 @@ gem 'rubyzip',  '~> 0.9.9'
 
 gem 'axlsx'
 gem 'rack-mini-profiler'
+gem 'delayed_job_active_record'
 
 # Use ActiveModel has_secure_password
 

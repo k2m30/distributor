@@ -5062,6 +5062,7 @@ SELECT pg_catalog.setval('urls_id_seq', 27647, true);
 
 COPY users (id, email, encrypted_password, reset_password_token, reset_password_sent_at, remember_created_at, sign_in_count, current_sign_in_at, last_sign_in_at, current_sign_in_ip, last_sign_in_ip, created_at, updated_at, admin, username) FROM stdin;
 1	1m@tut.by	$2a$10$rMn2DxaoAuJIfcHrrb3HhOeKBIp4Rs7z4PWQReGJyBoGudWQ0TnGG	\N	\N	\N	8	2013-10-08 14:21:59.564161	2013-10-01 17:42:05	127.0.0.1	127.0.0.1	2013-09-28 17:06:34.520498	2013-10-08 14:21:59.567139	\N	k2m30
+2	office@ydachnik.by	$2a$10$PN.Nce0ZGN.fsX8fIsKUbOZhEjgxt.v2cO8RphLlC4t0I6d/kedMu	\N	\N	\N	1	2013-10-08 15:34:00.99444	2013-10-08 15:34:00.99444	127.0.0.1	127.0.0.1	2013-10-08 15:34:00.982788	2013-10-08 15:34:00.996925	\N	ydachnik
 \.
 
 
@@ -5069,7 +5070,7 @@ COPY users (id, email, encrypted_password, reset_password_token, reset_password_
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: distributor
 --
 
-SELECT pg_catalog.setval('users_id_seq', 1, true);
+SELECT pg_catalog.setval('users_id_seq', 2, true);
 
 
 --
