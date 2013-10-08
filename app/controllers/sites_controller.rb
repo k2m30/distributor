@@ -1,5 +1,3 @@
-require 'actionpack/page_caching'
-require 'actionpack/action_caching'
 require 'rubyXL'
 require 'axlsx'
 
@@ -11,6 +9,7 @@ class SitesController < ApplicationController
   # GET /sites.json
   def index
     @sites = Site.all.order("name")
+    expire_fragment(controller: 'sites', action: 'stop_list', action_suffix: 'all')
 
   end
 
@@ -75,8 +74,12 @@ class SitesController < ApplicationController
   end
 
   def stop_list
-    @sites = Site.where(:violator => true)
-    @standard_site = Site.where(standard: true).first
+
+    @groups = Group.where(name: "MTD")
+    @sites = []
+    @groups.each do |group|
+      @sites += group.sites.where(:violator => true)
+    end
   end
 
   def export

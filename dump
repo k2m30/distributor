@@ -1,2 +1,2 @@
-pg_dump -c distributor_development > distributor
+pg_dump -c --role=distributor distributor_development > distributor
 scp distributor deployer@144.76.161.235:

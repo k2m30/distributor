@@ -33,7 +33,7 @@
 				<li><%= link_to group.name, group_path(group) %></li>
 				<% end %>
 			<% end %>
-          <li><%= link_to (t "nav.stoplist"), stoplist_sites_path %></li>
+          <li><%= link_to (t "nav.stoplist"), stop_list_sites_path %></li>
           <li><%= link_to (t "nav.sites"), sites_path %></li>
           <li><%= link_to (t "nav.urls"), urls_path %></li>
           <li><%= link_to (t "nav.settings"), settings_path %></li>
@@ -42,7 +42,7 @@
               <li><%= link_to((t 'nav.logout'), destroy_user_session_path, :method => :delete) %></li>
           <% else %>
               <li><%= link_to(t('nav.login'), new_user_session_path) %></li>
-              <li><%= link_to(t('nav.register'), new_user_registration_path) %></li>
+
           <% end %>
 
         </ul>

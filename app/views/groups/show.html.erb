@@ -20,23 +20,9 @@
         <td class="tooltip_cell" data-toggle="tooltip" data-placement="top" title="<%= site.company_name %>"><%= site.name %></td>
         <% group.items.order("id DESC").each do |item| %>
             <td style="white-space: nowrap; text-align: right">
-              <% if !item.sites.where(:id => site.id).empty? %>
-                  <%- url = item.urls.find_by(site_id: site.id) %>
-                  <% if !url.price.nil? %>
-                      <%- link_class = (!url.violator?) ? "muted" : "text-error" %>
-                      <%- standard_url = url.item.group.sites.where(standard: true).first.urls.where(item: url.item).first %>
-      <%- standard_price = standard_url.nil? ? url.price : standard_url.price %>
-                      <% if (!standard_price.nil?) && (standard_price > 0) && (!url.price.nil?) && (url.price > 0) && (((standard_price - url.price)/standard_price).abs > 0.3) %>
-                          <%- link_class = "text-warning" %>
-                      <% end %>
-                      <%- link_content = url.price>0 ? spaces(url.price) : "n/a" %>
-                  <% else %>
-                      <%- link_content = "n/a" %>
-                  <% end %>
-
-                  <%= link_to link_content, url.url, class: link_class, target: "_blank" %>
-              <% else %>
-                  -
+              <% url = (item.urls & site.urls).first %>
+              <% if !url.nil? && !url.url.nil? && !url.price.nil? && (url.price > 0)%>
+                  <%= link_to spaces(url.price), url.url, target: "_blank" %>
               <% end %>
             </td>
         <% end %>

@@ -2,54 +2,70 @@
 <div class="page-header">
   <h2>Стоп лист</h2>
 </div>
-<% @sites.each do |site| %>
-    <table class="table table-striped">
-      <tbody>
- <% cache "stop_list" do %>
-      <tr>
-        <td><%= site.company_name %></td>
-        <td><%= site.name %></td>
-        <td>email: <%= site.email %></td>
-        <td>В стоплисте еще <%= distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
-      </tr>
-      </tbody>
-    </table>
+<% cache(controller: 'sites', action: 'stop_list', action_suffix: 'all') do %>
+    <% @sites.each do |site| %>
+        <%- group_name = site.groups[0].name %>
+        <table class="table table-striped">
+          <tbody>
 
-
-
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th>Бренд</th>
-        <th>Позиция</th>
-        <th>Цена сайта</th>
-        <th>Эталон</th>
-        <th>Разница, руб.</th>
-        <th>Разница, %</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% site.urls.where(violator: true).each do |url| %>
           <tr>
-            <td><%= url.item.group.name %></td>
-            <td><%= url.item.name %></td>
-            <td><%= link_to spaces(url.price), url.url %></td>
-            <%- standard_url = (site.groups[0].sites.where(standard: true).first.urls & url.item.urls).first %>
-            <% if !standard_url.nil? %>
-            <td><%= link_to spaces((standard_url.nil?) ? 0 : standard_url.price ), (standard_url.nil?) ? "" : standard_url.url %></td>
-            <td><%= spaces(standard_url.price - url.price) %></td>
-            <td><%= "%.1f" % ((standard_url.price/url.price - 1)*100) %>%</td>
-            <% end %>
+            <td><%= site.company_name %></td>
+            <td><%= site.name %></td>
+            <td>email: <%= site.email %></td>
+            <td>В стоплисте еще <%= distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
           </tr>
-      <% end %>
+          </tbody>
+        </table>
+
+
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th>Цена сайта</th>
+            <th>Эталон</th>
+            <th>Разница, руб.</th>
+            <th>Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @groups.each do |group| %>
+              <%- standard_site = group.sites.where(standard: true).first %>
+              <%- items = site.items & group.items %>
+              <% items.each do |item| %>
+                  <% (site.urls.where(violator: true) & item.urls).each do |url| %>
+                      <%- name = item.name %>
+                      <%- price = url.price %>
+                      <%- url_url = url.url %>
+                      <%- standard_url = (url.item.urls & standard_site.urls).first %>
+                      <tr>
+                        <td><%= group.name %></td>
+                        <td><%= name %></td>
+                        <td><%= link_to spaces(price), url_url, target: "_blank" %></td>
+
+                        <% if !standard_url.nil? %>
+                            <%- standard_url_url = standard_url.url %>
+                            <%- standard_url_price = standard_url.price %>
+                            <td><%= link_to spaces(standard_url_price), standard_url_url, target: "_blank" %></td>
+                            <td><%= spaces(standard_url_price - price) %></td>
+                            <td><%= "%.1f" % ((standard_url_price/price - 1)*100) %>%</td>
+                        <% end %>
+                      </tr>
+                  <% end %>
+              <% end %>
+          <% end %>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
     <% end %>
-      </tr>
-      </tbody>
-    </table>
-    <hr>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
 <% end %>

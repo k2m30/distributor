@@ -77,6 +77,6 @@ class SettingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def setting_params
-      params.require(:settings).permit(:ban_time, :last_updated, :allowed_error, :update_time)
+      params.require(:settings).permit(:ban_time, :last_updated, :allowed_error, :update_time, :rate)
     end
 end

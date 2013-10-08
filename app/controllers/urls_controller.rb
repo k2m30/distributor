@@ -75,6 +75,7 @@ class UrlsController < ApplicationController
   end
 
   def update_prices
+    rate = current_user.settings.rate
     urls = params[:site].nil? ? Url.all : Site.find(params[:site]).urls.all
 
     urls.each do |url|
@@ -87,13 +88,12 @@ class UrlsController < ApplicationController
         puts uri
         page = open(uri, "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36 OPR/16.0.1196.73", "Accept" => "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Cache-Control" => "max-age=0")
         html = Nokogiri::HTML page
-        price = html.at_css(url.site.css).content.gsub(/\u00a0|\s/,"")
+        price = html.at_css(url.site.css).content.gsub(/\u00a0|\s/, "")
         p price
         r = Regexp.new(url.site.regexp)
-        price = price.mb_chars.downcase.to_s[r]#[/\d+\D*руб/].gsub("руб","")[/\d+/]
-        p r
-        p price
-        url.price = price
+        price = price.mb_chars.downcase.to_s[r] #[/\d+\D*руб/].gsub("руб","")[/\d+/]
+        url.price = (price.to_f<9000) ? rate*price.to_f : price
+        p (price.to_f<9000) ? rate*price.to_f : price
         url.save if url.changed?
       rescue
         url.price = -1
@@ -108,6 +108,7 @@ class UrlsController < ApplicationController
     update_violators (false)
     current_user.settings.last_updated = Time.now
     current_user.settings.save
+    expire_fragment('stop_list')
     flash[:notice] = "Цены обновлены"
     redirect_to sites_path
   end
@@ -262,7 +263,6 @@ class UrlsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
 
 
-
   def refine (regexp)
     # debugger
     return Regexp.new (regexp.encode("utf-8").gsub("\\", ""))
@@ -275,7 +275,7 @@ class UrlsController < ApplicationController
 
 # Never trust parameters from the scary internet, only allow the white list through.
   def url_params
-    params.require(:url).permit!#(:url, :price, :site, :item)
+    params.require(:url).permit! #(:url, :price, :site, :item)
   end
 
 
