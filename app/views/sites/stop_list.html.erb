@@ -2,7 +2,7 @@
 <div class="page-header">
   <h2>Стоп лист</h2>
 </div>
-<% cache(controller: 'sites', action: 'stop_list', action_suffix: 'all') do %>
+<%# cache(controller: 'sites', action: 'stop_list', action_suffix: 'all') do %>
     <% @sites.each do |site| %>
         <%- group_name = site.groups[0].name %>
         <table class="table table-striped">
@@ -68,4 +68,4 @@
         <br>
         <br>
     <% end %>
-<% end %>
+<%# end %>

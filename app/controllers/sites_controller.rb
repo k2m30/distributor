@@ -80,6 +80,7 @@ class SitesController < ApplicationController
     @groups.each do |group|
       @sites += group.sites.where(:violator => true)
     end
+    @sites = @sites.sort_by{ |site| site.name }
   end
 
   def export
