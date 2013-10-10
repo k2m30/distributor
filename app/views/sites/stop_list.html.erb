@@ -2,22 +2,20 @@
 <div class="page-header">
   <h2>Стоп лист</h2>
 </div>
-<% cache(controller: 'sites', action: 'stop_list', action_suffix: 'all') do %>
-    <% @sites.each do |site| %>
+
+<% @sites.each do |site| %>
+    <%= cache(site) do %>
         <%- group_name = site.groups[0].name %>
         <table class="table table-striped">
           <tbody>
-
           <tr>
             <td><%= site.company_name %></td>
-            <td><%= site.name %></td>
+            <td><%= link_to site.name, site_path(site) %></td>
             <td>email: <%= site.email %></td>
             <td>В стоплисте еще <%= distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
           </tr>
           </tbody>
         </table>
-
-
 
         <table class="table table-striped">
           <thead>

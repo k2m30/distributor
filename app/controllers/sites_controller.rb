@@ -17,7 +17,21 @@ class SitesController < ApplicationController
   # GET /sites/1.json
   def show
     # @standard_site = Site.where(standard: true).first
-    @violating_urls = @site.urls.where(violator: true)
+    #@violating_urls = @site.urls.where(violator: true)
+    groups = Group.where(name: "MTD")
+    items = []
+    groups.each do |group|
+      items += group.items
+    end
+
+    p items.count
+    items = items & @site.items
+    p items.count
+
+    @urls =[]
+    items.each do |item|
+      @urls += item.urls & @site.urls
+    end
   end
 
   # GET /sites/new
@@ -50,9 +64,9 @@ class SitesController < ApplicationController
   def update
     respond_to do |format|
       # p "-----"
- #      p site_params[:regexp]
- #      site_params[:regexp] = Regexp.new(site_params[:regexp])
- #      p site_params[:regexp]
+      #      p site_params[:regexp]
+      #      site_params[:regexp] = Regexp.new(site_params[:regexp])
+      #      p site_params[:regexp]
       if @site.update(site_params)
         format.html { redirect_to @site, notice: 'Site was successfully updated.' }
         format.json { head :no_content }
@@ -74,13 +88,16 @@ class SitesController < ApplicationController
   end
 
   def stop_list
-
     @groups = Group.where(name: "MTD")
     @sites = []
     @groups.each do |group|
       @sites += group.sites.where(:violator => true)
     end
-    @sites = @sites.sort_by{ |site| site.name }
+    @sites = @sites.sort_by { |site| site.name }
+    @sites.each do |site|
+      p site.name
+    end
+
   end
 
   def export
@@ -259,6 +276,6 @@ class SitesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def site_params
-    params.require(:site).permit!#(:name, :regexp, :standard, :company_name, :out_of_ban_time, :email, urls: :url, :items)
+    params.require(:site).permit! #(:name, :regexp, :standard, :company_name, :out_of_ban_time, :email, urls: :url, :items)
   end
 end

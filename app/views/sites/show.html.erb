@@ -1,6 +1,6 @@
 <%- model_class = Site -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+  <h1><%= t '.title', :default => model_class.model_name.human.titleize %></h1>
 </div>
 
 <dl class="dl-horizontal">
@@ -13,36 +13,35 @@
 </dl>
 
 <table class="table table-condensed">
-	<th>Производитель</th>
+  <th>Производитель</th>
   <th>Позиция</th>
-	<th>Цена сайта</th>
-	<th>Эталон</th>
-	<th>Дельта</th>
+  <th>Цена сайта</th>
+  <th>Эталон</th>
+  <th>Дельта</th>
 
-<% @site.urls.each do |url| %>
-<tr>
-	<td><%= url.item.group.name %></td>
-  <td><%= url.item.name %></td>
-	<td><%= link_to spaces(url.price), url.url %></td>
-    <%- standard_site = url.item.group.sites.where(standard: true).first %>
-    <%- standard_url = (standard_site.urls & url.item.urls).first  %>
-	<% if !standard_url.nil? && !standard_url.price.nil?%>
-    <td><%= link_to spaces(standard_url.price), standard_url.url %></td>
-    <td><%= "%.1f" % ((standard_url.price/url.price - 1)*100) %>%</td>
+  <% @urls.each do |url| %>
+      <tr class=<%= url.violator? ? "error":"" %>>
+        <td><%= url.item.group.name %></td>
+        <td><%= url.item.name %></td>
+        <% if url.price > 0 %>
+            <td><%= link_to spaces(url.price), url.url %></td>
+            <% else %>
+        <td>n/a</td>
+        <% end %>
+        <%- standard_site = url.item.group.sites.where(standard: true).first %>
+        <%- standard_url = (standard_site.urls & url.item.urls).first %>
+        <% if !standard_url.nil? && !standard_url.price.nil? %>
+            <td><%= link_to spaces(standard_url.price), standard_url.url %></td>
+            <% if url.price > 0 %>
+                <td><%= "%.1f" % ((standard_url.price/url.price - 1)*100) %>%</td>
+            <% end %>
+        <% end %>
+
+      </tr>
   <% end %>
-
-</tr>
-<% end %>
 </table>
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
-              sites_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_site_path(@site), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              site_path(@site),
-              :method => 'delete',
-              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger' %>
+              stop_list_sites_path, :class => 'btn' %>
 </div>

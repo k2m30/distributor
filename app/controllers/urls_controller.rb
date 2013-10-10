@@ -7,6 +7,7 @@ require 'rubyXL'
 class UrlsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_url, only: [:show, :edit, :update, :destroy]
+  #after_update_prices :expire_cache
 
   # GET /urls
   # GET /urls.json
@@ -79,37 +80,16 @@ class UrlsController < ApplicationController
     urls = params[:site].nil? ? Url.all : Site.find(params[:site]).urls.all
 
     urls.each do |url|
-      #logger.error(url.id)
-      #if url.id == 1584
-
-      begin
-        uri = URI.parse(url.url) #.encode("utf-8"))
-        puts "---"
-        puts uri
-        page = open(uri, "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36 OPR/16.0.1196.73", "Accept" => "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Cache-Control" => "max-age=0")
-        html = Nokogiri::HTML page
-        price = html.at_css(url.site.css).content.gsub(/\u00a0|\s/, "")
-        p price
-        r = Regexp.new(url.site.regexp)
-        price = price.mb_chars.downcase.to_s[r] #[/\d+\D*руб/].gsub("руб","")[/\d+/]
-        url.price = (price.to_f<9000) ? rate*price.to_f : price
-        p (price.to_f<9000) ? rate*price.to_f : price
-        url.save if url.changed?
-      rescue
-        url.price = -1
-        url.save
-        logger.error(url.url)
-        logger.error("#{$!}")
-      end
-
-
+      css = url.site.css
+      regexp = url.site.regexp
+      url.delay(run_at: 10.seconds.from_now).update_price(css, regexp, rate)
     end
 
-    update_violators (false)
-    current_user.settings.last_updated = Time.now
-    current_user.settings.save
-    expire_fragment('stop_list')
-    flash[:notice] = "Цены обновлены"
+    # update_violators(false)
+#     current_user.settings.last_updated = Time.now
+#     current_user.settings.save
+#     expire_fragment('stop_list')
+    flash[:notice] = "Цены обновляются.."
     redirect_to sites_path
   end
 
@@ -125,9 +105,7 @@ class UrlsController < ApplicationController
           site.save if site.changed?
         end
       end
-    end
-    handle_asynchronously :update_violators
-    
+    end    
 
     items = Item.all
     Group.all.each do |group|
@@ -158,6 +136,7 @@ class UrlsController < ApplicationController
                   end
 
                   site.save if site.changed?
+                  site.touch if site.changed?
                 end
               end
 
@@ -170,6 +149,8 @@ class UrlsController < ApplicationController
     end
 
     flash[:notice] = "Нарушители обновлены"
+    expire_fragment('stop_list')
+    p fragment_exist?(controller: 'sites', action: 'stop_list')
     if redirect_to_root
       redirect_to root_path
     end
@@ -278,6 +259,9 @@ class UrlsController < ApplicationController
 # Never trust parameters from the scary internet, only allow the white list through.
   def url_params
     params.require(:url).permit! #(:url, :price, :site, :item)
+  end
+  def expire_cache
+    expire_fragment('stop_list')
   end
 
 

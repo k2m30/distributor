@@ -48,6 +48,7 @@ gem 'axlsx'
 gem 'rack-mini-profiler'
 gem 'delayed_job_active_record'
 gem 'daemons'
+gem "delayed_job_web"
 
 # Use ActiveModel has_secure_password
 

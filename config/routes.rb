@@ -27,6 +27,7 @@ Distibutor::Application.routes.draw do
 
   end
 
+  get "/dj" => DelayedJobWeb, :anchor => false
 
   resources :groups
 

@@ -1,0 +1,46 @@
+o: ActiveSupport::Cache::Entry:@valueI"�
+        <table class="table table-striped">
+          <tbody>
+
+          <tr>
+            <td></td>
+            <td>21vek.by</td>
+            <td>email: </td>
+            <td>В стоплисте еще около 10 часов</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th>Цена сайта</th>
+            <th>Эталон</th>
+            <th>Разница, руб.</th>
+            <th>Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+                      <tr>
+                        <td>MTD</td>
+                        <td>SMART 46 PO</td>
+                        <td><a href="http://www.21vek.by/grass_cuts/mtd_smart46po.html" target="_blank">2 849 000</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=1740" target="_blank">3 096 000</a></td>
+                            <td> 247 000</td>
+                            <td>8.7%</td>
+                      </tr>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381402064.447437:@expires_in0

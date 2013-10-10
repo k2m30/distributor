@@ -1,0 +1,73 @@
+o: ActiveSupport::Cache::Entry:@valueI"+
+
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td></td>
+            <td><a href="/sites/117">7sotok.by</a></td>
+            <td>email: </td>
+            <td>В стоплисте еще 1 день</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th>Цена сайта</th>
+            <th>Эталон</th>
+            <th>Разница, руб.</th>
+            <th>Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+                      <tr>
+                        <td>MTD</td>
+                        <td>M61</td>
+                        <td><a href="http://7sotok.by/pages/product/view/557" target="_blank">10 865 400</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=654" target="_blank">10 965 000</a></td>
+                            <td>99 600</td>
+                            <td>0.9%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>OPTIMA ME66</td>
+                        <td><a href="http://7sotok.by/pages/product/view/552" target="_blank">14 560 000</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=655" target="_blank">16 334 500</a></td>
+                            <td>1 774 500</td>
+                            <td>12.2%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>ME61</td>
+                        <td><a href="http://7sotok.by/pages/product/view/551" target="_blank">12 084 800</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=658" target="_blank">12 194 000</a></td>
+                            <td> 109 200</td>
+                            <td>0.9%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>OPTIMA ME76</td>
+                        <td><a href="http://7sotok.by/pages/product/view/554" target="_blank">17 290 000</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=656" target="_blank">20 202 000</a></td>
+                            <td>2 912 000</td>
+                            <td>16.8%</td>
+                      </tr>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381404521.570873:@expires_in0

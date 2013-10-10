@@ -14,19 +14,22 @@
         <%= item.name %>
       </th>
   <% end %>
-
-  <% group.sites.each do |site| %>
-      <tr <%= (site.standard?) ? " class=\"success\"".html_safe : "" %>>
-        <td class="tooltip_cell" data-toggle="tooltip" data-placement="top" title="<%= site.company_name %>"><%= site.name %></td>
-        <% group.items.order("id DESC").each do |item| %>
-            <td style="white-space: nowrap; text-align: right">
-              <% url = (item.urls & site.urls).first %>
-              <% if !url.nil? && !url.url.nil? && !url.price.nil? && (url.price > 0)%>
-                  <%= link_to spaces(url.price), url.url, target: "_blank" %>
-              <% end %>
-            </td>
-        <% end %>
-      </tr>
-  <% end %>
+  <%#= cache(group) do %>
+      <% group.sites.order('name').each do |site| %>
+          <%= cache ([group, site]) do %>
+              <tr <%= (site.standard?) ? " class=\"success\"".html_safe : "" %>>
+                <td class="tooltip_cell" data-toggle="tooltip" data-placement="top" title="<%= site.company_name %>"><%= site.name %></td>
+                <% group.items.order("id DESC").each do |item| %>
+                    <td style="white-space: nowrap; text-align: right">
+                      <% url = (item.urls & site.urls).first %>
+                      <% if !url.nil? && !url.url.nil? && !url.price.nil? && (url.price > 0) %>
+                          <%= link_to spaces(url.price), url.url, target: "_blank" %>
+                      <% end %>
+                    </td>
+                <% end %>
+              </tr>
+          <% end %>
+      <% end %>
+  <%# end %>
 
 </table>
