@@ -84,11 +84,10 @@ class UrlsController < ApplicationController
       regexp = url.site.regexp
       url.delay(run_at: 10.seconds.from_now).update_price(css, regexp, rate)
     end
+
+    current_user.settings.last_updated = Time.now
+    current_user.settings.save
 
-    # update_violators(false)
-#     current_user.settings.last_updated = Time.now
-#     current_user.settings.save
-#     expire_fragment('stop_list')
     flash[:notice] = "Цены обновляются.."
     redirect_to sites_path
   end
@@ -105,7 +104,7 @@ class UrlsController < ApplicationController
           site.save if site.changed?
         end
       end
-    end    
+    end
 
     items = Item.all
     Group.all.each do |group|
@@ -260,6 +259,7 @@ class UrlsController < ApplicationController
   def url_params
     params.require(:url).permit! #(:url, :price, :site, :item)
   end
+
   def expire_cache
     expire_fragment('stop_list')
   end
