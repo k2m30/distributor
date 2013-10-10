@@ -19,7 +19,7 @@ class Url < ActiveRecord::Base
       self.price = (page_price.to_f<9000) ? rate*page_price.to_f : page_price
       logger.error self.price
       self.save
-      self.site
+      self.site.touch
     rescue
       self.price = -1
       self.save
