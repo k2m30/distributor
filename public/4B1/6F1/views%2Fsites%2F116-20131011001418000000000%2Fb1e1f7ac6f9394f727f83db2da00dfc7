@@ -1,0 +1,72 @@
+o: ActiveSupport::Cache::Entry:@valueI"�
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td></td>
+            <td><a href="/sites/116">motoblok.by</a></td>
+            <td>email: </td>
+            <td>В стоплисте еще около 11 часов</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th style="white-space: nowrap; text-align: right">Цена сайта</th>
+            <th style="white-space: nowrap; text-align: right">Эталон</th>
+            <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
+            <th style="white-space: nowrap; text-align: right">Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+                      <tr>
+                        <td>MTD</td>
+                        <td>M61</td>
+                        <td style="white-space: nowrap; text-align: right"><a href="http://motoblok.by/2999/3000/3012/" target="_blank">10 925 100</a></td>
+
+                            <td style="white-space: nowrap; text-align: right"><a href="http://www.ydachnik.by/catalog/?id=654" target="_blank">10 965 000</a></td>
+                            <td style="white-space: nowrap; text-align: right">39 900</td>
+                            <td style="white-space: nowrap; text-align: right">0.4%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>ME61</td>
+                        <td style="white-space: nowrap; text-align: right"><a href="http://motoblok.by/2999/3004/" target="_blank">12 151 200</a></td>
+
+                            <td style="white-space: nowrap; text-align: right"><a href="http://www.ydachnik.by/catalog/?id=658" target="_blank">12 194 000</a></td>
+                            <td style="white-space: nowrap; text-align: right">42 800</td>
+                            <td style="white-space: nowrap; text-align: right">0.4%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>OPTIMA ME66</td>
+                        <td style="white-space: nowrap; text-align: right"><a href="http://motoblok.by/2999/3008/" target="_blank">15 399 450</a></td>
+
+                            <td style="white-space: nowrap; text-align: right"><a href="http://www.ydachnik.by/catalog/?id=655" target="_blank">16 334 500</a></td>
+                            <td style="white-space: nowrap; text-align: right"> 935 050</td>
+                            <td style="white-space: nowrap; text-align: right">6.1%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>OPTIMA ME76</td>
+                        <td style="white-space: nowrap; text-align: right"><a href="http://motoblok.by/2999/3006/" target="_blank">19 215 000</a></td>
+
+                            <td style="white-space: nowrap; text-align: right"><a href="http://www.ydachnik.by/catalog/?id=656" target="_blank">20 202 000</a></td>
+                            <td style="white-space: nowrap; text-align: right"> 987 000</td>
+                            <td style="white-space: nowrap; text-align: right">5.1%</td>
+                      </tr>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381488861.120901:@expires_in0

@@ -1,0 +1,45 @@
+o: ActiveSupport::Cache::Entry:@valueI"k
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td></td>
+            <td><a href="/sites/108">21vek.by</a></td>
+            <td>email: </td>
+            <td>В стоплисте еще около 11 часов</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th style="white-space: nowrap; text-align: right">Цена сайта</th>
+            <th style="white-space: nowrap; text-align: right">Эталон</th>
+            <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
+            <th style="white-space: nowrap; text-align: right">Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+                      <tr>
+                        <td>MTD</td>
+                        <td>SMART 46 PO</td>
+                        <td style="white-space: nowrap; text-align: right"><a href="http://www.21vek.by/grass_cuts/mtd_smart46po.html" target="_blank">2 849 000</a></td>
+
+                            <td style="white-space: nowrap; text-align: right"><a href="http://www.ydachnik.by/catalog/?id=1740" target="_blank">3 096 000</a></td>
+                            <td style="white-space: nowrap; text-align: right"> 247 000</td>
+                            <td style="white-space: nowrap; text-align: right">8.7%</td>
+                      </tr>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381488855.443116:@expires_in0
