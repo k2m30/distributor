@@ -1,0 +1,54 @@
+o: ActiveSupport::Cache::Entry:@valueI"=
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td></td>
+            <td><a href="/sites/113">nash-dom.shop.by</a></td>
+            <td>email: </td>
+            <td>В стоплисте еще 1 день</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th>Цена сайта</th>
+            <th>Эталон</th>
+            <th>Разница, руб.</th>
+            <th>Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+                      <tr>
+                        <td>MTD</td>
+                        <td>VG40 BM</td>
+                        <td><a href="http://nash-dom.shop.by/3988/Aeratory-i-skarifikatory/Aerator-vertikutter-benzinovyy-MTD-VG-40-BM/" target="_blank">5 278 000</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=465" target="_blank">5 479 000</a></td>
+                            <td> 201 000</td>
+                            <td>3.8%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>395 PO</td>
+                        <td><a href="http://nash-dom.shop.by/GAZONOKOSILKI-I-TRIMMERY/Gaznokosilki-benzinovyye-nesamokhodnyye/Gazonokosilka-benzinovaya-nesamokhodnaya-MTD-395-PO/" target="_blank">2 502 500</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=80" target="_blank">2 511 000</a></td>
+                            <td>8 500</td>
+                            <td>0.3%</td>
+                      </tr>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381441483.438122:@expires_in0

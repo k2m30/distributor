@@ -76,8 +76,9 @@ class UrlsController < ApplicationController
   end
 
   def update_prices
+    current_site = params[:site].nil? ? nil : Site.find(params[:site])
     rate = current_user.settings.rate
-    urls = params[:site].nil? ? Url.all : Site.find(params[:site]).urls.all
+    urls = params[:site].nil? ? Url.all : current_site.urls
 
     urls.each do |url|
       css = url.site.css
@@ -88,67 +89,59 @@ class UrlsController < ApplicationController
     current_user.settings.save
 
     flash[:notice] = "Цены обновляются.."
-    redirect_to sites_path
-  end
-
-  def update_violators (redirect_to_root=true)
-    sites = Site.all
-    sites.each do |site|
-      if !site.out_of_ban_time.nil?
-        if Time.now > site.out_of_ban_time
-          site.violator = false
-          if !site.regexp.class == Regexp
-            site.regexp = Regexp.new(site.regexp)
-          end
-          site.save if site.changed?
-        end
-      end
+    update_violators(false, params[:site])
+    if current_site.nil?
+      redirect_to sites_path
+    else
+      redirect_to site_path(current_site)
     end
 
-    items = Item.all
-    Group.all.each do |group|
+  end
 
+  def update_violators (redirect_to_root=true, site_id=nil)
+    allowed_error = current_user.settings.allowed_error
+    if site_id.nil?
+      groups = Group.all
+    else
+      current_site = Site.find(site_id)
+      groups = current_site.groups
+    end
 
-      standard_site = group.sites.where(:standard => true)
-      if standard_site.nil? || standard_site.empty?
-        return
+    groups.each do |group|
+      if site_id.nil?
+        sites = group.sites
+        items = group.items
+        standard_site = group.sites.where(:standard => true).first
+      else
+        sites = [current_site]
+        items = current_site.items
+        standard_site = current_site.groups[0].sites.where(:standard => true).first
       end
 
-      standard_site = standard_site.first
+      if standard_site.nil?
+        return
+      end
       items.each do |item|
         standard_price = get_price(item, standard_site)
         if !standard_price.nil?
-          item.urls.each do |url|
+          urls = site_id.nil? ? item.urls : current_site.urls & item.urls
+          urls.each do |url|
             if !url.price.nil?
-              #logger.error(url.price)
-              url.violator = (url.price < (standard_price - current_user.settings.allowed_error) && url.price > 0) ? true : false
-
-              if url.violator?
-                if !url.site.violator?
-                  site = url.site
-                  site.violator = true
-                  site.out_of_ban_time = Time.now + 1.days
-                  logger.error("--")
-                  if !site.regexp.class == Regexp
-                    site.regexp = Regexp.new(site.regexp)
-                  end
-
-                  site.save if site.changed?
-                  site.touch if site.changed?
-                end
-              end
-
-              url.save if url.changed?
+              p "----", item.name, url.url, "%.1f" % url.price, "%.1f" % standard_price
+              url.delay(run_at: 3.seconds.from_now).check_for_violation(standard_price, allowed_error)
+              p url.violator?
             end
-
           end
         end
       end
-    end
 
-    flash[:notice] = "Нарушители обновлены"
-    expire_fragment('stop_list')
-    p fragment_exist?(controller: 'sites', action: 'stop_list')
+      sites.each do |site|
+        p "---", site.name, site.urls.where(violator: true).count
+        site.delay(run_at: 3.seconds.from_now).check_for_violation
+        p site.violator?
+      end
+    end
+    flash[:notice] = "Список нарушителей обновляется"
     if redirect_to_root
       redirect_to root_path
     end

@@ -1,0 +1,54 @@
+o: ActiveSupport::Cache::Entry:@valueI"	
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td></td>
+            <td><a href="/sites/129">50.by</a></td>
+            <td>email: </td>
+            <td>В стоплисте еще около 22 часов</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th style="white-space: nowrap; text-align: right">Цена сайта</th>
+            <th style="white-space: nowrap; text-align: right">Эталон</th>
+            <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
+            <th style="white-space: nowrap; text-align: right">Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+                      <tr>
+                        <td>MTD</td>
+                        <td>395 PO</td>
+                        <td style="white-space: nowrap; text-align: right"><a href="http://50.by/products/gazonokosilka-nesamohodnaya-benzinovaya-mtd-395-po" target="_blank">2 356 900</a></td>
+
+                            <td style="white-space: nowrap; text-align: right"><a href="http://www.ydachnik.by/catalog/?id=80" target="_blank">2 511 000</a></td>
+                            <td style="white-space: nowrap; text-align: right"> 154 100</td>
+                            <td style="white-space: nowrap; text-align: right">6.5%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>T/245</td>
+                        <td style="white-space: nowrap; text-align: right"><a href="http://50.by/products/kultivator-benzinovyj-mtd-t245" target="_blank">4 868 500</a></td>
+
+                            <td style="white-space: nowrap; text-align: right"><a href="http://www.ydachnik.by/catalog/?id=115" target="_blank">5 029 200</a></td>
+                            <td style="white-space: nowrap; text-align: right"> 160 700</td>
+                            <td style="white-space: nowrap; text-align: right">3.3%</td>
+                      </tr>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381448443.988322:@expires_in0

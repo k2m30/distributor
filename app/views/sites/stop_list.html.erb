@@ -22,16 +22,16 @@
           <tr>
             <th>Бренд</th>
             <th>Позиция</th>
-            <th>Цена сайта</th>
-            <th>Эталон</th>
-            <th>Разница, руб.</th>
-            <th>Разница, %</th>
+            <th style="white-space: nowrap; text-align: right">Цена сайта</th>
+            <th style="white-space: nowrap; text-align: right">Эталон</th>
+            <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
+            <th style="white-space: nowrap; text-align: right">Разница, %</th>
           </tr>
           </thead>
           <tbody>
           <% @groups.each do |group| %>
               <%- standard_site = group.sites.where(standard: true).first %>
-              <%- items = site.items & group.items %>
+              <%- items = (site.items & group.items).sort_by { |item| item.name } %>
               <% items.each do |item| %>
                   <% (site.urls.where(violator: true) & item.urls).each do |url| %>
                       <%- name = item.name %>
@@ -41,14 +41,14 @@
                       <tr>
                         <td><%= group.name %></td>
                         <td><%= name %></td>
-                        <td><%= link_to spaces(price), url_url, target: "_blank" %></td>
+                        <td style="white-space: nowrap; text-align: right"><%= link_to spaces(price), url_url, target: "_blank" %></td>
 
                         <% if !standard_url.nil? %>
                             <%- standard_url_url = standard_url.url %>
                             <%- standard_url_price = standard_url.price %>
-                            <td><%= link_to spaces(standard_url_price), standard_url_url, target: "_blank" %></td>
-                            <td><%= spaces(standard_url_price - price) %></td>
-                            <td><%= "%.1f" % ((standard_url_price/price - 1)*100) %>%</td>
+                            <td style="white-space: nowrap; text-align: right"><%= link_to spaces(standard_url_price), standard_url_url, target: "_blank" %></td>
+                            <td style="white-space: nowrap; text-align: right"><%= spaces(standard_url_price - price) %></td>
+                            <td style="white-space: nowrap; text-align: right"><%= "%.1f" % ((standard_url_price/price - 1)*100) %>%</td>
                         <% end %>
                       </tr>
                   <% end %>

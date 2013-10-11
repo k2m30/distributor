@@ -1,0 +1,36 @@
+o: ActiveSupport::Cache::Entry:@valueI"
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td></td>
+            <td><a href="/sites/134">suseki.by</a></td>
+            <td>email: </td>
+            <td>В стоплисте еще 1 день</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th>Цена сайта</th>
+            <th>Эталон</th>
+            <th>Разница, руб.</th>
+            <th>Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381441485.084457:@expires_in0

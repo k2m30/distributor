@@ -1,0 +1,54 @@
+o: ActiveSupport::Cache::Entry:@valueI"�
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td></td>
+            <td><a href="/sites/126">pingvin.shop.by</a></td>
+            <td>email: </td>
+            <td>В стоплисте еще 1 день</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th>Цена сайта</th>
+            <th>Эталон</th>
+            <th>Разница, руб.</th>
+            <th>Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+                      <tr>
+                        <td>MTD</td>
+                        <td>OPTIMA ME66</td>
+                        <td><a href="http://pingvin.shop.by/reviews/?item_id=15799" target="_blank">2 805 500</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=655" target="_blank">16 334 500</a></td>
+                            <td>13 529 000</td>
+                            <td>482.2%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>OPTIMA ME76</td>
+                        <td><a href="http://pingvin.shop.by/reviews/?item_id=15799" target="_blank">2 805 500</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=656" target="_blank">20 202 000</a></td>
+                            <td>17 396 500</td>
+                            <td>620.1%</td>
+                      </tr>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381441483.953291:@expires_in0

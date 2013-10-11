@@ -1,0 +1,45 @@
+o: ActiveSupport::Cache::Entry:@valueI"o
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td></td>
+            <td><a href="/sites/111">rsmarket.by</a></td>
+            <td>email: </td>
+            <td>В стоплисте еще около 22 часов</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th style="white-space: nowrap; text-align: right">Цена сайта</th>
+            <th style="white-space: nowrap; text-align: right">Эталон</th>
+            <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
+            <th style="white-space: nowrap; text-align: right">Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+                      <tr>
+                        <td>MTD</td>
+                        <td>T/245</td>
+                        <td style="white-space: nowrap; text-align: right"><a href="http://rsmarket.by/sadovaya_tehnika/kultivator/2157/2311/" target="_blank">4 904 900</a></td>
+
+                            <td style="white-space: nowrap; text-align: right"><a href="http://www.ydachnik.by/catalog/?id=115" target="_blank">5 029 200</a></td>
+                            <td style="white-space: nowrap; text-align: right"> 124 300</td>
+                            <td style="white-space: nowrap; text-align: right">2.5%</td>
+                      </tr>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381448449.989738:@expires_in0

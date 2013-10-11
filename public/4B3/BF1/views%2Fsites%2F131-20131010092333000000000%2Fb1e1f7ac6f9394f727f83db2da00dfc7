@@ -1,0 +1,81 @@
+o: ActiveSupport::Cache::Entry:@valueI"�
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td></td>
+            <td><a href="/sites/131">fazenda.shop.by</a></td>
+            <td>email: </td>
+            <td>В стоплисте еще 35 минуты</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th>Цена сайта</th>
+            <th>Эталон</th>
+            <th>Разница, руб.</th>
+            <th>Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+                      <tr>
+                        <td>MTD</td>
+                        <td>OPTIMA ME66</td>
+                        <td><a href="http://fazenda.shop.by/36/12/1561/" target="_blank">16 208 850</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=655" target="_blank">16 334 500</a></td>
+                            <td> 125 650</td>
+                            <td>0.8%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>395 PO</td>
+                        <td><a href="http://fazenda.shop.by/36/3/5/61/84/" target="_blank">2 284 590</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=80" target="_blank">2 511 000</a></td>
+                            <td> 226 410</td>
+                            <td>9.9%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>OPTIMA ME76</td>
+                        <td><a href="http://fazenda.shop.by/36/12/1562/" target="_blank">20 046 600</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=656" target="_blank">20 202 000</a></td>
+                            <td> 155 400</td>
+                            <td>0.8%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>T/245</td>
+                        <td><a href="http://fazenda.shop.by/36/6/73/112/" target="_blank">4 812 990</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=115" target="_blank">5 029 200</a></td>
+                            <td> 216 210</td>
+                            <td>4.5%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>M61</td>
+                        <td><a href="http://fazenda.shop.by/36/12/1048/" target="_blank">10 881 150</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=654" target="_blank">10 965 000</a></td>
+                            <td>83 850</td>
+                            <td>0.8%</td>
+                      </tr>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381440712.1438642:@expires_in0

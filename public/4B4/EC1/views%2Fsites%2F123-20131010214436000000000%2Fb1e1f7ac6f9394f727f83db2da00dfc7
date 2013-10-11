@@ -1,0 +1,63 @@
+o: ActiveSupport::Cache::Entry:@valueI"X
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td></td>
+            <td><a href="/sites/123">svoiludi.by</a></td>
+            <td>email: </td>
+            <td>В стоплисте еще 1 день</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Позиция</th>
+            <th>Цена сайта</th>
+            <th>Эталон</th>
+            <th>Разница, руб.</th>
+            <th>Разница, %</th>
+          </tr>
+          </thead>
+          <tbody>
+                      <tr>
+                        <td>MTD</td>
+                        <td>990 AST</td>
+                        <td><a href="http://svoiludi.by/products/mtd-990-ast" target="_blank">3 054 400</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=109" target="_blank">3 339 000</a></td>
+                            <td> 284 600</td>
+                            <td>9.3%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>T/245</td>
+                        <td><a href="http://svoiludi.by/products/mtd-t-245" target="_blank">4 958 800</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=115" target="_blank">5 029 200</a></td>
+                            <td>70 400</td>
+                            <td>1.4%</td>
+                      </tr>
+                      <tr>
+                        <td>MTD</td>
+                        <td>827 AST</td>
+                        <td><a href="http://svoiludi.by/products/mtd-827-ast" target="_blank">2 557 600</a></td>
+
+                            <td><a href="http://www.ydachnik.by/catalog/?id=1728" target="_blank">2 629 000</a></td>
+                            <td>71 400</td>
+                            <td>2.8%</td>
+                      </tr>
+
+          </tr>
+
+          </tbody>
+        </table>
+        <hr>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+:ET:@created_atf1381441485.370497:@expires_in0

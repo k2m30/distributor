@@ -16,22 +16,17 @@ class SitesController < ApplicationController
   # GET /sites/1
   # GET /sites/1.json
   def show
-    # @standard_site = Site.where(standard: true).first
-    #@violating_urls = @site.urls.where(violator: true)
     groups = Group.where(name: "MTD")
     items = []
     groups.each do |group|
       items += group.items
     end
-
-    p items.count
     items = items & @site.items
-    p items.count
-
     @urls =[]
     items.each do |item|
       @urls += item.urls & @site.urls
     end
+    @urls = @urls.sort_by { |url| url.item.name }
   end
 
   # GET /sites/new
@@ -63,10 +58,6 @@ class SitesController < ApplicationController
   # PATCH/PUT /sites/1.json
   def update
     respond_to do |format|
-      # p "-----"
-      #      p site_params[:regexp]
-      #      site_params[:regexp] = Regexp.new(site_params[:regexp])
-      #      p site_params[:regexp]
       if @site.update(site_params)
         format.html { redirect_to @site, notice: 'Site was successfully updated.' }
         format.json { head :no_content }
@@ -94,9 +85,9 @@ class SitesController < ApplicationController
       @sites += group.sites.where(:violator => true)
     end
     @sites = @sites.sort_by { |site| site.name }
-    @sites.each do |site|
-      p site.name
-    end
+    #@sites.each do |site|
+    #  p site.name
+    #end
 
   end
 
