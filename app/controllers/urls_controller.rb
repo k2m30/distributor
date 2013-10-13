@@ -83,7 +83,7 @@ class UrlsController < ApplicationController
     urls.each do |url|
       css = url.site.css
       regexp = url.site.regexp
-      #url.delay(run_at: 10.seconds.from_now).update_price(css, regexp, rate)
+      url.delay(run_at: 10.seconds.from_now).update_price(css, regexp, rate)
     end
     current_user.settings.last_updated = Time.now
     current_user.settings.save
