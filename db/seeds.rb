@@ -31,6 +31,7 @@ def  import_urls(filename)
           if (item_base.urls & site_base.urls).empty?
             url_base = Url.new
             url_base.url = hash[url]
+            url_base.price = 0
             url_base.item = item_base
             url_base.site = site_base
             #puts url_base.site.name
@@ -39,6 +40,7 @@ def  import_urls(filename)
           else
             url_base = Url.where(item: item_base, site: site_base).first
             url_base.url = hash[url]
+            url_base.price = 0
             #puts "change:"
             #puts url_base.url
             url_base.save    ############### сохранение в базу
