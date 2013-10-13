@@ -5,6 +5,8 @@ require "nokogiri"
 class Url < ActiveRecord::Base
   belongs_to :site
   belongs_to :item
+  has_many :logs
+
   def update_price(css, regexp, rate)
     begin
       uri = URI.parse(self.url)
@@ -23,12 +25,23 @@ class Url < ActiveRecord::Base
       logger.error self.price
       self.save
       self.site.touch
+
+      #log.log_type = "OK"
+      #log.price_found = page_price
+      #log.ok = true
+      #log.ok_all = true
+      #log.save
     rescue
       self.price = -1
       self.save
       logger.error("-----" + self.url + ' '+ rate)
       logger.error("#{$!}")
       self.site.touch
+    #  log = Log.new
+    #  log.url = self
+    #  log.text = "#{$!}"
+    #  log.save
+    ##logger.error(e.inspect)
     end
   end
 

@@ -17,6 +17,7 @@ class SitesController < ApplicationController
   # GET /sites/1.json
   def show
     groups = Group.where(name: "MTD")
+    groups += Group.where(name: "KARCHER")
     items = []
     groups.each do |group|
       items += group.items
@@ -80,6 +81,8 @@ class SitesController < ApplicationController
 
   def stop_list
     @groups = Group.where(name: "MTD")
+    @groups += Group.where(name: "KARCHER")
+    p @groups.count
     @sites = []
     @groups.each do |group|
       @sites += group.sites.where(:violator => true)

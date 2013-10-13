@@ -127,16 +127,16 @@ class UrlsController < ApplicationController
           urls = site_id.nil? ? item.urls : current_site.urls & item.urls
           urls.each do |url|
             if !url.price.nil?
-              p "----", item.name, url.url, "%.1f" % url.price, "%.1f" % standard_price
+              #p "----", item.name, url.url, "%.1f" % url.price, "%.1f" % standard_price
               url.delay(run_at: 3.seconds.from_now).check_for_violation(standard_price, allowed_error)
-              p url.violator?
+              #p url.violator?
             end
           end
         end
       end
 
       sites.each do |site|
-        p "---", site.name, site.urls.where(violator: true).count
+        #p "---", site.name, site.urls.where(violator: true).count
         site.delay(run_at: 3.seconds.from_now).check_for_violation
         p site.violator?
       end

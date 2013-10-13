@@ -1,4 +1,6 @@
 Distibutor::Application.routes.draw do
+  resources :logs
+
   resources :settings
 
   resources :items do
