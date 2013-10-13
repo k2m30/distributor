@@ -79,11 +79,11 @@ class UrlsController < ApplicationController
     current_site = params[:site].nil? ? nil : Site.find(params[:site])
     rate = current_user.settings.rate
     urls = params[:site].nil? ? Url.all : current_site.urls
-
+    p urls.count
     urls.each do |url|
       css = url.site.css
       regexp = url.site.regexp
-      url.delay(run_at: 10.seconds.from_now).update_price(css, regexp, rate)
+      #url.delay(run_at: 10.seconds.from_now).update_price(css, regexp, rate)
     end
     current_user.settings.last_updated = Time.now
     current_user.settings.save

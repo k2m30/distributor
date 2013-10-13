@@ -52,7 +52,7 @@ def  import_urls(filename)
     puts e.inspect
   end
 end
-sites = Group.all[1].sites
+sites = Group.where(name: "KARCHER").first.sites
 sites.each do |site|
   #puts hash.name
   import_urls(site.name)
