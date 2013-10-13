@@ -87,6 +87,7 @@ class SitesController < ApplicationController
     @groups.each do |group|
       @sites += group.sites.where(:violator => true)
     end
+    @sites = @sites.uniq
     @sites = @sites.sort_by { |site| site.name }
     #@sites.each do |site|
     #  p site.name
