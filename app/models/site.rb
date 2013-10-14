@@ -16,7 +16,10 @@ class Site < ActiveRecord::Base
         self.out_of_ban_time = nil
       end
     end
+    if self.changed?
       self.save
       self.touch
+    end
+
   end
 end

@@ -6,7 +6,7 @@ require 'rubyXL'
 
 class UrlsController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_url, only: [:show, :edit, :update, :destroy]
+  before_action :set_url, only: [:show, :edit, :update, :destroy, :update_single_price]
   #after_update_prices :expire_cache
 
   # GET /urls
@@ -75,6 +75,14 @@ class UrlsController < ApplicationController
     end
   end
 
+  def update_single_price
+    rate = current_user.settings.rate
+    css = @url.site.css
+    regexp = @url.site.regexp
+    @url.update_price(css, regexp, rate)
+    redirect_to logs_path
+  end
+
   def update_prices
     current_site = params[:site].nil? ? nil : Site.find(params[:site])
     rate = current_user.settings.rate
@@ -102,25 +110,27 @@ class UrlsController < ApplicationController
     allowed_error = current_user.settings.allowed_error
     if site_id.nil?
       groups = Group.all
+      all_sites = Site.all
     else
       current_site = Site.find(site_id)
       groups = current_site.groups
+      all_sites = [current_site]
     end
-
+    p groups.count
     groups.each do |group|
       if site_id.nil?
-        sites = group.sites
         items = group.items
         standard_site = group.sites.where(:standard => true).first
       else
-        sites = [current_site]
-        items = current_site.items
+        items = current_site.items & group.items
         standard_site = current_site.groups[0].sites.where(:standard => true).first
       end
 
       if standard_site.nil?
         return
       end
+
+      p items.count
       items.each do |item|
         standard_price = get_price(item, standard_site)
         if !standard_price.nil?
@@ -134,13 +144,13 @@ class UrlsController < ApplicationController
           end
         end
       end
-
-      sites.each do |site|
-        #p "---", site.name, site.urls.where(violator: true).count
-        site.delay(run_at: 3.seconds.from_now).check_for_violation
-        p site.violator?
-      end
     end
+
+    all_sites.each do |site|
+      site.delay(run_at: 3.seconds.from_now).check_for_violation
+      p site.violator?
+    end
+
     flash[:notice] = "Список нарушителей обновляется"
     if redirect_to_root
       redirect_to root_path

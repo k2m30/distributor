@@ -26,7 +26,7 @@ def  import_urls(filename)
       #puts item_base.name
       flag = false
       table.each do |hash|
-        str = hash[name]
+        str = hash[name].gsub("Е","E").gsub("Н","H").gsub("О","O").gsub("Р","P").gsub("А","A").gsub("В","B").gsub("С","C").gsub("М","M").gsub("Т","T").gsub("К","K").gsub("Х","X").gsub("  "," ")
         if !str.nil? && str.include?(item_base.name) && !flag
           if (item_base.urls & site_base.urls).empty?
             url_base = Url.new

@@ -19,6 +19,7 @@
   <th style="white-space: nowrap; text-align: right">Эталон</th>
   <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
   <th style="white-space: nowrap; text-align: right">Разница, %</th>
+  <th>Действия</th>
 
   <% @urls.each do |url| %>
       <tr class=<%= url.violator? ? "error" : "" %>>
@@ -27,7 +28,7 @@
         <% if url.price > 0 %>
             <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.price), url.url %></td>
         <% else %>
-            <td style="text-align: right">n/a</td>
+            <td style="text-align: right"><%= link_to "n/a", url.url %></td>
         <% end %>
         <%- standard_site = url.item.group.sites.where(standard: true).first %>
         <%- standard_url = (standard_site.urls & url.item.urls).first %>
@@ -47,7 +48,7 @@
             <td></td>
             <td></td>
         <% end %>
-
+        <td><%= link_to "Обновить", upd_url_path(url), target: "_blank",class: 'btn btn-mini'%></td>
       </tr>
   <% end %>
 </table>

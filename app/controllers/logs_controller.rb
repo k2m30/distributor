@@ -4,7 +4,12 @@ class LogsController < ApplicationController
   # GET /logs
   # GET /logs.json
   def index
-    @logs = Log.all
+    @logs = Log.where(ok: false).order('created_at DESC')
+    @logs = Log.all.order('created_at DESC')
+  end
+
+  def raw
+    @logs = Log.all.order('created_at DESC')
   end
 
   # GET /logs/1
@@ -19,6 +24,11 @@ class LogsController < ApplicationController
 
   # GET /logs/1/edit
   def edit
+  end
+
+  def clear_log
+    Log.delete_all
+    redirect_to logs_path
   end
 
   # POST /logs
@@ -54,6 +64,7 @@ class LogsController < ApplicationController
   # DELETE /logs/1
   # DELETE /logs/1.json
   def destroy
+    @log.url.destroy
     @log.destroy
     respond_to do |format|
       format.html { redirect_to logs_url }

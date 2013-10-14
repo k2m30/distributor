@@ -1,6 +1,9 @@
 Distibutor::Application.routes.draw do
-  resources :logs
-
+  resources :logs do
+    collection do
+      get 'clear_log' => 'logs#clear_log'
+    end
+  end
   resources :settings
 
   resources :items do
@@ -10,14 +13,14 @@ Distibutor::Application.routes.draw do
   end
 
   resources :urls do
-  member do
-    get 'test_regexp' => 'urls#test_regexp'
-  end
-  collection do
-    get 'update_prices' => 'urls#update_prices'
-    get 'update_violators' => 'urls#update_violators'
-    get 'find_urls' => 'urls#find_urls'
-  end
+    member do
+      get 'upd' => 'urls#update_single_price'
+    end
+    collection do
+      get 'update_prices' => 'urls#update_prices'
+      get 'update_violators' => 'urls#update_violators'
+      get 'find_urls' => 'urls#find_urls'
+    end
   end
 
   resources :sites do
@@ -74,7 +77,7 @@ Distibutor::Application.routes.draw do
   #       get 'recent', on: :collection
   #     end
   #   end
-  
+
   # Example resource route with concerns:
   #   concern :toggleable do
   #     post 'toggle'

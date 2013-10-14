@@ -9,12 +9,17 @@ class Url < ActiveRecord::Base
 
   def update_price(css, regexp, rate)
     begin
+      css_content = nil
+      log = Log.new
+      log.url = self
+
       uri = URI.parse(self.url)
-#      puts "---"
       logger.error uri.to_s
       page = open(uri, "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36 OPR/16.0.1196.73", "Accept" => "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Cache-Control" => "max-age=0")
       html = Nokogiri::HTML page
-      page_price = html.at_css(css).content.gsub(/\u00a0|\s/, "")
+      css_content = html.at_css(css)
+      css_content = css_content.content
+      page_price = css_content.gsub(/\u00a0|\s/, "")
       if  page_price.scan(/\d\.\d{3}/).count > 0
         page_price = page_price.gsub(".", "") #костыль специально для kosilka.by
       end
@@ -25,23 +30,29 @@ class Url < ActiveRecord::Base
       logger.error self.price
       self.save
       self.site.touch
-
-      #log.log_type = "OK"
-      #log.price_found = page_price
-      #log.ok = true
-      #log.ok_all = true
-      #log.save
-    rescue
+      if !page_price.nil? && !page_price.empty?
+        log.log_type = "OK"
+        log.ok = true
+        log.ok_all = true
+      else
+        log.log_type = "Wrong address"
+        log.ok = false
+        log.ok_all = false
+      end
+      log.price_found = (css_content.nil? || css_content.empty?) ? self.url : css_content
+      log.save
+    rescue Exception => e
       self.price = -1
       self.save
-      logger.error("-----" + self.url + ' '+ rate)
-      logger.error("#{$!}")
       self.site.touch
-    #  log = Log.new
-    #  log.url = self
-    #  log.text = "#{$!}"
-    #  log.save
-    ##logger.error(e.inspect)
+      log = Log.new
+      log.url = self
+      log.log_type = "#{$!}"
+      log.price_found = css_content
+      log.ok = false
+
+      log.save
+      ##logger.error(e.inspect)
     end
   end
 
