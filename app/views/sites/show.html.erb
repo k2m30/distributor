@@ -34,7 +34,7 @@
         <%- standard_url = (standard_site.urls & url.item.urls).first %>
         <% if !standard_url.nil? && !standard_url.price.nil? %>
             <td style="white-space: nowrap; text-align: right"><%= link_to spaces(standard_url.price), standard_url.url %></td>
-            <% if url.price > 0 %>
+            <% if url.price > 0 && standard_url.price > 0%>
                 <td style="white-space: nowrap; text-align: right"><%= spaces(standard_url.price - url.price) %></td>
                 <td style="white-space: nowrap; text-align: right"><%= "%.1f" % ((standard_url.price/url.price - 1)*100) %>
                   %

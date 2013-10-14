@@ -5,7 +5,7 @@ class LogsController < ApplicationController
   # GET /logs.json
   def index
     @logs = Log.where(ok: false).order('created_at DESC')
-    @logs = Log.all.order('created_at DESC')
+    #@logs = Log.all.order('created_at DESC')
   end
 
   def raw
