@@ -64,8 +64,10 @@ class LogsController < ApplicationController
   # DELETE /logs/1
   # DELETE /logs/1.json
   def destroy
-    @log.url.destroy
-    @log.destroy
+    url = @log.url
+    url.logs.destroy_all
+    url.destroy
+
     respond_to do |format|
       format.html { redirect_to logs_url }
       format.json { head :no_content }

@@ -80,6 +80,10 @@ class UrlsController < ApplicationController
     css = @url.site.css
     regexp = @url.site.regexp
     @url.update_price(css, regexp, rate)
+
+    standard_site = Site.where(standard: true).first
+    standard_price = get_price(@url.item, standard_site)
+    @url.check_for_violation(standard_price, current_user.settings.allowed_error)
     redirect_to logs_path
   end
 

@@ -43,12 +43,13 @@ class Url < ActiveRecord::Base
       log.save
     rescue Exception => e
       self.price = -1
+      self.violator = false
       self.save
       self.site.touch
       log = Log.new
       log.url = self
       log.log_type = "#{$!}"
-      log.price_found = css_content
+      log.price_found = (css_content.nil? || css_content.empty?) ? self.url : css_content
       log.ok = false
 
       log.save
@@ -58,6 +59,15 @@ class Url < ActiveRecord::Base
 
   def check_for_violation(standard_price, allowed_error)
     self.violator = (self.price < (standard_price - allowed_error) && self.price > 0) ? true : false
+
+    if (self.price > 0) && (((standard_price - self.price)/standard_price).abs > 0.3) && standard_price > 0
+      log = Log.new
+      log.url = self
+      log.log_type = "Standard price = " + standard_price.to_s + ". This site price = " + self.price.to_s
+      log.price_found = self.price
+      log.save
+    end
+
     if self.changed?
       self.save
       self.touch

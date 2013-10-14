@@ -18,6 +18,12 @@ class ApplicationController < ActionController::Base
     return (item.urls & site.urls).first
   end
 
+  def spaces(x)
+    str = x.to_i.to_s.reverse
+    str.gsub!(/([0-9]{3})/,"\\1 ")
+    return str.gsub(/,$/,"").reverse
+  end
+
   protected
 
   def configure_permitted_parameters
