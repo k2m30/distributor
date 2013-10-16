@@ -13,20 +13,20 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
-//= require turbolinks
 //= require_tree .
 function showSpin() {
     //$('.spin').toggle();
-    $('.table').hide()
-    $('.spin-wrapper').show();
-    console.log('clicked');
+    $('.row-fluid').hide()
+    $('.spin').fadeIn("slow");
+//    console.log('clicked');
 }
 
 $(document).ready(function () {
     $('.tooltip_cell').tooltip({container: 'body'})
-
-//    $('.spin-wrapper').hide()//css('background', '#444');
-//    $('h1').on('click', 'h1',showSpin);
+    var spin = $('.spin');
+    spin.hide()//css('background', '#444');
+    $('.nav').on('click','a', showSpin);
+    $('.tdfade').on('click', showSpin);
 
 
 });

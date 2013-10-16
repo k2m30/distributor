@@ -10,7 +10,7 @@
           <tbody>
           <tr>
             <td><%= site.company_name %></td>
-            <td><%= link_to site.name, site_path(site) %></td>
+            <td><%= link_to site.name, site_path(site), class: "tdfade" %></td>
             <td>email: <%= site.email %></td>
             <td>В стоплисте еще <%= distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
           </tr>

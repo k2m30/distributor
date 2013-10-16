@@ -1,0 +1,1 @@
+scp deployer@144.76.161.235:/home/deployer/backups/distributor_backup ./
