@@ -20,36 +20,38 @@
   <% end %>
 
   <% @urls.each do |url| %>
-      <tr class=<%= url.violator? ? "error" : "" %>>
-        <td><%= url.item.group.name %></td>
-        <td><%= url.item.name %></td>
-        <% if url.price > 0 %>
-            <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.price), url.url %></td>
-        <% else %>
-            <td style="text-align: right"><%= link_to "n/a", url.url %></td>
-        <% end %>
-        <%- standard_site = url.item.group.sites.where(standard: true).first %>
-        <%- standard_url = (standard_site.urls & url.item.urls).first %>
-        <% if !standard_url.nil? && !standard_url.price.nil? && standard_url.price > 0 %>
-            <td style="white-space: nowrap; text-align: right"><%= link_to spaces(standard_url.price), standard_url.url %></td>
-            <% if url.price > 0 && standard_url.price > 0 %>
-                <td style="white-space: nowrap; text-align: right"><%= spaces(standard_url.price - url.price) %></td>
-                <td style="white-space: nowrap; text-align: right"><%= "%.1f" % ((standard_url.price/url.price - 1)*100) %>
-                  %
-                </td>
+      <%= cache(url) do %>
+          <tr class=<%= url.violator? ? "error" : "" %>>
+            <td><%= url.item.group.name %></td>
+            <td><%= url.item.name %></td>
+            <% if url.price > 0 %>
+                <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.price), url.url %></td>
+            <% else %>
+                <td style="text-align: right"><%= link_to "n/a", url.url %></td>
+            <% end %>
+            <%- standard_site = url.item.group.sites.where(standard: true).first %>
+            <%- standard_url = (standard_site.urls & url.item.urls).first %>
+            <% if !standard_url.nil? && !standard_url.price.nil? && standard_url.price > 0 %>
+                <td style="white-space: nowrap; text-align: right"><%= link_to spaces(standard_url.price), standard_url.url %></td>
+                <% if url.price > 0 && standard_url.price > 0 %>
+                    <td style="white-space: nowrap; text-align: right"><%= spaces(standard_url.price - url.price) %></td>
+                    <td style="white-space: nowrap; text-align: right"><%= "%.1f" % ((standard_url.price/url.price - 1)*100) %>
+                      %
+                    </td>
+                <% else %>
+                    <td></td>
+                    <td></td>
+                <% end %>
             <% else %>
                 <td></td>
                 <td></td>
+                <td></td>
             <% end %>
-        <% else %>
-            <td></td>
-            <td></td>
-            <td></td>
-        <% end %>
-        <% if current_user.admin? %>
-            <td><%= link_to "Обновить", upd_url_path(url), target: "_blank", class: 'btn btn-mini' %></td>
-        <% end %>
-      </tr>
+            <% if current_user.admin? %>
+                <td><%= link_to "Обновить", upd_url_path(url), target: "_blank", class: 'btn btn-mini' %></td>
+            <% end %>
+          </tr>
+      <% end %>
   <% end %>
 </table>
 
