@@ -5,8 +5,8 @@
 
 <% if current_user.admin? %>
     <p>
-    <%= link_to t('.import', :default => t("helpers.links.import")),
-                import_sites_path, :class => 'btn btn-primary' %>
+      <%= link_to t('.import', :default => t("helpers.links.import")),
+                  import_sites_path, :class => 'btn btn-primary' %>
       <%= link_to t('.export', :default => t("helpers.links.export")),
                   export_sites_path, :class => 'btn btn-primary' %>
     </p>
@@ -28,8 +28,8 @@
   <thead>
   <tr>
     <th><%= model_class.human_attribute_name(:name) %></th>
-	<th><%= model_class.human_attribute_name(:group) %></th>
-	<th><%= model_class.human_attribute_name(:company_name) %></th>
+    <th><%= model_class.human_attribute_name(:group) %></th>
+    <th><%= model_class.human_attribute_name(:company_name) %></th>
     <th><%= model_class.human_attribute_name(:out_of_ban_time) %></th>
     <th><%= t '.actions', :default => t("helpers.actions") %></th>
   </tr>
@@ -37,18 +37,20 @@
   <tbody>
   <% @sites.order(:name).each do |site| %>
       <tr <%= (site.violator?) ? " class=\"error\"".html_safe : "" %>"" >
-      <td><%= link_to site.name, site_path(site) %></td>
-	  <td><% site.groups.each do |group|%>
-	      <%= group.name %> 
-	      <% end %></td>
-	  <td><%= site.company_name %></td>
+      <td><%= link_to site.name, site_path(site), class: "tdfade" %></td>
+      <td>
+        <% site.groups.each do |group| %>
+            <%= group.name %>
+        <% end %></td>
+      <td><%= site.company_name %></td>
       <td><%= (site.out_of_ban_time.nil?) ? "-" : distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
 
       <td>
-        <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                    edit_site_path(site), :class => 'btn btn-mini' %>
-
         <% if current_user.admin? %>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                        edit_site_path(site), :class => 'btn btn-mini' %>
+
+
             <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                         site_path(site),
                         :method => :delete,

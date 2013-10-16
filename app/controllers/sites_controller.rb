@@ -82,7 +82,6 @@ class SitesController < ApplicationController
   def stop_list
     @groups = Group.where(name: "MTD")
     @groups += Group.where(name: "KARCHER")
-    p @groups.count
     @sites = []
     @groups.each do |group|
       @sites += group.sites.where(:violator => true)

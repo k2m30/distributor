@@ -15,7 +15,9 @@
   <th style="white-space: nowrap; text-align: right">Эталон</th>
   <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
   <th style="white-space: nowrap; text-align: right">Разница, %</th>
-  <th>Действия</th>
+  <% if current_user.admin? %>
+      <th>Действия</th>
+  <% end %>
 
   <% @urls.each do |url| %>
       <tr class=<%= url.violator? ? "error" : "" %>>
@@ -28,9 +30,9 @@
         <% end %>
         <%- standard_site = url.item.group.sites.where(standard: true).first %>
         <%- standard_url = (standard_site.urls & url.item.urls).first %>
-        <% if !standard_url.nil? && !standard_url.price.nil? %>
+        <% if !standard_url.nil? && !standard_url.price.nil? && standard_url.price > 0 %>
             <td style="white-space: nowrap; text-align: right"><%= link_to spaces(standard_url.price), standard_url.url %></td>
-            <% if url.price > 0 && standard_url.price > 0%>
+            <% if url.price > 0 && standard_url.price > 0 %>
                 <td style="white-space: nowrap; text-align: right"><%= spaces(standard_url.price - url.price) %></td>
                 <td style="white-space: nowrap; text-align: right"><%= "%.1f" % ((standard_url.price/url.price - 1)*100) %>
                   %
@@ -44,7 +46,9 @@
             <td></td>
             <td></td>
         <% end %>
-        <td><%= link_to "Обновить", upd_url_path(url), target: "_blank",class: 'btn btn-mini'%></td>
+        <% if current_user.admin? %>
+            <td><%= link_to "Обновить", upd_url_path(url), target: "_blank", class: 'btn btn-mini' %></td>
+        <% end %>
       </tr>
   <% end %>
 </table>

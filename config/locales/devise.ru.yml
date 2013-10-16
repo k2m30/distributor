@@ -12,7 +12,7 @@ ru:
       locked: "Ваша учётная запись заблокирована."
       not_found_in_database: "Неверный пароль или email."
       timeout: "Ваш сеанс закончился. Пожалуйста, войдите в систему снова."
-      unauthenticated: "Вам необходимо войти в систему или зарегистрироваться."
+      unauthenticated: "Вам необходимо войти в систему."
       unconfirmed: "Вы должны подтвердить вашу учётную запись."
     mailer:
       confirmation_instructions:

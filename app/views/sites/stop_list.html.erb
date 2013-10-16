@@ -38,19 +38,23 @@
                       <%- price = url.price %>
                       <%- url_url = url.url %>
                       <%- standard_url = (url.item.urls & standard_site.urls).first %>
-                      <tr>
-                        <td><%= group.name %></td>
-                        <td><%= name %></td>
-                        <td style="white-space: nowrap; text-align: right"><%= link_to spaces(price), url_url, target: "_blank" %></td>
+                      <% if !standard_url.nil? && !standard_url.price.nil? && standard_url.price > 0 %>
+                          <tr>
+                            <td><%= group.name %></td>
+                            <td><%= name %></td>
+                            <td style="white-space: nowrap; text-align: right"><%= link_to spaces(price), url_url, target: "_blank" %></td>
 
-                        <% if !standard_url.nil? %>
+
                             <%- standard_url_url = standard_url.url %>
                             <%- standard_url_price = standard_url.price %>
                             <td style="white-space: nowrap; text-align: right"><%= link_to spaces(standard_url_price), standard_url_url, target: "_blank" %></td>
                             <td style="white-space: nowrap; text-align: right"><%= spaces(standard_url_price - price) %></td>
-                            <td style="white-space: nowrap; text-align: right"><%= "%.1f" % ((standard_url_price/price - 1)*100) %>%</td>
-                        <% end %>
-                      </tr>
+                            <td style="white-space: nowrap; text-align: right"><%= "%.1f" % ((standard_url_price/price - 1)*100) %>
+                              %
+                            </td>
+
+                          </tr>
+                      <% end %>
                   <% end %>
               <% end %>
           <% end %>
