@@ -12,7 +12,7 @@ class UrlsController < ApplicationController
   # GET /urls
   # GET /urls.json
   def index
-    group = Group.where(name: "MTD").first
+    group = Group.where(name: "KARCHER").first
     items = group.items
     @urls = []
     items.each do |item|
