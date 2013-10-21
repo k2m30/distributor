@@ -16,7 +16,7 @@ module ApplicationHelper
     end
     link_to(name, '#', class: "add_fields", data: {id: id, fields: fields.gsub("\n", "")})
   end
-  
+
   def link_to_add_fields(name, f, association)
     # debugger
     new_object = f.object.send(association).klass.new
@@ -31,8 +31,17 @@ module ApplicationHelper
 
   def spaces(x)
     str = x.to_i.to_s.reverse
-    str.gsub!(/([0-9]{3})/,"\\1 ")
-    return str.gsub(/,$/,"").reverse
+    str.gsub!(/([0-9]{3})/, "\\1 ")
+    return str.gsub(/,$/, "").reverse
+  end
+
+  def find_violating_urls(site, group)
+    #Rails.cache.fetch([site.cache_key, group.cache_key, 'url']) do
+      urls = site.urls.where(violator: true).find_all { |url| url.item.get_group_name == group.name }
+      p urls.inspect
+      urls = urls.sort_by {|url| url.item.name}
+
+    #end
   end
 
 

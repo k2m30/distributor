@@ -89,24 +89,28 @@ class UrlsController < ApplicationController
 
   def update_prices
     current_site = params[:site].nil? ? nil : Site.find(params[:site])
+    if current_site.nil?
+      redirect_to sites_path
+    end
     rate = current_user.settings.rate
+    allowed_error = current_user.settings.allowed_error
     urls = params[:site].nil? ? Url.all : current_site.urls
     p urls.count
     urls.each do |url|
       css = url.site.css
       regexp = url.site.regexp
       url.delay(run_at: 10.seconds.from_now).update_price(css, regexp, rate)
+      url.delay(run_at: 10.seconds.from_now).check_for_violation(url.item.get_standard_price ,allowed_error)
     end
     current_user.settings.last_updated = Time.now
     current_user.settings.save
+    current_site.delay(run_at: 10.seconds.from_now).check_for_violation
 
-    flash[:notice] = "Цены обновляются.."
-    update_violators(false, params[:site])
-    if current_site.nil?
-      redirect_to sites_path
-    else
-      redirect_to site_path(current_site)
-    end
+    flash[:notice] = "Цены обновляются. Обычно это занимает 1-2 минуты для каждого сайта."
+
+
+    redirect_to site_path(current_site)
+
 
   end
 
@@ -137,7 +141,7 @@ class UrlsController < ApplicationController
       p items.count
       items.each do |item|
         standard_price = get_price(item, standard_site)
-        if !standard_price.nil?
+        if !standard_price.nil? && standard_price > 0
           urls = site_id.nil? ? item.urls : current_site.urls & item.urls
           urls.each do |url|
             if !url.price.nil?
@@ -146,6 +150,12 @@ class UrlsController < ApplicationController
               #p url.violator?
             end
           end
+        else
+          item.urls.each do |url|
+            url.violator = false
+            url.save if url.changed?
+          end
+
         end
       end
     end

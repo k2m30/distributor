@@ -4,70 +4,54 @@
 </div>
 
 <% @sites.each do |site| %>
-    <%= cache(site) do %>
-        <%- group_name = site.groups[0].name %>
-        <table class="table table-striped">
-          <tbody>
-          <tr>
-            <td><%= site.company_name %></td>
-            <td><%= link_to site.name, site_path(site), class: "tdfade" %></td>
-            <td>email: <%= site.email %></td>
-            <td>В стоплисте еще <%= distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
-          </tr>
-          </tbody>
-        </table>
+    <%#= cache(site) do %>
+    <table class="table table-striped">
+      <tbody>
+      <tr>
+        <td><%= site.company_name %></td>
+        <td><%= link_to site.name, site_path(site), class: "tdfade" %></td>
+        <td>email: <%= site.email %></td>
+      </tr>
+      </tbody>
+    </table>
 
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Бренд</th>
-            <th>Позиция</th>
-            <th style="white-space: nowrap; text-align: right">Цена сайта</th>
-            <th style="white-space: nowrap; text-align: right">Эталон</th>
-            <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
-            <th style="white-space: nowrap; text-align: right">Разница, %</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @groups.each do |group| %>
-              <%- standard_site = group.sites.where(standard: true).first %>
-              <%- items = (site.items & group.items).sort_by { |item| item.name } %>
-              <% items.each do |item| %>
-                  <% (site.urls.where(violator: true) & item.urls).each do |url| %>
-                      <%- name = item.name %>
-                      <%- price = url.price %>
-                      <%- url_url = url.url %>
-                      <%- standard_url = (url.item.urls & standard_site.urls).first %>
-                      <% if !standard_url.nil? && !standard_url.price.nil? && standard_url.price > 0 %>
-                          <tr>
-                            <td><%= group.name %></td>
-                            <td><%= name %></td>
-                            <td style="white-space: nowrap; text-align: right"><%= link_to spaces(price), url_url, target: "_blank" %></td>
-
-
-                            <%- standard_url_url = standard_url.url %>
-                            <%- standard_url_price = standard_url.price %>
-                            <td style="white-space: nowrap; text-align: right"><%= link_to spaces(standard_url_price), standard_url_url, target: "_blank" %></td>
-                            <td style="white-space: nowrap; text-align: right"><%= spaces(standard_url_price - price) %></td>
-                            <td style="white-space: nowrap; text-align: right"><%= "%.1f" % ((standard_url_price/price - 1)*100) %>
-                              %
-                            </td>
-
-                          </tr>
-                      <% end %>
-                  <% end %>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Бренд</th>
+        <th>Позиция</th>
+        <th style="white-space: nowrap; text-align: right">Цена сайта</th>
+        <th style="white-space: nowrap; text-align: right">Эталон</th>
+        <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
+        <th style="white-space: nowrap; text-align: right">Разница, %</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @groups.each do |group| %>
+          <% find_violating_urls(site, group).each do |url| %>
+              <% if !url.item.get_standard_url.nil? && !url.item.get_standard_price.nil? && url.item.get_standard_price > 0 %>
+                  <tr>
+                    <td><%= group.name %></td>
+                    <td><%= url.item.name %></td>
+                    <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.price), url.url, target: "_blank" %></td>
+                    <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.item.get_standard_price), url.item.get_standard_url, target: "_blank" %></td>
+                    <td style="white-space: nowrap; text-align: right"><%= spaces(url.item.get_standard_price - url.price) %></td>
+                    <td style="white-space: nowrap; text-align: right"><%= "%.1f" % ((url.item.get_standard_price/url.price - 1)*100) %>
+                      %
+                    </td>
+                  </tr>
               <% end %>
           <% end %>
 
-          </tr>
+      <% end %>
 
-          </tbody>
-        </table>
-        <hr>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-    <% end %>
+      </tbody>
+    </table>
+    <hr>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <%# end %>
 <% end %>

@@ -9,25 +9,16 @@ class SitesController < ApplicationController
   # GET /sites.json
   def index
     @sites = Site.all.order("name")
-    expire_fragment(controller: 'sites', action: 'stop_list', action_suffix: 'all')
-
   end
 
   # GET /sites/1
   # GET /sites/1.json
   def show
-    groups = Group.where(name: "MTD")
-    groups += Group.where(name: "KARCHER")
-    items = []
-    groups.each do |group|
-      items += group.items
+    @urls = []
+    @site.groups.order("name").each do |group|
+      group_urls = @site.urls.find_all { |url| url.item.get_group_name == group.name }
+      @urls += group_urls.sort_by { |url| url.item.name }
     end
-    items = items & @site.items
-    @urls =[]
-    items.each do |item|
-      @urls += item.urls & @site.urls
-    end
-    @urls = @urls.sort_by { |url| url.item.name }
   end
 
   # GET /sites/new
@@ -80,18 +71,8 @@ class SitesController < ApplicationController
   end
 
   def stop_list
-    @groups = Group.where(name: "MTD")
-    @groups += Group.where(name: "KARCHER")
-    @sites = []
-    @groups.each do |group|
-      @sites += group.sites.where(:violator => true)
-    end
-    @sites = @sites.uniq
-    @sites = @sites.sort_by { |site| site.name }
-    #@sites.each do |site|
-    #  p site.name
-    #end
-
+    @groups = Group.order("name")
+    @sites = Site.where(violator: true).order("name")
   end
 
   def export

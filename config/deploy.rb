@@ -2,6 +2,8 @@ require "bundler/capistrano"
 
 server "144.76.161.235", :web, :app, :db, primary: true
 
+set :whenever_command, "bundle exec whenever"
+require "whenever/capistrano"
 set :application, "distributor"
 set :user, "deployer"
 set :deploy_to, "/home/#{user}/apps/#{application}"
