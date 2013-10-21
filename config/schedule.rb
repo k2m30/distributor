@@ -20,12 +20,16 @@
 # Learn more: http://github.com/javan/whenever
 
 set :output, "#{path}/log/cron.log"
-set :environment, 'development'
+#set :environment, 'development'
 
-every 30.minutes do
+#every 30.minutes do
+#  runner "Url.first.update_all_prices"
+#end
+
+every :day, :at => '2:46 pm' do
   runner "Url.first.update_all_prices"
 end
 
-#every :day, :at => '3:06 pm' do
-#  runner "Url.first.update_all_prices"
-#end
+every :day, :at => '9:46 am' do
+  runner "Url.first.update_all_prices"
+end
