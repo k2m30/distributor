@@ -79,9 +79,12 @@ class Url < ActiveRecord::Base
 
       end
 
-      Url.all.each { |url| url.check_for_violation(url.item.get_standard_price, allowed_error) }
-      Site.all.each { |site| site.check_for_violation }
+      settings = user.settings
+      settings.last_updated = Time.now
+      settings.save
     end
+    Url.all.each { |url| url.check_for_violation(url.item.get_standard_price, User.all[1].settings.allowed_error) }
+    Site.all.each { |site| site.check_for_violation }
   end
 
 
