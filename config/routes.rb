@@ -26,8 +26,10 @@ Distibutor::Application.routes.draw do
   resources :sites do
     collection do
       get 'stop_list' => 'sites#stop_list'
+      get 'export_preview' => 'sites#export_preview'
       get 'export' => 'sites#export'
-      get 'import' => 'sites#import'
+      get 'import_preview' => 'sites#import_preview'
+      post 'import_preview' => 'sites#import_preview'
     end
 
   end

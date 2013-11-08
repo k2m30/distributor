@@ -1,18 +1,155 @@
+require 'zip/zip'
 require 'rubyXL'
 require 'axlsx'
 
 class SitesController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_site, only: [:show, :edit, :update, :destroy]
-  # caches_page :index, :stop_list
-  # GET /sites
-  # GET /sites.json
+
+
+  def export()
+    sites = Site.all
+    create_sites_file(sites)
+    users = User.all
+    create_user_folders(users)
+
+    create_zip_folder
+    redirect_to sites_path
+  end
+
+
+  def export_preview
+    @sites = ["_sites", Site.all]
+    @folders = []
+
+    @users = User.all.order("username")
+    @users.each do |user|
+      user_folders = []
+      user.groups.each do |group|
+        user_folders << [group.name, group.items.order("name"), group.sites.order("name"), "standard.xlsx"]
+      end
+      @folders << [user.username, user_folders]
+    end
+
+  end
+
+  def imprort_css
+    #Hash[[@header, spreadsheet.row(i)].transpose]
+    #product = find_by_id(row["id"]) || new
+    #product.attributes = row.to_hash.slice(*accessible_attributes)
+    #product.save!
+  end
+
+  def import
+
+    redirect_to sites_path, notice: "Импортировано"
+  end
+
+  def import_sites(folder)
+    Dir.chdir(folder) do
+      spreadsheet = Roo::Excelx.new('all_sites.xlsx', nil, :ignore)
+      @header = spreadsheet.row(1)
+      @rows = []
+      (2..spreadsheet.last_row).each do |i|
+        row = Hash[[@header, spreadsheet.row(i)].transpose]
+        site = Site.find_by_id(row["id"]) || Site.new
+
+        site.attributes = row.to_hash #.slice(*accessible_attributes)
+        site.save!
+      end
+    end
+  end
+
+  def import_standard_prices(folder)
+    Dir.chdir(folder) do
+      site = Site.where(standard: true).first
+      spreadsheet = Roo::Excelx.new('standard.xlsx')
+      spreadsheet.sheets.each do |sheet|
+        spreadsheet.default_sheet = sheet
+        @header = spreadsheet.row(1)
+        group = Group.where(name: sheet).first
+        (2..spreadsheet.last_row).each do |i|
+          row = Hash[[@header, spreadsheet.row(i)].transpose]
+          item = group.items.where(name: row["item_id"]).first
+          price = row["price"]
+          if !item.nil? && !site.nil?
+            set_price(item, site, price)
+          end
+        end
+      end
+
+    end
+  end
+  def import_group_items(user, group, spreadsheet)
+    p group.items.size
+    @header = spreadsheet.row(1)
+    (2..spreadsheet.last_row).each do |i|
+      row = Hash[[@header, spreadsheet.row(i)].transpose]
+      item = Item.where(name: row["name"]).first
+      group.items << items if !item.nil? && !group.items.include?(item)
+    end
+    p group.items.size
+  end
+
+  def import_group_sites(user, group, spreadsheet)
+    @header = spreadsheet.row(1)
+    (2..spreadsheet.last_row).each do |i|
+      row = Hash[[@header, spreadsheet.row(i)].transpose]
+      site = Site.where(name: row["name"]).first
+      group.sites << site if !site.nil? && !group.sites.include?(site)
+    end
+  end
+
+  def import_user_data(folder)
+    Dir.chdir(folder) do
+      Dir.glob("*").each do |file_name|
+        user = User.where(username: file_name)
+        if !user.empty?
+          user = user.first
+          Dir.chdir(file_name) do
+            Dir.glob("*").each do |group_name|
+              group = Group.where(name: group_name)
+              if !group.empty?
+                Dir.chdir(group_name) do
+                  group = group.first
+                  items_file = Roo::Excelx.new('items.xlsx')
+                  sites_file = Roo::Excelx.new('sites.xlsx')
+                  import_group_items(user, group, items_file)
+                  import_group_sites(user, group, sites_file)
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def import_preview
+    @site = params[:file]
+    if @site.nil?
+      redirect_to sites_path, alert: "Выберите файл"
+      return
+    end
+
+    tmp_folder = './tmp/export/'
+    unzip_file(@site.tempfile, tmp_folder)
+    sites = import_sites(tmp_folder+'_sites/')
+    user_data = import_user_data(tmp_folder)
+    import_standard_prices(tmp_folder+'_sites/')
+    #spreadsheet = Roo::Excelx.new(@site.path, nil, :ignore)
+    #@header = spreadsheet.row(1)
+    #@rows = []
+    #(2..spreadsheet.last_row).each do |i|
+    #  @rows << spreadsheet.row(i)
+    #end
+
+  end
+
   def index
     @sites = Site.all.order("name")
   end
 
-  # GET /sites/1
-  # GET /sites/1.json
   def show
     @urls = []
     @site.groups.order("name").each do |group|
@@ -21,17 +158,13 @@ class SitesController < ApplicationController
     end
   end
 
-  # GET /sites/new
   def new
     @site = Site.new
   end
 
-  # GET /sites/1/edit
   def edit
   end
 
-  # POST /sites
-  # POST /sites.json
   def create
     @site = Site.new(site_params)
 
@@ -46,8 +179,6 @@ class SitesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /sites/1
-  # PATCH/PUT /sites/1.json
   def update
     respond_to do |format|
       if @site.update(site_params)
@@ -60,8 +191,6 @@ class SitesController < ApplicationController
     end
   end
 
-  # DELETE /sites/1
-  # DELETE /sites/1.json
   def destroy
     @site.destroy
     respond_to do |format|
@@ -75,182 +204,116 @@ class SitesController < ApplicationController
     @sites = Site.where(violator: true).order("name")
   end
 
-  def export
-    groups = Group.all
-
-    Axlsx::Package.new do |p|
-
-      groups.each do |group|
-        p.workbook.add_worksheet(:name => group.name) do |sheet|
-          ok = sheet.styles.add_style :color => "#000000"
-          repeat = sheet.styles.add_style :bg_color => "#FF000000"
-          wrong = sheet.styles.add_style :bg_color => "#fbec5d00"
-          first_row = []
-          first_row << group.name
-          first_row += generate_first_row(group.sites)
-          sheet.add_row first_row
-          group.items.each do |item|
-            cells = []
-            cells << item.name
-            cells += generate_cells(item, group.sites)
-            types = generate_types(item, group.sites, ok, repeat, wrong)
-            sheet.add_row cells, :style => types
-          end
-
-          sheet.rows.each do |row|
-            row.cells.each do |cell|
-              #sheet.add_hyperlink :location => 'https://www.google.by/search?num=10&q='+row.cells[0].value+'+site:'+sheet.rows[0].cells[cell.index].value, :ref => cell, :target => :external
-              sheet.add_hyperlink :location => cell.value, :ref => cell, :target => :external
-            end
-          end
-
-
-        end
-      end
-      p.serialize('export.xlsx')
-    end
-    redirect_to sites_path, notice: "Данные выгружены"
-
-  end
-
-  def import
-    a = 0
-    p "Started"
-    workbook = RubyXL::Parser.parse("import.xlsx")
-
-    sheets = [workbook.worksheets[0]]
-    sheets.each do |sheet|
-      group = Group.where(name: sheet[0][0].value).first
-      data = sheet.extract_data
-      data[1..data.size].each_with_index do |row, i|
-        row[1..row.size].each_with_index do |col, j|
-          site = group.sites.where(name: sheet[0][j+1].value).first
-          # p "---" + sheet[0][j+1].value
-          if site.nil?
-            p "-" + sheet[0][j+1].value.to_s
-          end
-
-          item = Item.where(name: sheet[i+1][0].value).first #item
-          if item.nil?
-            p sheet[i+1][0].value
-          end
-
-          cell_value = sheet[i+1][j+1].value
-          url = (item.nil? || site.nil?) ? nil : get_url(item, site)
-
-          if !url.nil?
-            url.url = cell_value #url
-            url.site = Site.where(name: site.name).first
-
-            if !item.sites.include?(url.site)
-              item.sites << url.site
-              item.save
-            end
-            if !url.site.items.include?(item)
-              url.site << item
-              url.site.save
-            end
-            if !url.site.groups.include?(item.group)
-              url.site.groups << item.group
-              url.site.save
-            end
-            a += 1
-            url.save
-
-
-            if url.site.name == "ydachnik.by"
-              puts "----"
-              puts url.id, url.item.name, cell_value
-              p url.site.urls.find(url.id).url
-              p url.item.urls.find(url.id).url, url.url
-              puts "----"
-            end
-
-            if url.url == "X" || url.url == "[]" || url.url.nil?
-              site.urls -=[url]
-              item.urls -=[url]
-              url.delete
-            end
-
-          else
-
-            if !(cell_value == "X" || cell_value == "[]" || cell_value.nil?)
-              url = Url.new
-              url.site = site
-              url.item = item
-              url.url = cell_value
-              url.save
-            end
-
-          end
-
-        end
-      end
-
-    end
-
-    # Url.all.each do |url|
-    #       if !url.site.groups.include?(url.item.group)
-    #         url.site.groups << url.item.group
-    #         url.site.save
-    #       end
-    #     end
-
-    p a
-    p "Finished"
-    redirect_to sites_path, notice: "Импортировано"
-  end
-
-  def generate_first_row (sites)
-    cells = []
-    sites.each do |site|
-      cells << site.name
-    end
-    return cells
-  end
-
-  def generate_cells(item, sites)
-    cells = []
-    sites.each do |site|
-      url = (site.urls & item.urls).first
-      new_cell = url.nil? ? [] : url.url
-      cells << new_cell
-    end
-    return cells
-  end
-
-  def generate_types(item, sites, ok, repeat, wrong)
-    types = []
-    types << ok
-    standard_site = sites[0].groups[0].sites.where(standard: true).first
-    standard_price = get_price(item, standard_site)
-    standard_url = get_url(item, standard_site)
-    sites.each do |site|
-      url = (site.urls & item.urls).first
-      if !url.nil? && !url.price.nil? && !standard_price.nil?
-        if (((standard_price - url.price)/standard_price).abs > 0.3)
-          new_type = wrong
-        else
-          new_type = ok
-        end
-      else
-        new_type = ok
-      end
-
-      types << new_type
-    end
-    return types
-  end
-
-
   private
-  # Use callbacks to share common setup or constraints between actions.
+# Use callbacks to share common setup or constraints between actions.
   def set_site
     @site = Site.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+# Never trust parameters from the scary internet, only allow the white list through.
   def site_params
     params.require(:site).permit! #(:name, :regexp, :standard, :company_name, :out_of_ban_time, :email, urls: :url, :items)
   end
+
+  def mkdir(dirname, permissions=0755)
+    begin
+      Dir.mkdir(dirname, permissions)
+    rescue => e
+      p e.inspect
+    end
+  end
+
+  def create_sites_file (sites)
+    permissions = 0755
+    p Dir.pwd
+    mkdir("export", permissions)
+    Dir.chdir("export") do
+      p Dir.pwd
+
+      mkdir("_sites", permissions)
+      Dir.chdir("_sites") do
+        p Dir.pwd
+
+        Axlsx::Package.new do |p|
+          p.workbook.add_worksheet(:name => "all_sites") do |sheet|
+            sheet.add_row Site.first.attributes.keys
+            sites.each do |site|
+              row = site.attributes.values
+              sheet.add_row row
+            end
+          end
+          p.serialize("all_sites.xlsx")
+        end
+
+        standard_site = sites.where(standard: true).first
+        Axlsx::Package.new do |p|
+          standard_site.groups.order("name").each do |group|
+            p.workbook.add_worksheet(name: group.name) do |sheet|
+              sheet.add_row ["group_id", "item", "price"]
+              group_items = standard_site.items.find_all { |item| item.get_group_name == group.name }
+              group_items = group_items.sort_by { |item| item.name }
+              group_items.each { |item| sheet.add_row [group.name, item.name, get_price(standard_site, item)] }
+            end
+          end
+          p.serialize("standard.xlsx")
+        end
+      end
+    end
+  end
+
+  def create_user_folders(users)
+    Dir.chdir("export") do
+      users.each do |user|
+        mkdir(user.username)
+        Dir.chdir(user.username) do
+          user.groups.each do |group|
+            mkdir(group.name)
+            Dir.chdir(group.name) do
+              #items.xlsx
+              Axlsx::Package.new do |p|
+                p.workbook.add_worksheet(:name => "items") do |sheet|
+                  sheet.add_row ["name"]
+                  group.items.order("name").each { |item| sheet.add_row [item.name] }
+                end
+                p.serialize("items.xlsx")
+              end
+
+              #sites.xlsx
+              Axlsx::Package.new do |p|
+                p.workbook.add_worksheet(:name => "sites") do |sheet|
+                  sheet.add_row ["name"]
+                  group.sites.order("name").each { |site| sheet.add_row [site.name] }
+                end
+                p.serialize("sites.xlsx")
+              end
+
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def create_zip_folder
+    directory = './export/'
+    zipfile_name = './export_file.zip'
+
+    Zip::ZipFile.open(zipfile_name, Zip::ZipFile::CREATE) do |zipfile|
+      Dir[File.join(directory, '**', '**')].each do |file|
+        zipfile.add(file.sub(directory, ''), file)
+      end
+    end
+
+  end
+
+  def unzip_file (file, destination)
+    Zip::ZipFile.open(file) { |zip_file|
+      zip_file.each { |f|
+        f_path=File.join(destination, f.name)
+        FileUtils.mkdir_p(File.dirname(f_path))
+        zip_file.extract(f, f_path) unless File.exist?(f_path)
+      }
+    }
+  end
+
 end

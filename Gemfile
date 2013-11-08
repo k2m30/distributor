@@ -43,6 +43,7 @@ gem 'quiet_assets', group: :development
 gem 'rubyXL'
 gem 'nokogiri'
 gem 'rubyzip',  '~> 0.9.9'
+gem 'roo'
 
 gem 'axlsx'
 gem 'rack-mini-profiler'

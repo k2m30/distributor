@@ -14,6 +14,17 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def set_price (item, site, price)
+    common_url = item.urls & site.urls
+    if common_url.size == 1
+      url = common_url.first
+      url.price = price
+      url.save
+    else
+      Raise StandardPriceException
+    end
+  end
+
   def get_url (item, site)
     return (item.urls & site.urls).first
   end
