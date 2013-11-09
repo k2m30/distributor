@@ -2,66 +2,67 @@
     <div class="control-group">
       <%= f.label :name, :class => 'control-label' %>
       <div class="controls">
-        <%= f.text_field :name, :class => 'text_field' %>
+        <%= f.text_field :name, :class => 'span10' %>
       </div>
     </div>
     <div class="control-group">
       <%= f.label :company_name, :class => 'control-label' %>
       <div class="controls">
-        <%= f.text_field :company_name, :class => 'text_field' %>
+        <%= f.text_field :company_name, :class => 'span10' %>
       </div>
     </div>
     <div class="control-group">
       <%= f.label :email, :class => 'control-label' %>
       <div class="controls">
-        <%= f.text_field :email, :class => 'text_field' %>
+        <%= f.text_field :email, :class => 'span10' %>
       </div>
     </div>
-    <div class="control-group">
-      <%= f.label :css_item, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :css_item, :class => 'text_field' %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= f.label :css_price, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :css_price, :class => 'text_field' %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= f.label :css_pagination, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :css_pagination, :class => 'text_field' %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= f.label :regexp, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :regexp, :class => 'text_field' %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= f.label :method, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :method, :class => 'text_field' %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= f.label :search_url, :class => 'control-label' %>
-      <div class="controls">
-        <!--<textarea rows="5">-->
-        <%= f.text_area :search_url, rows:10, cols: 40, :class => 'text_field' %>
-        <!--</textarea>-->
-      </div>
-    </div>
-
-    <div class="control-group">
-      <%= f.label :standard, :class => 'control-label' %>
-      <div class="controls">
-        <%= f.check_box :standard, :class => 'check_box' %>
-      </div>
-    </div>
+    <% if current_user.admin? %>
+        <div class="control-group">
+          <%= f.label :css_item, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :css_item, :class => 'span10' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :css_price, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :css_price, :class => 'span10' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :css_pagination, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :css_pagination, :class => 'span10' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :regexp, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :regexp, :class => 'span10' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :method, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :method, :class => 'span10' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :search_url, :class => 'control-label' %>
+          <div class="controls">
+            <!--<textarea rows="5">-->
+            <%= f.text_area :search_url, rows:10, cols: 40, :class => 'span10' %>
+            <!--</textarea>-->
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :standard, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.check_box :standard, :class => 'check_box' %>
+          </div>
+        </div>
+    <% end %>
 
     <div class="form-actions">
       <%= f.submit nil, :class => 'btn btn-primary' %>
