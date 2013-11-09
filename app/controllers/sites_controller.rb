@@ -33,18 +33,6 @@ class SitesController < ApplicationController
 
   end
 
-  def imprort_css
-    #Hash[[@header, spreadsheet.row(i)].transpose]
-    #product = find_by_id(row["id"]) || new
-    #product.attributes = row.to_hash.slice(*accessible_attributes)
-    #product.save!
-  end
-
-  def import
-
-    redirect_to sites_path, notice: "Импортировано"
-  end
-
   def import_sites(folder)
     Dir.chdir(folder) do
       spreadsheet = Roo::Excelx.new('all_sites.xlsx', nil, :ignore)

@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 20131013103549) do
     t.string   "css_item"
     t.string   "css_price"
     t.string   "css_pagination"
-    t.string   "search_url"
+    t.text     "search_url"
     t.string   "method", default: 2
     t.string   "regexp", default: "/d+/"
     t.datetime "created_at"

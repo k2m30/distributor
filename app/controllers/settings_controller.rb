@@ -70,6 +70,49 @@ class SettingsController < ApplicationController
 
   end
 
+  def import_sites
+    begin
+      spreadsheet = Roo::Excelx.new("./tmp/sites_" + current_user.username + ".xlsx", nil, :ignore)
+      @header = spreadsheet.row(1)
+      @rows = []
+      (2..spreadsheet.last_row).each do |i|
+        row = Hash[[@header, spreadsheet.row(i)].transpose]
+        site = Site.where(name: row["name"]).first || Site.new
+
+        site.attributes = row.to_hash
+        site.save!
+      end
+
+      File.delete("./tmp/sites_" + current_user.username + ".xlsx")
+      redirect_to sites_path, success: "Информация о сайтах импортирована"
+    rescue
+      redirect_to settings_path, alert: "Произошла ошибка импорта."
+    end
+  end
+
+  def import_sites_preview
+    @file = params[:sites]
+    if @file.nil?
+      redirect_to settings_path, alert: "Выберите файл"
+      return
+    end
+    begin
+      spreadsheet = Roo::Excelx.new(@file.path, nil, :ignore)
+      @sites = []
+      @header = spreadsheet.row(1)
+      (2..spreadsheet.last_row).each do |i|
+        @sites << spreadsheet.row(i)
+      end
+      File.open("./tmp/sites_" + current_user.username + ".xlsx", 'w') do |tempfile|
+        tempfile.write(@file.tempfile.set_encoding("utf-8").read)
+      end
+    rescue
+      redirect_to settings_path, alert: "Произошла ошибка импорта."
+    end
+
+
+  end
+
   def import_standard_prices
 
     begin
@@ -106,8 +149,8 @@ class SettingsController < ApplicationController
   end
 
 
-  # GET /settings
-  # GET /settings.json
+# GET /settings
+# GET /settings.json
   def index
 
     if current_user.admin?
@@ -117,22 +160,22 @@ class SettingsController < ApplicationController
     end
   end
 
-  # GET /settings/1
-  # GET /settings/1.json
+# GET /settings/1
+# GET /settings/1.json
   def show
   end
 
-  # GET /settings/new
+# GET /settings/new
   def new
     @setting = Settings.new
   end
 
-  # GET /settings/1/edit
+# GET /settings/1/edit
   def edit
   end
 
-  # POST /settings
-  # POST /settings.json
+# POST /settings
+# POST /settings.json
   def create
     @setting = Settings.new(setting_params)
 
@@ -147,8 +190,8 @@ class SettingsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /settings/1
-  # PATCH/PUT /settings/1.json
+# PATCH/PUT /settings/1
+# PATCH/PUT /settings/1.json
   def update
     respond_to do |format|
       if @setting.update(setting_params)
@@ -161,8 +204,8 @@ class SettingsController < ApplicationController
     end
   end
 
-  # DELETE /settings/1
-  # DELETE /settings/1.json
+# DELETE /settings/1
+# DELETE /settings/1.json
   def destroy
     @setting.destroy
     respond_to do |format|
@@ -172,14 +215,15 @@ class SettingsController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
+# Use callbacks to share common setup or constraints between actions.
   def set_setting
     @setting = Settings.find(params[:id])
 
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+# Never trust parameters from the scary internet, only allow the white list through.
   def setting_params
     params.require(:settings).permit(:ban_time, :last_updated, :allowed_error, :update_time, :rate)
   end
+
 end
