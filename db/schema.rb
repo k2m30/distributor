@@ -55,9 +55,8 @@ ActiveRecord::Schema.define(version: 20131013103549) do
     t.text     "message"
     t.string   "price_found"
     t.string   "name_found"
-    t.string   "type"
+    t.string   "log_type"
     t.boolean  "ok"
-    t.boolean  "ok_all"
     t.integer  "url_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -66,36 +65,32 @@ ActiveRecord::Schema.define(version: 20131013103549) do
   create_table "settings", force: true do |t|
     t.decimal  "ban_time",      default: 24.0
     t.datetime "last_updated"
-    t.decimal  "allowed_error", default: 2000.0
-    t.decimal  "update_time",   default: 5.0
-    t.integer  "user_id"
+    t.string  "allowed_error", default: 5000.0
+    t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "rate"
+    t.decimal  "rate", default: 9300
   end
 
   create_table "sites", force: true do |t|
     t.string   "name"
-    t.string   "css"
-    t.string   "xpath"
-    t.string   "regexp"
-    t.string   "one_k_path"
-    t.string   "onliner_path"
-    t.string   "initial_request"
+    t.string   "css_item"
+    t.string   "css_price"
+    t.string   "css_pagination"
+    t.string   "search_url"
+    t.string   "method", default: 2
+    t.string   "regexp", default: "/d+/"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "standard"
-    t.boolean  "violator"
+    t.boolean  "violator", default: false
     t.string   "email"
     t.string   "company_name"
-    t.datetime "out_of_ban_time"
-    t.string   "css_name"
   end
 
   create_table "urls", force: true do |t|
     t.string   "url"
     t.decimal  "price"
-    t.string   "tmp"
     t.integer  "site_id"
     t.integer  "item_id"
     t.datetime "created_at"
@@ -117,7 +112,7 @@ ActiveRecord::Schema.define(version: 20131013103549) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "admin"
+    t.boolean  "admin", default: false
     t.string   "username"
   end
 

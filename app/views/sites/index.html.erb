@@ -3,15 +3,6 @@
   <h2><%= t '.title', :default => model_class.model_name.human.pluralize.titleize %></h2>
 </div>
 
-<% if current_user.admin? %>
-    <%= form_tag import_preview_sites_path, multipart: true do %>
-        <%= file_field_tag "file", value: "./import/import_css.xlsx" %>
-        <%= submit_tag "Импорт CSS", :class => 'btn btn-primary'%>
-    <% end %>
-
-    <%= link_to "Экспорт базы", export_preview_sites_path, :class => 'btn btn-primary' %>
-<% end %>
-
 <table class="table table-striped">
   <thead>
   <tr>
@@ -31,7 +22,7 @@
             <%= group.name %>
         <% end %></td>
       <td><%= site.company_name %></td>
-      <td><%= (site.out_of_ban_time.nil?) ? "-" : distance_of_time_in_words_to_now(site.out_of_ban_time) %></td>
+
 
       <td>
         <% if current_user.admin? %>

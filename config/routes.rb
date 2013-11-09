@@ -4,7 +4,17 @@ Distibutor::Application.routes.draw do
       get 'clear_log' => 'logs#clear_log'
     end
   end
-  resources :settings
+  resources :settings do
+    collection do
+      #get 'import_preview' => 'settings#import_standard_prices_preview'
+      post 'import_preview' => 'settings#import_standard_prices_preview'
+      get 'import_standard_prices' => 'settings#import_standard_prices'
+
+      #get 'import_sites_preview' => 'settings#import_sites_preview'
+      post 'import_sites_preview' => 'settings#import_sites_preview'
+      get 'import_sites' => 'settings#import_sites'
+    end
+  end
 
   resources :items do
     collection do

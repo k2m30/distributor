@@ -1,32 +1,47 @@
 <%- model_class = Settings -%>
 <div class="page-header">
-  <h2><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h2>
+  <h2><%= t '.title', :default => model_class.model_name.human.pluralize.titleize %></h2>
 </div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:ban_time) %></th>
-      <th><%= model_class.human_attribute_name(:allowed_error) %></th>
-      <!--<th><%= model_class.human_attribute_name(:update_time) %></th>-->
-      <th><%= model_class.human_attribute_name(:rate) %></th>
 
-
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-
+<% @groups.each do |group| %>
+    <table class="table table-striped">
+      <thead>
       <tr>
-        <td><%= @settings.ban_time %></td>
-        <td><%= @settings.allowed_error %></td>
-        <!--<td><%= @settings.update_time %></td>-->
-        <td><%= @settings.rate %></td>
-        <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_setting_path(@settings), :class => 'btn btn-mini' %>
-        </td>
+        <th>Группа</th>
+        <th><%= model_class.human_attribute_name(:ban_time) %></th>
+        <th><%= model_class.human_attribute_name(:allowed_error) %></th>
+        <th><%= model_class.human_attribute_name(:rate) %></th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><%= group.name %></td>
+        <td><%= group.settings.ban_time %></td>
+        <td><%= group.settings.allowed_error %></td>
+        <td><%= group.settings.rate %></td>
+        <td><%= link_to "Изменить", edit_setting_path(group.settings), :class => 'btn btn-mini' %></td>
       </tr>
 
-  </tbody>
-</table>
+      </tbody>
+    </table>
+<% end %>
+<br>
+<br>
+<br>
+<br>
+<br>
 
+<%= form_tag import_preview_settings_path, multipart: true do %>
+    <%= file_field_tag "file", value: "./import/import_css.xlsx" %>
+    <%= submit_tag "Импорт стандартных цен", :class => 'btn btn-primary' %>
+<% end %>
+
+<% if current_user.admin? %>
+
+    <%= form_tag import_sites_preview_settings_path, multipart: true do %>
+        <%= file_field_tag "sites" %>
+        <%= submit_tag "Импорт информации о сайтах", :class => 'btn btn-primary' %>
+    <% end %>
+    <%= link_to "Экспорт базы", export_preview_sites_path, :class => 'btn btn-primary' %>
+<% end %>

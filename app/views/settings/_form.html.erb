@@ -18,15 +18,8 @@
       </div>
     </div>
 
-    <!--<div class="control-group">-->
-      <!--<%= f.label :update_time, :class => 'control-label' %>-->
-      <!--<div class="controls">-->
-        <!--<%= f.text_field :update_time, :class => 'text_field' %>-->
-      <!--</div>-->
-    <!--</div>-->
-
     <div class="form-actions">
-      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= f.submit "Сохранить настройки", :class => 'btn btn-primary' %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                   settings_path, :class => 'btn' %>
     </div>
