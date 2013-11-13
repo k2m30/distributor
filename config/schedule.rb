@@ -29,9 +29,9 @@ env :PATH, '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
 #end
 
 every :day, :at => '2:46 pm' do
-  runner "Url.first.update_all_prices"
+  runner 'Url.first.update_all_prices'
 end
 
 every :day, :at => '9:46 am' do
-  runner "Url.first.update_all_prices"
+  runner 'Url.first.update_all_prices'
 end

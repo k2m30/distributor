@@ -6,27 +6,27 @@
 
 ############################### open file with url ########################
 def import_urls(filename, groupname)
-  name = "NAME"
-  url = "URL"
-  group= "GROUP"
+  name = 'NAME'
+  url = 'URL'
+  group= 'GROUP'
   begin
     #puts "filename: " + filename
-    file = RubyXL::Parser.parse("./import/" + groupname + "/" + filename + ".xlsx")
+    file = RubyXL::Parser.parse('./import/' + groupname + '/' + filename + '.xlsx')
     table_site = file[0].get_table([group, name, url])
     table = table_site[:table][0..table_site[:table].size-2]
     groupname_file = table[0][group]
     #puts "group file: " + groupname_file
     table = table.sort_by { |element| element[name] }
-    site_base = Site.where("name = ?", filename).first
+    site_base = Site.where('name = ?', filename).first
 
     group_base = Group.where(name: groupname_file).first
-    items_array = group_base.items.order("name")
+    items_array = group_base.items.order('name')
     items_array.each do |item_base|
       #puts '----------------------'
       #puts item_base.name
       flag = false
       table.each do |hash|
-        str = hash[name].gsub("Е", "E").gsub("Н", "H").gsub("О", "O").gsub("Р", "P").gsub("А", "A").gsub("В", "B").gsub("С", "C").gsub("М", "M").gsub("Т", "T").gsub("К", "K").gsub("Х", "X").gsub("  ", " ")
+        str = hash[name].gsub('Е', 'E').gsub('Н', 'H').gsub('О', 'O').gsub('Р', 'P').gsub('А', 'A').gsub('В', 'B').gsub('С', 'C').gsub('М', 'M').gsub('Т', 'T').gsub('К', 'K').gsub('Х', 'X').gsub('  ', ' ')
         if !str.nil? && str.include?(item_base.name) && !flag
           if (item_base.urls & site_base.urls).empty?
             url_base = Url.new
@@ -50,7 +50,7 @@ def import_urls(filename, groupname)
       end
     end
   rescue => e
-    puts "error import file: " + filename + "|" + table.to_s
+    puts 'error import file: ' + filename + '|' + table.to_s
     puts e.inspect
   end
 end
@@ -59,7 +59,7 @@ def clear_group(group_name)
   begin
     group_base = Group.where(name: group_name).first
     #puts group_base.name
-    items_array = group_base.items.order("name")
+    items_array = group_base.items.order('name')
     items_array.each do |item_base|
       #puts item_base.name
       item_base.urls.destroy_all
@@ -67,7 +67,7 @@ def clear_group(group_name)
     end
       #group_base.destroy    ############ удаление group
   rescue => e
-    puts "error cleaning group: " + group_name
+    puts 'error cleaning group: ' + group_name
     puts e.inspect
   end
 end
@@ -79,10 +79,10 @@ end
 #  import_urls(site.name, "KARCHER")
 #end
 
-sites = Group.where(name: "ELPUMPS").first.sites
+sites = Group.where(name: 'ELPUMPS').first.sites
 sites.each do |site|
   #puts hash.name
-  import_urls(site.name, "ELPUMPS")
+  import_urls(site.name, 'ELPUMPS')
 end
 
 

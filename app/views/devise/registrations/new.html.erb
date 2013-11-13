@@ -3,19 +3,19 @@
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
 
-  <div><%= f.label "Пользователь" %>
+  <div><%= f.label 'Пользователь' %>
   <%= f.text_field :username, :autofocus => true %></div><br />
 
   <div><%= f.label :email %>
   <%= f.email_field :email %></div><br />
 
-  <div><%= f.label "Пароль" %>
+  <div><%= f.label 'Пароль' %>
   <%= f.password_field :password %></div><br />
 
-  <div><%= f.label "Подтверждение" %>
+  <div><%= f.label 'Подтверждение' %>
   <%= f.password_field :password_confirmation %></div><br />
 
-  <div><%= f.submit "Зарегистрироваться" %></div>
+  <div><%= f.submit 'Зарегистрироваться' %></div>
 <% end %>
 
-<%= render "devise/shared/links" %>
+<%= render 'devise/shared/links' %>

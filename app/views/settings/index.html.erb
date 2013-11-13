@@ -20,7 +20,7 @@
         <td><%= group.settings.ban_time %></td>
         <td><%= group.settings.allowed_error %></td>
         <td><%= group.settings.rate %></td>
-        <td><%= link_to "Изменить", edit_setting_path(group.settings), :class => 'btn btn-mini' %></td>
+        <td><%= link_to 'Изменить', edit_setting_path(group.settings), :class => 'btn btn-mini' %></td>
       </tr>
 
       </tbody>
@@ -33,15 +33,15 @@
 <br>
 
 <%= form_tag import_preview_settings_path, multipart: true do %>
-    <%= file_field_tag "file", value: "./import/import_css.xlsx" %>
-    <%= submit_tag "Импорт стандартных цен", :class => 'btn btn-primary' %>
+    <%= file_field_tag 'file', value: './import/import_css.xlsx' %>
+    <%= submit_tag 'Импорт стандартных цен', :class => 'btn btn-primary' %>
 <% end %>
 
 <% if current_user.admin? %>
 
     <%= form_tag import_sites_preview_settings_path, multipart: true do %>
-        <%= file_field_tag "sites" %>
-        <%= submit_tag "Импорт информации о сайтах", :class => 'btn btn-primary' %>
+        <%= file_field_tag 'sites' %>
+        <%= submit_tag 'Импорт информации о сайтах', :class => 'btn btn-primary' %>
     <% end %>
-    <%= link_to "Экспорт базы", export_preview_sites_path, :class => 'btn btn-primary' %>
+    <%= link_to 'Экспорт базы', export_preview_sites_path, :class => 'btn btn-primary' %>
 <% end %>

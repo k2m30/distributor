@@ -1,16 +1,16 @@
 <tr>
-  <td><%= link_to log.price_found, log.url.url, target: "_blank" %></td>
+  <td><%= link_to log.price_found, log.url.url, target: '_blank' %></td>
   <td><%= log.url.site.css %></td>
   <td><%= log.name_found %></td>
   <td><%= log.url.site.css_name %></td>
-  <td><%= link_to log.log_type, site_path(log.url.site), targe: "_blank" %></td>
+  <td><%= link_to log.log_type, site_path(log.url.site), targe: '_blank' %></td>
   <td><%= log.url.item.name %></td>
   <td><%= log.url.site.name %></td>
 
   <td><%= log.created_at.to_formatted_s(:short) %></td>
   <td>
     <% if !log.ok %>
-        <%= link_to "Удалить url на сайте " + log.url.site.name,
+        <%= link_to 'Удалить url на сайте ' + log.url.site.name,
                     log_path(log),
                     :method => :delete,
                     :class => 'btn btn-mini btn-danger' %>

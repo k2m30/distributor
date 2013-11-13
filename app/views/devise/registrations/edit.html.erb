@@ -11,7 +11,7 @@
   <% end %>
 
   <div><%= f.label :password %> <i>(Оставьте пустым, если не хотите изменить)</i><br />
-  <%= f.password_field :password, :autocomplete => "off" %></div>
+  <%= f.password_field :password, :autocomplete => 'off' %></div>
 
   <div><%= f.label :password_confirmation %><br />
   <%= f.password_field :password_confirmation %></div>
@@ -19,11 +19,11 @@
   <div><%= f.label :current_password %> <i>(Введите текущий пароль)</i><br />
   <%= f.password_field :current_password %></div>
 
-  <div><%= f.submit "Обновить" %></div>
+  <div><%= f.submit 'Обновить' %></div>
 <% end %>
 
 <h3>Удалить аккаунт</h3>
 
-<p><%= button_to "Удалить аккуант", registration_path(resource_name), :data => { :confirm => "Точно?" }, :method => :delete %></p>
+<p><%= button_to 'Удалить аккуант', registration_path(resource_name), :data => { :confirm => 'Точно?'}, :method => :delete %></p>
 
-<%= link_to "Назад", :back %>
+<%= link_to 'Назад', :back %>

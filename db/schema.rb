@@ -14,110 +14,110 @@
 ActiveRecord::Schema.define(version: 20131013103549) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension 'plpgsql'
 
-  create_table "delayed_jobs", force: true do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table 'delayed_jobs', force: true do |t|
+    t.integer  'priority',   default: 0, null: false
+    t.integer  'attempts',   default: 0, null: false
+    t.text     'handler',                null: false
+    t.text 'last_error'
+    t.datetime 'run_at'
+    t.datetime 'locked_at'
+    t.datetime 'failed_at'
+    t.string 'locked_by'
+    t.string 'queue'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  add_index 'delayed_jobs', ['priority', 'run_at'], name: 'delayed_jobs_priority', using: :btree
 
-  create_table "groups", force: true do |t|
-    t.string   "name"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table 'groups', force: true do |t|
+    t.string 'name'
+    t.integer 'user_id'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
   end
 
-  create_table "groups_sites", force: true do |t|
-    t.integer "site_id"
-    t.integer "group_id"
+  create_table 'groups_sites', force: true do |t|
+    t.integer 'site_id'
+    t.integer 'group_id'
   end
 
-  create_table "items", force: true do |t|
-    t.string   "name"
-    t.integer  "group_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table 'items', force: true do |t|
+    t.string 'name'
+    t.integer 'group_id'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
   end
 
-  create_table "logs", force: true do |t|
-    t.text     "message"
-    t.string   "price_found"
-    t.string   "name_found"
-    t.string   "log_type"
-    t.boolean  "ok"
-    t.integer  "url_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table 'logs', force: true do |t|
+    t.text 'message'
+    t.string 'price_found'
+    t.string 'name_found'
+    t.string 'log_type'
+    t.boolean 'ok'
+    t.integer 'url_id'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
   end
 
-  create_table "settings", force: true do |t|
-    t.decimal  "ban_time",      default: 24.0
-    t.datetime "last_updated"
-    t.string  "allowed_error", default: 5000.0
-    t.integer  "group_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.decimal  "rate", default: 9300
+  create_table 'settings', force: true do |t|
+    t.decimal  'ban_time',      default: 24.0
+    t.datetime 'last_updated'
+    t.string  'allowed_error', default: 5000.0
+    t.integer 'group_id'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
+    t.decimal  'rate', default: 9300
   end
 
-  create_table "sites", force: true do |t|
-    t.string   "name"
-    t.string   "css_item"
-    t.string   "css_price"
-    t.string   "css_pagination"
-    t.text     "search_url"
-    t.string   "method", default: 2
-    t.string   "regexp", default: "/d+/"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "standard"
-    t.boolean  "violator", default: false
-    t.string   "email"
-    t.string   "company_name"
+  create_table 'sites', force: true do |t|
+    t.string 'name'
+    t.string 'css_item'
+    t.string 'css_price'
+    t.string 'css_pagination'
+    t.text 'search_url'
+    t.string   'method', default: 2
+    t.string   'regexp', default: '/d+/'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
+    t.boolean 'standard'
+    t.boolean  'violator', default: false
+    t.string 'email'
+    t.string 'company_name'
   end
 
-  create_table "urls", force: true do |t|
-    t.string   "url"
-    t.decimal  "price"
-    t.integer  "site_id"
-    t.integer  "item_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "violator"
-    t.decimal  "delta"
+  create_table 'urls', force: true do |t|
+    t.string 'url'
+    t.decimal 'price'
+    t.integer 'site_id'
+    t.integer 'item_id'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
+    t.boolean 'violator'
+    t.decimal 'delta'
   end
 
-  create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "admin", default: false
-    t.string   "username"
+  create_table 'users', force: true do |t|
+    t.string   'email',                  default: '', null: false
+    t.string   'encrypted_password',     default: '', null: false
+    t.string 'reset_password_token'
+    t.datetime 'reset_password_sent_at'
+    t.datetime 'remember_created_at'
+    t.integer  'sign_in_count',          default: 0
+    t.datetime 'current_sign_in_at'
+    t.datetime 'last_sign_in_at'
+    t.string 'current_sign_in_ip'
+    t.string 'last_sign_in_ip'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
+    t.boolean  'admin', default: false
+    t.string 'username'
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
+  add_index 'users', ['email'], name: 'index_users_on_email', unique: true, using: :btree
+  add_index 'users', ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true, using: :btree
+  add_index 'users', ['username'], name: 'index_users_on_username', unique: true, using: :btree
 
 end

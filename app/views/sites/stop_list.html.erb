@@ -9,7 +9,7 @@
       <tbody>
       <tr>
         <td><%= site.company_name %></td>
-        <td><%= link_to site.name, site_path(site), class: "tdfade" %></td>
+        <td><%= link_to site.name, site_path(site), class: 'tdfade' %></td>
         <td>email: <%= site.email %></td>
       </tr>
       </tbody>
@@ -33,10 +33,10 @@
                   <tr>
                     <td><%= group.name %></td>
                     <td><%= url.item.name %></td>
-                    <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.price), url.url, target: "_blank" %></td>
-                    <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.item.get_standard_price), url.item.get_standard_url, target: "_blank" %></td>
+                    <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.price), url.url, target: '_blank' %></td>
+                    <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.item.get_standard_price), url.item.get_standard_url, target: '_blank' %></td>
                     <td style="white-space: nowrap; text-align: right"><%= spaces(url.item.get_standard_price - url.price) %></td>
-                    <td style="white-space: nowrap; text-align: right"><%= "%.1f" % ((url.item.get_standard_price/url.price - 1)*100) %>
+                    <td style="white-space: nowrap; text-align: right"><%= '%.1f' % ((url.item.get_standard_price/url.price - 1)*100) %>
                       %
                     </td>
                   </tr>

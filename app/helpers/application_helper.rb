@@ -12,9 +12,9 @@ module ApplicationHelper
     new_object = f.object.send(association).klass.new
     id = new_object.object_id
     fields = f.fields_for(association, new_object, child_index: id) do |builder|
-      render(association.to_s.singularize + "_fields", f: builder)
+      render(association.to_s.singularize + '_fields', f: builder)
     end
-    link_to(name, '#', class: "add_fields", data: {id: id, fields: fields.gsub("\n", "")})
+    link_to(name, '#', class: 'add_fields', data: {id: id, fields: fields.gsub("\n", '')})
   end
 
   def link_to_add_fields(name, f, association)
@@ -22,17 +22,17 @@ module ApplicationHelper
     new_object = f.object.send(association).klass.new
     id = new_object.object_id
     fields = f.fields_for(association, new_object, child_index: id) do |builder|
-      render(association.to_s.singularize + "_fields", f: builder)
+      render(association.to_s.singularize + '_fields', f: builder)
     end
     debugger
-    link_to(name, '#', class: "add_fields", data: {id: id, fields: fields.gsub("\n", "")})
+    link_to(name, '#', class: 'add_fields', data: {id: id, fields: fields.gsub("\n", '')})
   end
 
 
   def spaces(x)
     str = x.to_i.to_s.reverse
     str.gsub!(/([0-9]{3})/, "\\1 ")
-    return str.gsub(/,$/, "").reverse
+    return str.gsub(/,$/, '').reverse
   end
 
   def find_violating_urls(site, group)

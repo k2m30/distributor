@@ -16,15 +16,15 @@
 //= require_tree .
 function showSpin() {
     //$('.spin').toggle();
-    $('.row-fluid').hide()
+    $('.row-fluid').hide();
     $('.spin').fadeIn("slow");
 //    console.log('clicked');
 }
 
 $(document).ready(function () {
-    $('.tooltip_cell').tooltip({container: 'body'})
+    $('.tooltip_cell').tooltip({container: 'body'});
     var spin = $('.spin');
-    spin.hide()//css('background', '#444');
+    spin.hide();//css('background', '#444');
     $('.nav').on('click','a', showSpin);
     $('.tdfade').on('click', showSpin);
 

@@ -184,6 +184,7 @@ class SitesController < ApplicationController
       group_urls = @site.urls.find_all { |url| url.item.get_group_name == group.name }
       @urls += group_urls.sort_by { |url| url.item.name }
     end
+    @urls = @site.urls
   end
 
   def new

@@ -2,15 +2,15 @@
 
 <%- group = @group %>
 <% if !group.settings.nil? && !group.settings.last_updated.nil? %>
-    <div class="muted"><%= t "tips.prices_updated" %> <%= time_ago_in_words(current_user.settings.last_updated) %> <%= t "tips.ago" %></div>
+    <div class="muted"><%= t 'tips.prices_updated' %> <%= time_ago_in_words(current_user.settings.last_updated) %> <%= t 'tips.ago' %></div>
 <% end %>
 
 <h1><%= group.name %></h1>
 
 
 <table class="table table-condensed">
-  <th style="vertical-align:bottom"> <%= t "groups.index.site" %> </th>
-  <% group.items.order("id ASC").each do |item| %>
+  <th style="vertical-align:bottom"> <%= t 'groups.index.site' %> </th>
+  <% group.items.order('id ASC').each do |item| %>
       <th>
         <%= item.name %>
       </th>
@@ -18,14 +18,14 @@
   <%#= cache(group) do %>
       <% group.sites.order('name').each do |site| %>
           <%= cache ([group, site]) do %>
-              <tr <%= (site.standard?) ? " class=\"success\"".html_safe : "" %>>
+              <tr <%= (site.standard?) ? " class=\"success\"".html_safe : '' %>>
                 <td class="tooltip_cell" data-toggle="tooltip" data-placement="top" title="<%= site.company_name %>"><%= site.name %></td>
-                <% group.items.order("id ASC").each do |item| %>
+                <% group.items.order('id ASC').each do |item| %>
                     <td style="white-space: nowrap; text-align: right">
                       <% url = (item.urls & site.urls).first %>
                       <% if !url.nil? && !url.price.nil? && (url.price > 0) %>
-                          <%- link_class = (!url.violator?) ? "muted" : "text-error" %>
-                          <%= link_to spaces(url.price), url.url, class: link_class, target: "_blank" %>
+                          <%- link_class = (!url.violator?) ? 'muted' : 'text-error' %>
+                          <%= link_to spaces(url.price), url.url, class: link_class, target: '_blank' %>
                       <% end %>
                     </td>
                 <% end %>

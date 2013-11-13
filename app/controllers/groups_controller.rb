@@ -5,11 +5,11 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.json
   def index
-    @groups = Group.where("user_id = ?", current_user.id)
+    @groups = Group.where('user_id = ?', current_user.id)
     @items = []
     
     @groups.each do |group|
-      @items << group.items.order("id DESC")
+      @items << group.items.order('id DESC')
     end
 
     @sites_search = Site.search(params[:q])

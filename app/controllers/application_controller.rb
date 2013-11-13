@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
     url.site = site
     url.item = item
     url.price = price
-    url.url = "#" if url.url.nil?
+    url.url = '#' if url.url.nil?
     url.save
   end
 
@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   def spaces(x)
     str = x.to_i.to_s.reverse
     str.gsub!(/([0-9]{3})/,"\\1 ")
-    return str.gsub(/,$/,"").reverse
+    return str.gsub(/,$/, '').reverse
   end
 
   protected
