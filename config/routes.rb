@@ -6,13 +6,14 @@ Distibutor::Application.routes.draw do
   end
   resources :settings do
     collection do
-      #get 'import_preview' => 'settings#import_standard_prices_preview'
       post 'import_preview' => 'settings#import_standard_prices_preview'
       get 'import_standard_prices' => 'settings#import_standard_prices'
 
-      #get 'import_sites_preview' => 'settings#import_sites_preview'
       post 'import_sites_preview' => 'settings#import_sites_preview'
       get 'import_sites' => 'settings#import_sites'
+
+      post 'import_shops_preview' => 'settings#import_user_sites_preview'
+      get 'import_shops' => 'settings#import_user_sites'
     end
   end
 

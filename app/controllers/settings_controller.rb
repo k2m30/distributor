@@ -35,6 +35,59 @@ class SettingsController < ApplicationController
     return site
   end
 
+  def import_user_sites_preview
+    begin
+      @shops = params[:shops]
+      if @shops.nil?
+        redirect_to settings_path, alert: 'Выберите файл'
+        return
+      end
+
+      @sites = []
+      spreadsheet = Roo::Excelx.new(@shops.path, nil, :ignore)
+      spreadsheet.sheets.each do |sheet|
+        spreadsheet.default_sheet = sheet
+        group = Group.where(name: sheet).first
+        next if group.nil?
+
+        (2..spreadsheet.last_row).each do |i|
+          @sites << [sheet, spreadsheet.row(i)[0]]
+        end
+      end
+
+      File.open('./tmp/' + current_user.username + '_shops' + '.xlsx', 'w') do |tempfile|
+        tempfile.write(@shops.tempfile.set_encoding('utf-8').read)
+      end
+    rescue
+      redirect_to settings_path, alert: 'Произошла ошибка импорта.'
+    end
+
+  end      #список магазинов по группам
+
+  def import_user_sites
+    begin
+      spreadsheet = Roo::Excelx.new('./tmp/' + current_user.username + '_shops'+'.xlsx', nil, :ignore)
+      spreadsheet.sheets.each do |sheet|
+        spreadsheet.default_sheet = sheet
+        group = Group.where(name: sheet).first
+        next if group.nil?
+        group.sites.delete_all
+
+        (2..spreadsheet.last_row).each do |i|
+          site = Site.where(name: spreadsheet.row(i)[0]).first
+          group.sites << site if !site.nil? && !group.sites.include?(site)
+        end
+
+        group.save
+      end
+
+      File.delete('./tmp/' + current_user.username + '_shops'+ '.xlsx')
+      redirect_to settings_path, success: 'Список могазинов обновлен.'
+
+    rescue
+      redirect_to settings_path, alert: 'Произошла ошибка импорта.'
+    end
+  end #список магазинов по группам
 
   def import_standard_prices_preview
     begin
@@ -68,7 +121,7 @@ class SettingsController < ApplicationController
     end
 
 
-  end
+  end #стандартные цены
 
   def import_standard_prices
 
@@ -103,7 +156,7 @@ class SettingsController < ApplicationController
     rescue
       redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
-  end
+  end #стандартные цены
 
   def import_sites
     begin
@@ -124,7 +177,7 @@ class SettingsController < ApplicationController
     rescue
       redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
-  end
+  end      #параметры сайтов
 
   def import_sites_preview(site)
     @file = params[:sites] || site
@@ -149,19 +202,7 @@ class SettingsController < ApplicationController
     if !site.nil?
       return [@header, @sites]
     end
-  end
-
-  def import_all_preview
-    if @file.nil?
-      redirect_to settings_path, alert: 'Выберите файл'
-      return
-    end
-
-
-
-
-
-  end
+  end #параметры сайтов
 
   def index
 

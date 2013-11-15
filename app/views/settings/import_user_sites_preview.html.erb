@@ -1,0 +1,24 @@
+<%- model_class = Site -%>
+<div class="page-header">
+  <h2><%= current_user.username %></h2>
+</div>
+
+<table class="table table-striped">
+  <thead>
+  <th>Группа</th>
+  <th>Сайт</th>
+  </thead>
+  <tbody>
+  <% @sites.each do |site| %>
+      <tr>
+        <td><%= site[0] %></td>
+        <td><%= site[1] %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Импорт', import_shops_settings_path, :class => 'btn btn-primary' %>
+<%= link_to 'Назад', settings_path, :class => 'btn' %>
+
+
