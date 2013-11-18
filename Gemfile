@@ -54,6 +54,7 @@ gem 'delayed_job_web'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem "letter_opener"
 end
 
 gem 'whenever', :require => false

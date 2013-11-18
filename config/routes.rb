@@ -9,8 +9,8 @@ Distibutor::Application.routes.draw do
       post 'import_preview' => 'settings#import_standard_prices_preview'
       get 'import_standard_prices' => 'settings#import_standard_prices'
 
-      post 'import_sites_preview' => 'settings#import_sites_preview'
-      get 'import_sites' => 'settings#import_sites'
+      post 'all' => 'settings#all_sites_preview'
+      get 'all' => 'settings#all_sites_import'
 
       post 'import_shops_preview' => 'settings#import_user_sites_preview'
       get 'import_shops' => 'settings#import_user_sites'
@@ -37,10 +37,6 @@ Distibutor::Application.routes.draw do
   resources :sites do
     collection do
       get 'stop_list' => 'sites#stop_list'
-      get 'export_preview' => 'sites#export_preview'
-      get 'export' => 'sites#export'
-      get 'import_preview' => 'sites#import_preview'
-      post 'import_preview' => 'sites#import_preview'
     end
 
   end

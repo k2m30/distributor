@@ -2,7 +2,7 @@
 
 <%- group = @group %>
 <% if !group.settings.nil? && !group.settings.last_updated.nil? %>
-    <div class="muted"><%= t 'tips.prices_updated' %> <%= time_ago_in_words(current_user.settings.last_updated) %> <%= t 'tips.ago' %></div>
+    <div class="muted"><%= t 'tips.prices_updated' %> <%= time_ago_in_words(group.settings.last_updated) %> <%= t 'tips.ago' %></div>
 <% end %>
 
 <h1><%= group.name %></h1>

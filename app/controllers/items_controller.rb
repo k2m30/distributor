@@ -5,16 +5,8 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    @items = Item.all
-    @sites_stripped = []
-    @items.each do |item|
-      item.urls.each do |url|
+    @items = Item.all.order(:id)
 
-        @sites_stripped << url.site
-      end
-    end
-
-    @sites = @sites_stripped.uniq
 
   end
 

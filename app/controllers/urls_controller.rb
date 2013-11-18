@@ -90,6 +90,8 @@ class UrlsController < ApplicationController
   def update_prices
     current_site = params[:site].nil? ? nil : Site.find(params[:site])
     current_site.update_prices
+    #sdf
+    LogMailer.update_report(current_site).deliver
 
     #if current_site.nil?
     #  redirect_to sites_path

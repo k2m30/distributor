@@ -13,23 +13,18 @@ class Item < ActiveRecord::Base
 
   def get_standard_price
     Rails.cache.fetch([self, 'standard_price']) do
-      standard_url = self.get_urls & self.group.get_standard_site.get_urls
-      if standard_url.nil? || standard_url.empty?
-        nil
-      else
-        standard_url.first.price
-      end
+      #rer
+      url = (self.get_urls & self.group.get_standard_site.urls).first
+      url.nil? ? nil : url.price
     end
   end
 
   def get_standard_url
     Rails.cache.fetch([self, 'standard_url']) do
-      standard_url = self.get_urls & self.group.get_standard_site.get_urls
-      if standard_url.nil? || standard_url.empty?
-        nil
-      else
-        standard_url.first.url
-      end
+      #urls1 = self.get_urls
+      #urls2 = self.group.get_standard_site.get_urls
+
+      (self.urls & self.group.get_standard_site.urls).first
     end
   end
 end

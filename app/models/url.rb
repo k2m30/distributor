@@ -5,7 +5,7 @@ require 'nokogiri'
 class Url < ActiveRecord::Base
   belongs_to :site, touch: true
   belongs_to :item, touch: true
-  has_many :logs
+
 
   def update_price(css, regexp, rate)
     begin
@@ -89,12 +89,13 @@ class Url < ActiveRecord::Base
 
 
   def check_for_violation(standard_price, allowed_error)
+
     if !standard_price.nil? && (standard_price > 0) && !allowed_error.nil? && !self.price.nil? && (self.price > 0)
       self.violator = self.price < (standard_price - allowed_error) ? true : false
       if ((standard_price - self.price)/standard_price).abs > 0.3
         log = Log.new
-        log.url = self
-        log.log_type = 'Standard price = ' + standard_price.to_s + '. This site price = ' + self.price.to_s
+        log.site = self.site
+        log.log_type = 'Standard price = ' + standard_price.to_s
         log.price_found = self.price
         log.save
       end

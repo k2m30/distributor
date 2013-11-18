@@ -62,7 +62,9 @@ class SettingsController < ApplicationController
       redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
 
-  end      #список магазинов по группам
+  end
+
+  #список магазинов по группам
 
   def import_user_sites
     begin
@@ -71,7 +73,8 @@ class SettingsController < ApplicationController
         spreadsheet.default_sheet = sheet
         group = Group.where(name: sheet).first
         next if group.nil?
-        group.sites.delete_all
+        sites = group.sites.where(standard: false)
+        group.sites.delete(sites)
 
         (2..spreadsheet.last_row).each do |i|
           site = Site.where(name: spreadsheet.row(i)[0]).first
@@ -87,7 +90,9 @@ class SettingsController < ApplicationController
     rescue
       redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
-  end #список магазинов по группам
+  end
+
+  #список магазинов по группам
 
   def import_standard_prices_preview
     begin
@@ -121,7 +126,9 @@ class SettingsController < ApplicationController
     end
 
 
-  end #стандартные цены
+  end
+
+  #стандартные цены
 
   def import_standard_prices
 
@@ -156,9 +163,11 @@ class SettingsController < ApplicationController
     rescue
       redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
-  end #стандартные цены
+  end
 
-  def import_sites
+  #стандартные цены
+
+  def all_sites_import
     begin
       spreadsheet = Roo::Excelx.new('./tmp/sites_' + current_user.username + '.xlsx', nil, :ignore)
       @header = spreadsheet.row(1)
@@ -177,32 +186,33 @@ class SettingsController < ApplicationController
     rescue
       redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
-  end      #параметры сайтов
+  end
 
-  def import_sites_preview(site)
-    @file = params[:sites] || site
-    if @file.nil?
-      redirect_to settings_path, alert: 'Выберите файл'
-      return
-    end
-    begin
-      spreadsheet = Roo::Excelx.new(@file.path, nil, :ignore)
-      @sites = []
-      @header = spreadsheet.row(1)
-      (2..spreadsheet.last_row).each do |i|
-        @sites << spreadsheet.row(i)
-      end
-      File.open('./tmp/sites_' + current_user.username + '.xlsx', 'w') do |tempfile|
-        tempfile.write(@file.tempfile.set_encoding('utf-8').read)
-      end
-    rescue
-      redirect_to settings_path, alert: 'Произошла ошибка импорта.'
-    end
+  #параметры сайтов
 
-    if !site.nil?
-      return [@header, @sites]
-    end
-  end #параметры сайтов
+  def all_sites_preview
+      @file = params[:sites]
+      if @file.nil?
+        redirect_to settings_path, alert: 'Выберите файл'
+        return
+      end
+      #begin
+        spreadsheet = Roo::Excelx.new(@file.path, nil, :ignore)
+        @sites = []
+
+        @header = spreadsheet.row(1)
+        (2..spreadsheet.last_row).each do |i|
+          @sites << spreadsheet.row(i)
+        end
+        File.open('./tmp/sites_' + current_user.username + '.xlsx', 'w') do |tempfile|
+          tempfile.write(@file.tempfile.set_encoding('utf-8').read)
+        end
+      #rescue
+       # redirect_to settings_path, alert: 'Произошла ошибка импорта.'
+      #end
+  end
+
+  #параметры сайтов
 
   def index
 

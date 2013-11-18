@@ -9,6 +9,7 @@ class Site < ActiveRecord::Base
   has_many :urls
   has_many :items, through: :urls
   has_and_belongs_to_many :groups
+  has_many :logs
 
   def check_for_violation
     urls = self.urls.where(violator: true)
@@ -57,15 +58,16 @@ class Site < ActiveRecord::Base
   ###################### update price ###################
 
   def update_prices
-    puts "--------------start--------------"
-    puts "site_name: " + self.name
-    puts "urls: "
-    puts self.search_url
-
+    return if self.standard
+    begin
+    self.logs.delete_all
     result_array = self.parsing_site
-    save_file(self.name, result_array)
     self.update_urls(result_array)
-
+    self.check_for_violation
+    rescue => e
+      p e.inspect
+      Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+    end
   end
 
   def update_prices_from_file
@@ -142,116 +144,115 @@ class Site < ActiveRecord::Base
   #сохранение таблицы в файл xlsx
 
   def parsing_site #функция парсинга сайта
-                   #begin
-    puts "--------------start parsing function--------------"
+    begin
+      puts "--------------start parsing function--------------" + self.name
 
-    css_page = self.css_pagination
-    css_page = "no" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
+      css_page = self.css_pagination
+      css_page = "no" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
 
-    start_page = "http://" + self.name
-    referer = start_page
-    result_array = []
-    site_urls_array = self.search_url.split(/[,]+/)
+      start_page = "http://" + self.name
+      referer = start_page
+      result_array = []
+      site_urls_array = self.search_url.split(/[,]+/)
 
-    puts "csspage: " + css_page
-    puts "css name: " + self.css_item
-    puts "css price: " + self.css_price
-    puts "referer: " + referer
-    puts start_page
+      site_urls_array.each do |site_url|
 
-    site_urls_array.each do |site_url|
+        url_site_start = site_url
+        previous_page = open(site_url, "Referer" => referer)
+        if previous_page.meta["set-cookie"].nil? #присвоение хоть чего нибудь, если cookie отсутсвует     previous_page.meta["set-cookie"]||=""
+          previous_page.meta["set-cookie"] = ""
+        end #присвоение хоть чего нибудь, если cookie отсутсвует
+        if start_page == "http://technostil.by" #затычка для technostil.by
+          previous_page.meta["set-cookie"] = ""
+        end #затычка для technostil.by
 
-      url_site_start = site_url
-      previous_page = open(site_url, "Referer" => referer)
-      if previous_page.meta["set-cookie"].nil? #присвоение хоть чего нибудь, если cookie отсутсвует     previous_page.meta["set-cookie"]||=""
-        previous_page.meta["set-cookie"] = ""
-      end #присвоение хоть чего нибудь, если cookie отсутсвует
-      if start_page == "http://technostil.by" #затычка для technostil.by
-        previous_page.meta["set-cookie"] = ""
-      end #затычка для technostil.by
+        puts "------ pagination metod css next ------"
+        begin
+          puts site_url
+          page = open(site_url, "Cookie" => previous_page.meta["set-cookie"], "Referer" => referer)
+          html = Nokogiri::HTML page
+          name_array = html.css(self.css_item)
+          name_array.each do |name|
+            name.content = name.text.strip.gsub('Е', 'E').gsub('Н', 'H').gsub('О', 'O').gsub('Р', 'P').gsub('А', 'A').gsub('В', 'B').gsub('С', 'C').gsub('М', 'M').gsub('Т', 'T').gsub('К', 'K').gsub('Х', 'X').gsub('/', ' ').gsub('\\', ' ')
+          end
 
-      puts "------ pagination metod css next ------"
-      begin
-        puts site_url
-        page = open(site_url, "Cookie" => previous_page.meta["set-cookie"], "Referer" => referer)
-        html = Nokogiri::HTML page
-        name_array = html.css(self.css_item)
-        name_array.each do |name|
-          name.content = name.text.strip.gsub('Е', 'E').gsub('Н', 'H').gsub('О', 'O').gsub('Р', 'P').gsub('А', 'A').gsub('В', 'B').gsub('С', 'C').gsub('М', 'M').gsub('Т', 'T').gsub('К', 'K').gsub('Х', 'X').gsub('/', ' ').gsub('\\', ' ')
-        end
+          r = Regexp.new(self.regexp)
+          price_array = html.css(self.css_price)
+          price_array.each do |price|
+            price.content = price.text.strip.gsub(/\u00a0|\s/, '').mb_chars.downcase.to_s[r]
+          end
 
-        r = Regexp.new(self.regexp)
-        price_array = html.css(self.css_price)
-        price_array.each do |price|
-          price.content = price.text.strip.gsub(/\u00a0|\s/, '').mb_chars.downcase.to_s[r]
-        end
+          if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
+            puts "----------error---------"
+            puts "amount name: " + name_array.size.to_s
+            puts "amount price: " + price_array.size.to_s
+            next
+          end #проверка соответствия кол-ва товаров и цен
+          name_array.each_with_index do |product, index|
+            str = check_link(product["href"], start_page)
+            if start_page == "http://ydachnik.by" #затычка для ydachnik.by
+              str = str.gsub("http://ydachnik.by", "http://ydachnik.by/catalog")
+            end #затычка для ydachnik.by
 
-        if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
-          puts "----------error---------"
-          puts "amount name: " + name_array.size.to_s
-          puts "amount price: " + price_array.size.to_s
-          next
-        end #проверка соответствия кол-ва товаров и цен
-        name_array.each_with_index do |product, index|
-          str = check_link(product["href"], start_page)
-          if start_page == "http://ydachnik.by" #затычка для ydachnik.by
-            str = str.gsub("http://ydachnik.by", "http://ydachnik.by/catalog")
-          end #затычка для ydachnik.by
+            result_array << [product.text, str, price_array[index].text]
 
-          result_array << [product.text, str, price_array[index].text]
+            puts product.text
 
-          puts product.text
+          end #цикл по списку товаров на странице
+          puts html.at_css(css_page)
+          last_page = site_url
+          if !html.at_css(css_page).nil? #проверка на наличие след. страницы
+            site_url = html.at_css(css_page)["href"]
+            site_url = check_link(site_url, url_site_start)
+          end #проверка на наличие след. страницы
 
-        end #цикл по списку товаров на странице
-        puts html.at_css(css_page)
-        last_page = site_url
-        if !html.at_css(css_page).nil? #проверка на наличие след. страницы
-          site_url = html.at_css(css_page)["href"]
-          site_url = check_link(site_url, url_site_start)
-        end #проверка на наличие след. страницы
+        end while !html.at_css(css_page).nil? && site_url != last_page #цикл пагинации
 
-      end while !html.at_css(css_page).nil? && site_url != last_page #цикл пагинации
-
-    end #цикл по списку адресов с товаром сайта
-    puts "-----------" + self.name + " parsing ready!!!-----------"
-
-    result_array.sort_by { |item_array| item_array[2] }
-    p result_array
-    result_array.reverse
-
-    #rescue => e
-    #  puts "error parsing site: " + self.name
-    #  puts e.inspect
-    #end
+      end #цикл по списку адресов с товаром сайта
+      result_array.sort_by { |item_array| item_array[2] }
+      result_array.reverse
+    rescue => e
+      puts "error parsing site: " + self.name
+      puts e.inspect
+      Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+    end
   end
 
   #функция парсинга сайта
 
   def update_urls(result_array)
-    #items = []
-    #self.groups.each do |group|
-    #  items+=group.items
-    #end
+    items = []
+    self.groups.each do |group|
+      items+=group.items
+    end
 
     self.urls.delete_all
-    items = Item.all
     items = items.sort_by { |item| item.name.size }
     items = items.reverse
 
     result_array.each do |item_array|
       price = item_array[2]
-      next if price.empty?
+
+      if price.empty?
+        Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
+                    log_type: "No price", site_id: self.id)
+        next
+      end
+
       item = find_item(item_array[0], price, items)
-      next if item.nil?
+      if item.nil?
+        Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
+                    log_type: "Item not found", site_id: self.id)
+        next
+      end
       items.delete(item)
       url_str = item_array[1]
       update_url(price, url_str, item)
+
+      Log.create!(message: item_array.to_s, price_found: price, name_found: item.name,
+                  log_type: "OK", site_id: self.id)
     end
-
-  end
-
-  def find_price(price_str)
-
+    self.save
   end
 
   def find_item(text, price, items)
@@ -263,8 +264,8 @@ class Site < ActiveRecord::Base
     items_found = []
     items.each do |item|
       if compressed_text.include?(item.name.downcase.gsub(' ', ''))
-        p "Found: ", item.name, " ", text
-        return item
+        #p "Found: " + item.name + text.to_s
+        return item if (item.get_standard_price/price.to_f - 1).abs < 0.3
       end
     end
 
@@ -273,7 +274,7 @@ class Site < ActiveRecord::Base
     items.each do |item|
       item_name = item.name.gsub('/', ' ').downcase.split(' ')
       if (item_name&text).size == item_name.size
-        items_found << item
+        return item if (item.get_standard_price/price.to_f - 1).abs < 0.4
       end
     end
 
@@ -283,7 +284,8 @@ class Site < ActiveRecord::Base
     if items_found.size > 1
       deltas = []
       items_found.each do |item|
-        deltas += item.price - price
+
+        #deltas += item.price - price
       end
 
       min_delta = deltas.min
@@ -304,6 +306,14 @@ class Site < ActiveRecord::Base
     url.url = url_str
     url.price = price.to_f < item.group.settings.rate ? price.to_f*item.group.settings.rate : price.to_f
     url.save
+
+    allowed_error = url.item.group.settings.allowed_error
+    allowed_error = allowed_error.include?('%') ? allowed_error.gsub('%', '').to_f/100 * url.price : allowed_error.to_f
+
+    standard_price = url.item.get_standard_price
+    #p '---', allowed_error, standard_price
+    url.check_for_violation(standard_price, allowed_error)
+
 
   end
 end

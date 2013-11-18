@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20131013103549) do
     t.string 'name_found'
     t.string 'log_type'
     t.boolean 'ok'
-    t.integer 'url_id'
+    t.integer 'site_id'
     t.datetime 'created_at'
     t.datetime 'updated_at'
   end
