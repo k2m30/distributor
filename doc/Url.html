@@ -1,0 +1,518 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Url
+  
+    &mdash; Documentation by YARD 0.8.7.2
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index (U)</a> &raquo;
+    
+    
+    <span class="title">Url</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: Url
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">ActiveRecord::Base</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">ActiveRecord::Base</li>
+          
+            <li class="next">Url</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">app/models/url.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#check_for_violation-instance_method" title="#check_for_violation (instance method)">- (Object) <strong>check_for_violation</strong>(standard_price, allowed_error) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_violator-instance_method" title="#set_violator (instance method)">- (Object) <strong>set_violator</strong>(val = true) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#update_all_prices-instance_method" title="#update_all_prices (instance method)">- (Object) <strong>update_all_prices</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#update_price-instance_method" title="#update_price (instance method)">- (Object) <strong>update_price</strong>(css, regexp, rate) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="check_for_violation-instance_method">
+  
+    - (<tt>Object</tt>) <strong>check_for_violation</strong>(standard_price, allowed_error) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/url.rb', line 91</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_check_for_violation'>check_for_violation</span><span class='lparen'>(</span><span class='id identifier rubyid_standard_price'>standard_price</span><span class='comma'>,</span> <span class='id identifier rubyid_allowed_error'>allowed_error</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_standard_price'>standard_price</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_standard_price'>standard_price</span> <span class='op'>&gt;</span> <span class='int'>0</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_allowed_error'>allowed_error</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span> <span class='op'>&gt;</span> <span class='int'>0</span><span class='rparen'>)</span>
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_violator'>violator</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span> <span class='op'>&lt;</span> <span class='lparen'>(</span><span class='id identifier rubyid_standard_price'>standard_price</span> <span class='op'>-</span> <span class='id identifier rubyid_allowed_error'>allowed_error</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='kw'>true</span> <span class='op'>:</span> <span class='kw'>false</span>
+    <span class='kw'>if</span> <span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_standard_price'>standard_price</span> <span class='op'>-</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span><span class='rparen'>)</span><span class='op'>/</span><span class='id identifier rubyid_standard_price'>standard_price</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_abs'>abs</span> <span class='op'>&gt;</span> <span class='float'>0.3</span>
+      <span class='id identifier rubyid_log'>log</span> <span class='op'>=</span> <span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+      <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_url'>url</span> <span class='op'>=</span> <span class='kw'>self</span>
+      <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_log_type'>log_type</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Standard price = </span><span class='tstring_end'>&#39;</span></span> <span class='op'>+</span> <span class='id identifier rubyid_standard_price'>standard_price</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>. This site price = </span><span class='tstring_end'>&#39;</span></span> <span class='op'>+</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+      <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_price_found'>price_found</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span>
+      <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+    <span class='kw'>end</span>
+  <span class='kw'>else</span>
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_violator'>violator</span> <span class='op'>=</span> <span class='kw'>false</span>
+  <span class='kw'>end</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_violator-instance_method">
+  
+    - (<tt>Object</tt>) <strong>set_violator</strong>(val = true) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+107
+108
+109
+110</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/url.rb', line 107</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_set_violator'>set_violator</span><span class='lparen'>(</span><span class='id identifier rubyid_val'>val</span><span class='op'>=</span><span class='kw'>true</span><span class='rparen'>)</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_violator'>violator</span><span class='op'>=</span><span class='id identifier rubyid_val'>val</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="update_all_prices-instance_method">
+  
+    - (<tt>Object</tt>) <strong>update_all_prices</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/url.rb', line 61</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_update_all_prices'>update_all_prices</span>
+  <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_user'>user</span><span class='op'>|</span>
+    <span class='id identifier rubyid_rate'>rate</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_settings'>settings</span><span class='period'>.</span><span class='id identifier rubyid_rate'>rate</span>
+    <span class='id identifier rubyid_allowed_error'>allowed_error</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_settings'>settings</span><span class='period'>.</span><span class='id identifier rubyid_allowed_error'>allowed_error</span>
+
+    <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_groups'>groups</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_group'>group</span><span class='op'>|</span>
+
+      <span class='id identifier rubyid_group'>group</span><span class='period'>.</span><span class='id identifier rubyid_sites'>sites</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>standard:</span> <span class='kw'>true</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_standard_site'>standard_site</span><span class='op'>|</span>
+        <span class='id identifier rubyid_standard_site'>standard_site</span><span class='period'>.</span><span class='id identifier rubyid_urls'>urls</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_url'>url</span><span class='op'>|</span>
+          <span class='id identifier rubyid_url'>url</span><span class='period'>.</span><span class='id identifier rubyid_update_price'>update_price</span><span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='period'>.</span><span class='id identifier rubyid_site'>site</span><span class='period'>.</span><span class='id identifier rubyid_css'>css</span><span class='comma'>,</span> <span class='id identifier rubyid_url'>url</span><span class='period'>.</span><span class='id identifier rubyid_site'>site</span><span class='period'>.</span><span class='id identifier rubyid_regexp'>regexp</span><span class='comma'>,</span> <span class='id identifier rubyid_rate'>rate</span><span class='rparen'>)</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+
+      <span class='id identifier rubyid_group'>group</span><span class='period'>.</span><span class='id identifier rubyid_items'>items</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_item'>item</span><span class='op'>|</span>
+        <span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_urls'>urls</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_url'>url</span><span class='op'>|</span>
+          <span class='id identifier rubyid_url'>url</span><span class='period'>.</span><span class='id identifier rubyid_update_price'>update_price</span><span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='period'>.</span><span class='id identifier rubyid_site'>site</span><span class='period'>.</span><span class='id identifier rubyid_css'>css</span><span class='comma'>,</span> <span class='id identifier rubyid_url'>url</span><span class='period'>.</span><span class='id identifier rubyid_site'>site</span><span class='period'>.</span><span class='id identifier rubyid_regexp'>regexp</span><span class='comma'>,</span> <span class='id identifier rubyid_rate'>rate</span><span class='rparen'>)</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_settings'>settings</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_settings'>settings</span>
+    <span class='id identifier rubyid_settings'>settings</span><span class='period'>.</span><span class='id identifier rubyid_last_updated'>last_updated</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span>
+    <span class='id identifier rubyid_settings'>settings</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+  <span class='kw'>end</span>
+  <span class='const'>Url</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_url'>url</span><span class='op'>|</span> <span class='id identifier rubyid_url'>url</span><span class='period'>.</span><span class='id identifier rubyid_check_for_violation'>check_for_violation</span><span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='period'>.</span><span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_get_standard_price'>get_standard_price</span><span class='comma'>,</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_settings'>settings</span><span class='period'>.</span><span class='id identifier rubyid_allowed_error'>allowed_error</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+  <span class='const'>Site</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_site'>site</span><span class='op'>|</span> <span class='id identifier rubyid_site'>site</span><span class='period'>.</span><span class='id identifier rubyid_check_for_violation'>check_for_violation</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="update_price-instance_method">
+  
+    - (<tt>Object</tt>) <strong>update_price</strong>(css, regexp, rate) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/url.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_update_price'>update_price</span><span class='lparen'>(</span><span class='id identifier rubyid_css'>css</span><span class='comma'>,</span> <span class='id identifier rubyid_regexp'>regexp</span><span class='comma'>,</span> <span class='id identifier rubyid_rate'>rate</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_css_content'>css_content</span> <span class='op'>=</span> <span class='kw'>nil</span>
+    <span class='id identifier rubyid_log'>log</span> <span class='op'>=</span> <span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+    <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_url'>url</span> <span class='op'>=</span> <span class='kw'>self</span>
+
+    <span class='id identifier rubyid_uri'>uri</span> <span class='op'>=</span> <span class='const'>URI</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_url'>url</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_error'>error</span> <span class='id identifier rubyid_uri'>uri</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+    <span class='id identifier rubyid_page'>page</span> <span class='op'>=</span> <span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>User-Agent</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36 OPR/16.0.1196.73</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Accept</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Cache-Control</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>max-age=0</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_html'>html</span> <span class='op'>=</span> <span class='const'>Nokogiri</span><span class='op'>::</span><span class='const'>HTML</span> <span class='id identifier rubyid_page'>page</span>
+    <span class='id identifier rubyid_css_content'>css_content</span> <span class='op'>=</span> <span class='id identifier rubyid_html'>html</span><span class='period'>.</span><span class='id identifier rubyid_at_css'>at_css</span><span class='lparen'>(</span><span class='id identifier rubyid_css'>css</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_css_content'>css_content</span> <span class='op'>=</span> <span class='id identifier rubyid_css_content'>css_content</span><span class='period'>.</span><span class='id identifier rubyid_content'>content</span>
+    <span class='id identifier rubyid_page_price'>page_price</span> <span class='op'>=</span> <span class='id identifier rubyid_css_content'>css_content</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\u00a0|\s</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+    <span class='kw'>if</span>  <span class='id identifier rubyid_page_price'>page_price</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\d\.\d{3}</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>&gt;</span> <span class='int'>0</span>
+      <span class='id identifier rubyid_page_price'>page_price</span> <span class='op'>=</span> <span class='id identifier rubyid_page_price'>page_price</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'>#костыль специально для kosilka.by
+</span>    <span class='kw'>end</span>
+    <span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_error'>error</span> <span class='id identifier rubyid_page_price'>page_price</span>
+    <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_regexp'>regexp</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_page_price'>page_price</span> <span class='op'>=</span> <span class='id identifier rubyid_page_price'>page_price</span><span class='period'>.</span><span class='id identifier rubyid_mb_chars'>mb_chars</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lbracket'>[</span><span class='id identifier rubyid_r'>r</span><span class='rbracket'>]</span>
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_page_price'>page_price</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span><span class='op'>&lt;</span><span class='id identifier rubyid_rate'>rate</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_rate'>rate</span><span class='op'>*</span><span class='id identifier rubyid_page_price'>page_price</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span> <span class='op'>:</span> <span class='id identifier rubyid_page_price'>page_price</span>
+    <span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_error'>error</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span>
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_site'>site</span><span class='period'>.</span><span class='id identifier rubyid_touch'>touch</span>
+    <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_page_price'>page_price</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_page_price'>page_price</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+      <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_log_type'>log_type</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>OK</span><span class='tstring_end'>&#39;</span></span>
+      <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_ok'>ok</span> <span class='op'>=</span> <span class='kw'>true</span>
+      <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_ok_all'>ok_all</span> <span class='op'>=</span> <span class='kw'>true</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_log_type'>log_type</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Wrong address</span><span class='tstring_end'>&#39;</span></span>
+      <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_ok'>ok</span> <span class='op'>=</span> <span class='kw'>false</span>
+      <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_ok_all'>ok_all</span> <span class='op'>=</span> <span class='kw'>false</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_price_found'>price_found</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_css_content'>css_content</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>||</span> <span class='id identifier rubyid_css_content'>css_content</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_url'>url</span> <span class='op'>:</span> <span class='id identifier rubyid_css_content'>css_content</span>
+    <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+  <span class='kw'>rescue</span> <span class='const'>Exception</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+    <span class='kw'>if</span> <span class='op'>!</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span> <span class='op'>&gt;</span> <span class='int'>0</span><span class='rparen'>)</span>
+      <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_price'>price</span> <span class='op'>=</span> <span class='op'>-</span><span class='int'>1</span>
+    <span class='kw'>end</span>
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_violator'>violator</span> <span class='op'>=</span> <span class='kw'>false</span>
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+    <span class='id identifier rubyid_log'>log</span> <span class='op'>=</span> <span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+    <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_url'>url</span> <span class='op'>=</span> <span class='kw'>self</span>
+    <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_log_type'>log_type</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='gvar'>$!</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_price_found'>price_found</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_css_content'>css_content</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>||</span> <span class='id identifier rubyid_css_content'>css_content</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_url'>url</span> <span class='op'>:</span> <span class='id identifier rubyid_css_content'>css_content</span>
+    <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_ok'>ok</span> <span class='op'>=</span> <span class='kw'>false</span>
+
+    <span class='id identifier rubyid_log'>log</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+    <span class='comment'>##logger.error(e.inspect)
+</span>  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Fri Nov 15 17:37:54 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.2 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>

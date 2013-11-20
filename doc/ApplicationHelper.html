@@ -1,0 +1,430 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: ApplicationHelper
+  
+    &mdash; Documentation by YARD 0.8.7.2
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index (A)</a> &raquo;
+    
+    
+    <span class="title">ApplicationHelper</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Module: ApplicationHelper
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">app/helpers/application_helper.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_url_to_item-instance_method" title="#add_url_to_item (instance method)">- (Object) <strong>add_url_to_item</strong>(url, item) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#find_violating_urls-instance_method" title="#find_violating_urls (instance method)">- (Object) <strong>find_violating_urls</strong>(site, group) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#link_to_add_fields-instance_method" title="#link_to_add_fields (instance method)">- (Object) <strong>link_to_add_fields</strong>(name, f, association) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#link_to_add_fields_old-instance_method" title="#link_to_add_fields_old (instance method)">- (Object) <strong>link_to_add_fields_old</strong>(name, f, association) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#spaces-instance_method" title="#spaces (instance method)">- (Object) <strong>spaces</strong>(x) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="add_url_to_item-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_url_to_item</strong>(url, item) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+2
+3
+4
+5
+6
+7
+8</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/helpers/application_helper.rb', line 2</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_add_url_to_item'>add_url_to_item</span> <span class='lparen'>(</span><span class='id identifier rubyid_url'>url</span><span class='comma'>,</span> <span class='id identifier rubyid_item'>item</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_new_url'>new_url</span> <span class='op'>=</span> <span class='const'>Url</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='id identifier rubyid_new_url'>new_url</span><span class='period'>.</span><span class='id identifier rubyid_url'>url</span> <span class='op'>=</span> <span class='id identifier rubyid_url'>url</span>
+  <span class='id identifier rubyid_new_url'>new_url</span><span class='period'>.</span><span class='id identifier rubyid_item'>item</span> <span class='op'>=</span> <span class='id identifier rubyid_item'>item</span>
+  <span class='id identifier rubyid_new_url'>new_url</span><span class='period'>.</span><span class='id identifier rubyid_save'>save</span>
+  <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_edit_item_path'>edit_item_path</span> <span class='lparen'>(</span><span class='id identifier rubyid_item'>item</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="find_violating_urls-instance_method">
+  
+    - (<tt>Object</tt>) <strong>find_violating_urls</strong>(site, group) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+38
+39
+40
+41
+42
+43
+44
+45</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/helpers/application_helper.rb', line 38</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_find_violating_urls'>find_violating_urls</span><span class='lparen'>(</span><span class='id identifier rubyid_site'>site</span><span class='comma'>,</span> <span class='id identifier rubyid_group'>group</span><span class='rparen'>)</span>
+  <span class='comment'>#Rails.cache.fetch([site.cache_key, group.cache_key, &#39;url&#39;]) do
+</span>    <span class='id identifier rubyid_urls'>urls</span> <span class='op'>=</span> <span class='id identifier rubyid_site'>site</span><span class='period'>.</span><span class='id identifier rubyid_urls'>urls</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='label'>violator:</span> <span class='kw'>true</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_find_all'>find_all</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_url'>url</span><span class='op'>|</span> <span class='id identifier rubyid_url'>url</span><span class='period'>.</span><span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_get_group_name'>get_group_name</span> <span class='op'>==</span> <span class='id identifier rubyid_group'>group</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='rbrace'>}</span>
+    <span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_urls'>urls</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
+    <span class='id identifier rubyid_urls'>urls</span> <span class='op'>=</span> <span class='id identifier rubyid_urls'>urls</span><span class='period'>.</span><span class='id identifier rubyid_sort_by'>sort_by</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_url'>url</span><span class='op'>|</span> <span class='id identifier rubyid_url'>url</span><span class='period'>.</span><span class='id identifier rubyid_item'>item</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbrace'>}</span>
+
+  <span class='comment'>#end
+</span><span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="link_to_add_fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>link_to_add_fields</strong>(name, f, association) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/helpers/application_helper.rb', line 20</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_link_to_add_fields'>link_to_add_fields</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_f'>f</span><span class='comma'>,</span> <span class='id identifier rubyid_association'>association</span><span class='rparen'>)</span>
+  <span class='comment'># debugger
+</span>  <span class='id identifier rubyid_new_object'>new_object</span> <span class='op'>=</span> <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_association'>association</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_new_object'>new_object</span><span class='period'>.</span><span class='id identifier rubyid_object_id'>object_id</span>
+  <span class='id identifier rubyid_fields'>fields</span> <span class='op'>=</span> <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_fields_for'>fields_for</span><span class='lparen'>(</span><span class='id identifier rubyid_association'>association</span><span class='comma'>,</span> <span class='id identifier rubyid_new_object'>new_object</span><span class='comma'>,</span> <span class='label'>child_index:</span> <span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_builder'>builder</span><span class='op'>|</span>
+    <span class='id identifier rubyid_render'>render</span><span class='lparen'>(</span><span class='id identifier rubyid_association'>association</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_singularize'>singularize</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>_fields</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>f:</span> <span class='id identifier rubyid_builder'>builder</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_debugger'>debugger</span>
+  <span class='id identifier rubyid_link_to'>link_to</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>#</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>class:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>add_fields</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>data:</span> <span class='lbrace'>{</span><span class='label'>id:</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>fields:</span> <span class='id identifier rubyid_fields'>fields</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="link_to_add_fields_old-instance_method">
+  
+    - (<tt>Object</tt>) <strong>link_to_add_fields_old</strong>(name, f, association) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/helpers/application_helper.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_link_to_add_fields_old'>link_to_add_fields_old</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_f'>f</span><span class='comma'>,</span> <span class='id identifier rubyid_association'>association</span><span class='rparen'>)</span>
+  <span class='comment'># debugger
+</span>  <span class='id identifier rubyid_new_object'>new_object</span> <span class='op'>=</span> <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_object'>object</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_association'>association</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_new_object'>new_object</span><span class='period'>.</span><span class='id identifier rubyid_object_id'>object_id</span>
+  <span class='id identifier rubyid_fields'>fields</span> <span class='op'>=</span> <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_fields_for'>fields_for</span><span class='lparen'>(</span><span class='id identifier rubyid_association'>association</span><span class='comma'>,</span> <span class='id identifier rubyid_new_object'>new_object</span><span class='comma'>,</span> <span class='label'>child_index:</span> <span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_builder'>builder</span><span class='op'>|</span>
+    <span class='id identifier rubyid_render'>render</span><span class='lparen'>(</span><span class='id identifier rubyid_association'>association</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_singularize'>singularize</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>_fields</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>f:</span> <span class='id identifier rubyid_builder'>builder</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_link_to'>link_to</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>#</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>class:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>add_fields</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>data:</span> <span class='lbrace'>{</span><span class='label'>id:</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>fields:</span> <span class='id identifier rubyid_fields'>fields</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="spaces-instance_method">
+  
+    - (<tt>Object</tt>) <strong>spaces</strong>(x) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+32
+33
+34
+35
+36</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/helpers/application_helper.rb', line 32</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_spaces'>spaces</span><span class='lparen'>(</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_str'>str</span> <span class='op'>=</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_reverse'>reverse</span>
+  <span class='id identifier rubyid_str'>str</span><span class='period'>.</span><span class='id identifier rubyid_gsub!'>gsub!</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>([0-9]{3})</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\1 </span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_str'>str</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>,$</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_reverse'>reverse</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Fri Nov 15 17:37:54 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.2 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>

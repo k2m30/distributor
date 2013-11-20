@@ -39,6 +39,10 @@ Distibutor::Application.routes.draw do
       get 'stop_list' => 'sites#stop_list'
     end
 
+    member do
+      get 'logs' => 'sites#logs'
+    end
+
   end
 
   get '/dj' => DelayedJobWeb, :anchor => false

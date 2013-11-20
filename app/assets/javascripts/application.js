@@ -14,6 +14,9 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require_tree .
+//= require jquery.ui.all
+//= require best_in_place
+
 function showSpin() {
     //$('.spin').toggle();
     $('.row-fluid').hide();
@@ -30,3 +33,4 @@ $(document).ready(function () {
 
 
 });
+

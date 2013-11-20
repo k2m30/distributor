@@ -20,6 +20,7 @@ gem 'coffee-rails', '~> 4.0.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -56,6 +57,8 @@ group :development do
   gem 'binding_of_caller'
   gem "letter_opener"
 end
+
+gem 'best_in_place', :git => 'https://github.com/aaronchi/best_in_place.git'
 
 gem 'whenever', :require => false
 

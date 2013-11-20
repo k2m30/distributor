@@ -4,8 +4,13 @@ require 'axlsx'
 
 class SitesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_site, only: [:show, :edit, :update, :destroy]
+  before_action :set_site, only: [:show, :edit, :update, :destroy, :logs]
 
+
+  def logs
+    @logs = @site.logs
+    @names = Item.all.order(:name).pluck(:id, :name)
+  end
 
   def export()
     sites = Site.all
