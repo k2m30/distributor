@@ -15,9 +15,6 @@
   <th style="white-space: nowrap; text-align: right">Эталон</th>
   <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
   <th style="white-space: nowrap; text-align: right">Разница, %</th>
-  <% if current_user.admin? %>
-      <th>Действия</th>
-  <% end %>
 
   <% @urls.each do |url| %>
       <%= cache(url) do %>
@@ -47,9 +44,6 @@
                 <td></td>
                 <td></td>
             <% end %>
-            <% if current_user.admin? %>
-                <td><%= link_to 'Обновить', upd_url_path(url), target: '_blank', class: 'btn btn-mini' %></td>
-            <% end %>
           </tr>
       <% end %>
   <% end %>
@@ -59,5 +53,8 @@
   <%= link_to t('.back', :default => t('helpers.links.back')),
               stop_list_sites_path, :class => 'btn' %>
   <%= link_to t('.update_prices', :default => t('helpers.links.update_prices')),
-              update_prices_urls_path(:site => @site), :class => 'btn tdfade' %>
+              update_prices_urls_path(:site => @site), :class => 'btn' %>
+  <% if current_user.admin? %>
+      <%= link_to 'Лог', logs_site_path(@site), :class => 'btn' %>
+  <% end %>
 </div>

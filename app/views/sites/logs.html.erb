@@ -2,7 +2,7 @@
   <h1><%= @site.name %></h1>
 
 </div>
-<table>
+<table class="table table-striped">
   <thead>
   <tr>
     <th>Тип</th>
@@ -18,15 +18,15 @@
         <% if !log.message.nil? %>
             <%- message = log.message.gsub(/[\[\]\"]/, "").split(', ') %>
             <td><%= link_to message[0], message[1] %></td>
+         <% else %>
+        <td></td>
         <% end %>
-        <td>
-          <%#= best_in_place_if(log.name_found.nil?, log, :name_found, :type => :select, :collection => @names, :nil => "Click me to add content!") %>
-          <%#= search_field_tag "item_found", value = log.name_found, class: 'typeahead', autocomplete: 'off',
-                               data: {typeahead_source: Item.order(:name).map(&:name)}  %>
+        <td width="350px">
           <%= best_in_place log, :name_found, :type=> :input, :classes => 'typeahead',
                             :html_attrs => {:'data-provide' => "typeahead",
-                                            :'data-source' => Item.order(:name).pluck(:name).to_json,
+                                            :'data-source' => log.names(current_user),
                                             :'autocomplete' => 'off'} %>
+
         </td>
         <td><%= spaces(log.price_found) %></td>
 
@@ -35,7 +35,9 @@
   </tbody>
 </table>
 
+<br><br><br>
 Поисковые ссылки:
+<br>
 <% if !@site.search_url.nil? %>
     <p><% @site.search_url.split(',').each do |search_url|%>
         <p><%= link_to search_url, search_url %></p>
