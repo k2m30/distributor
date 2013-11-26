@@ -59,16 +59,20 @@ class Site < ActiveRecord::Base
 
   def update_prices
     return if self.standard
-    #begin
-    self.logs.destroy_all
-    result_array = self.parsing_site
-    self.update_urls(result_array)
-    self.check_for_violation
-    #rescue => e
-    #  p "error update_price"
-    #  p e.inspect
-    #  Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
-    #end
+    begin
+      self.logs.delete_all
+
+      result_array = self.parsing_site
+      self.update_urls(result_array)
+
+      self.check_for_violation
+
+      #rescue => e
+      #  p "error update_price"
+      #  p e.inspect
+      #  Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+    end
+
   end
 
   def update_prices_from_file
@@ -103,44 +107,59 @@ class Site < ActiveRecord::Base
 
   #парсинг с исходными данными из файла
 
-  def check_link(url, start_page) #исправление относительной ссылки
+  def check_link(url, start_url) #исправление относительной ссылки
     begin
-      site_name = start_page.scan(/(?:[-a-z_\d])+.(?:[-a-z])*(?:\.[a-z]{2,4})+/).first
+      site_name = start_url.scan(/(?:[-a-z_\d])+.(?:[-a-z])*(?:\.[a-z]{2,4})+/).first
+      site_name = "http://" + site_name
+      url_size = url[1..(url.size-1)].split('/').size
+
+      if  url_size > 1 #проверка на редактируемого адреса
+        add_str = site_name
+      else
+        add_str = start_url
+      end
+
       if url.scan(site_name).first.nil? #проверка на относительную ссылку
-        if url[0] != "/" && start_page[-1] != "/" #проверка на наличие первого слэша
-          str = start_page + "/" + url
+
+        if url[0] != "/" && add_str[-1] != "/" #проверка на наличие первого слэша
+          str = add_str + "/" + url
         else
-          str = start_page + url
+          str = add_str + url
         end #проверка на наличие первого слэша
+
       else
         str = url
       end #проверка на относительную ссылку
+
       return str
+
     rescue => e
       puts "error check link"
       puts e.inspect
     end
-  end
-
-  #исправление относительной ссылки
+  end #исправление относительной ссылки
 
   def save_file(site_name, result_array=[]) #сохранение таблицы в файл xlsx
     begin
       file = Axlsx::Package.new
+
       file.workbook.add_worksheet(:name => "1") do |sheet|
         sheet.add_row ["NAME", "URL", "PRICE"]
+
         result_array.each do |product|
-          name = product[0].keys.first
-          sheet.add_row [name, product[0][name], product[1][name]]
+          sheet.add_row [product[0], product[1], product[2]]
         end
+
       end
+
       file.serialize(site_name + ".xlsx")
       puts "-----------save file: " + site_name + ".xlsx -------------"
+
     rescue => e
       puts "error save file" + site_name + ".xlsx"
       puts e.inspect
     end
-  end
+  end  #сохранение таблицы в файл xlsx
 
   #сохранение таблицы в файл xlsx
 
@@ -167,7 +186,7 @@ class Site < ActiveRecord::Base
           previous_page.meta["set-cookie"] = ""
         end #затычка для technostil.by
 
-        puts "------ pagination metod css next ------"
+        puts "------------"
         begin
           puts site_url
           page = open(site_url, "Cookie" => previous_page.meta["set-cookie"], "Referer" => referer)
@@ -214,7 +233,9 @@ class Site < ActiveRecord::Base
         end while !html.at_css(css_page).nil? && site_url != last_page #цикл пагинации
 
       end #цикл по списку адресов с товаром сайта
-      result_array.sort_by { |item_array| item_array[2].to_f }
+      result_array = result_array.sort_by { |item_array| item_array[2].to_f }
+      puts "------done parsing function: " + self.name + "------"
+      return result_array
 
     rescue => e
       puts "error parsing site: " + self.name
@@ -274,7 +295,7 @@ class Site < ActiveRecord::Base
     end
 
 
-    puts "-------------- update_urls DONE ------------"
+    puts "------ update_urls DONE ------"
 
 
     self.save
@@ -299,13 +320,9 @@ class Site < ActiveRecord::Base
         item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
         item_name = item_name.gsub(' ', '')
         if compressed_text.include?(item_name)
-          #p "Found: " + item.name + text.to_s
           return item if price_fit?(item, price)
         end
       end
-
-
-
 
       items.each do |item|
         item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
