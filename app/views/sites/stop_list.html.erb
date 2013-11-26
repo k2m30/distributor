@@ -29,6 +29,9 @@
       <tbody>
       <% @groups.each do |group| %>
           <% find_violating_urls(site, group).each do |url| %>
+              <%= url.item.name %>
+              <%= url.item.get_standard_url %>
+              <%= url.item.get_standard_price %>
 
               <% if !url.item.get_standard_url.nil? && !url.item.get_standard_price.nil? && url.item.get_standard_price > 0 %>
                   <tr>

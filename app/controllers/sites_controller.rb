@@ -4,12 +4,40 @@ require 'axlsx'
 
 class SitesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_site, only: [:show, :edit, :update, :destroy, :logs]
+  before_action :set_site, only: [:show, :edit, :update, :destroy, :logs, :logs_submit]
 
 
   def logs
-    @logs = @site.logs
+    @logs = @site.logs.order(:message)
     @names = Item.all.order(:name).pluck(:id, :name)
+  end
+
+  def logs_submit
+    @site.logs.each do |log|
+      url = Url.find_by_url(log.message.split(", ")[1].gsub("\"", ""))
+      if url.nil?
+        item = Item.find_by_name(log.name_found)
+        next if item.nil?
+
+        url = @site.update_url(log.price_found, log.message.split(", ")[1].gsub("\"", ""), item)
+        #url.locked = true
+        #url.save
+      else
+        item = Item.find_by_name(log.name_found)
+        next if item.nil?
+
+        next if item.name == log.name_found
+
+        url.item = item
+        url.locked = true
+        url.save
+
+      end
+
+    end
+
+    redirect_to site_path(@site)
+
   end
 
   def export()
@@ -21,7 +49,6 @@ class SitesController < ApplicationController
     create_zip_folder
     redirect_to sites_path
   end
-
 
   def export_preview
     @sites = ["_sites", Site.all]
@@ -38,158 +65,12 @@ class SitesController < ApplicationController
 
   end
 
-  def import_sites(folder)
-    Dir.chdir(folder) do
-      spreadsheet = Roo::Excelx.new('all_sites.xlsx', nil, :ignore)
-      @header = spreadsheet.row(1)
-      @rows = []
-      (2..spreadsheet.last_row).each do |i|
-        row = Hash[[@header, spreadsheet.row(i)].transpose]
-        site = Site.find_by_id(row["id"]) || Site.new
-
-        site.attributes = row.to_hash #.slice(*accessible_attributes)
-        site.save!
-      end
-    end
-  end
-
-  def create_new_group(name, site, user)
-    group = Group.new
-    group.name = name
-    group.user = user
-    group.sites << site
-    group.save
-
-    settings = Settings.new
-    settings.group = group
-    settings.save
-
-    return group
-  end
-
-  def create_new_item(name, group)
-    item = Item.new
-    item.name = name
-    item.group = group
-    item.save
-
-    return item
-  end
-
-  def create_new_standard_site
-    site = Site.new
-    site.name = 'Standard'
-    site.standard = true
-    site.save
-
-    return site
-  end
-
-  def import_standard_prices(file, user)
-    site = Site.where(standard: true).first || create_new_standard_site
-
-    spreadsheet = Roo::Excelx.new(file.path, nil, :ignore)
-    spreadsheet.sheets.each do |sheet|
-      spreadsheet.default_sheet = sheet
-      @header = spreadsheet.row(1)
-      group = Group.where(name: sheet).first || create_new_group(sheet, site, user)
-      site.groups << group if !site.groups.include?(group)
-
-      (2..spreadsheet.last_row).each do |i|
-        row = Hash[[@header, spreadsheet.row(i)].transpose]
-        if !row["item_id"].nil?
-          item = group.items.where(name: row["item_id"]).first || create_new_item(row["item_id"], group)
-        else
-          next
-        end
-        price = row["price"]
-        if !item.nil? && !site.nil?
-          set_price(item, site, price)
-        end
-      end
-      group.settings.last_updated = Time.now
-    end
-  end
-
-  def import_group_items(user, group, spreadsheet)
-    p group.items.size
-    @header = spreadsheet.row(1)
-    (2..spreadsheet.last_row).each do |i|
-      row = Hash[[@header, spreadsheet.row(i)].transpose]
-      item = Item.where(name: row["name"]).first
-      group.items << items if !item.nil? && !group.items.include?(item)
-    end
-    p group.items.size
-  end
-
-  def import_group_sites(user, group, spreadsheet)
-    @header = spreadsheet.row(1)
-    (2..spreadsheet.last_row).each do |i|
-      row = Hash[[@header, spreadsheet.row(i)].transpose]
-      site = Site.where(name: row["name"]).first
-      group.sites << site if !site.nil? && !group.sites.include?(site)
-    end
-  end
-
-  def import_user_data(folder)
-    Dir.chdir(folder) do
-      Dir.glob("*").each do |file_name|
-        user = User.where(username: file_name)
-        if !user.empty?
-          user = user.first
-          Dir.chdir(file_name) do
-            Dir.glob("*").each do |group_name|
-              group = Group.where(name: group_name)
-              if !group.empty?
-                Dir.chdir(group_name) do
-                  group = group.first
-                  items_file = Roo::Excelx.new('items.xlsx')
-                  sites_file = Roo::Excelx.new('sites.xlsx')
-                  import_group_items(user, group, items_file)
-                  import_group_sites(user, group, sites_file)
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-
-  def import_preview
-    @site = params[:file]
-    if @site.nil?
-      redirect_to settings_path, alert: "Выберите файл"
-      return
-    end
-
-    tmp_folder = './import/'
-    #unzip_file(@site.tempfile, tmp_folder)
-    #sites = import_sites(tmp_folder+'_sites/')
-    #user_data = import_user_data(tmp_folder)
-    #import_standard_prices(@site, current_user)
-
-
-    #spreadsheet = Roo::Excelx.new(@site.path, nil, :ignore)
-    #@header = spreadsheet.row(1)
-    #@rows = []
-    #(2..spreadsheet.last_row).each do |i|
-    #  @rows << spreadsheet.row(i)
-    #end
-
-  end
-
   def index
     @sites = Site.all.order("name")
   end
 
   def show
-    @urls = []
-    @site.groups.order("name").each do |group|
-      group_urls = @site.urls.find_all { |url| url.item.get_group_name == group.name }
-      @urls += group_urls.sort_by { |url| url.item.name }
-    end
-    @urls = @site.urls
+   @urls = @site.urls.joins(item: :group).order('groups.name ASC, items.name ASC')
   end
 
   def new
@@ -234,8 +115,8 @@ class SitesController < ApplicationController
   end
 
   def stop_list
-    @groups = Group.order("name")
-    @sites = Site.where(violator: true).order("name")
+    @groups = current_user.groups.order("name")
+    @sites = Site.joins(:groups).where(violator: true, groups: {'user' =>  current_user}).uniq.order(:name)
   end
 
   private

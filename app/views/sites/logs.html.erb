@@ -17,13 +17,13 @@
         <td><%= log.log_type %></td>
         <% if !log.message.nil? %>
             <%- message = log.message.gsub(/[\[\]\"]/, "").split(', ') %>
-            <td><%= link_to message[0], message[1] %></td>
-         <% else %>
-        <td></td>
+            <td><%= link_to message[0], message[1], target: "_blank" %></td>
+        <% else %>
+            <td></td>
         <% end %>
         <td width="350px">
-          <%= best_in_place log, :name_found, :type=> :input, :classes => 'typeahead',
-                            :html_attrs => {:'data-provide' => "typeahead",
+          <%= best_in_place log, :name_found, :type => :input, :classes => 'typeahead',
+                            :html_attrs => {:'data-provide' => 'typeahead',
                                             :'data-source' => log.names(current_user),
                                             :'autocomplete' => 'off'} %>
 
@@ -35,11 +35,19 @@
   </tbody>
 </table>
 
+<div class="form-actions">
+  <%= link_to t('.back', :default => t('helpers.links.back')),
+              site_path(@site), :class => 'btn' %>
+  <%= link_to 'Изменить позиции', logs_submit_site_path(@site), :class => 'btn' %>
+
+</div>
+
 <br><br><br>
 Поисковые ссылки:
 <br>
 <% if !@site.search_url.nil? %>
-    <p><% @site.search_url.split(',').each do |search_url|%>
+    <p>
+      <% @site.search_url.split(',').each do |search_url| %>
         <p><%= link_to search_url, search_url %></p>
     <% end %>
     </p>

@@ -6,7 +6,8 @@ class Log < ActiveRecord::Base
   end
 
   def url=(name)
-    self.name_found
+    self.name_found = name
+    self.save
   end
 
   def names(current_user)

@@ -59,15 +59,16 @@ class Site < ActiveRecord::Base
 
   def update_prices
     return if self.standard
-    begin
-    self.logs.delete_all
+    #begin
+    self.logs.destroy_all
     result_array = self.parsing_site
     self.update_urls(result_array)
     self.check_for_violation
-    rescue => e
-      p e.inspect
-      Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
-    end
+    #rescue => e
+    #  p "error update_price"
+    #  p e.inspect
+    #  Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+    #end
   end
 
   def update_prices_from_file
@@ -179,7 +180,11 @@ class Site < ActiveRecord::Base
           r = Regexp.new(self.regexp)
           price_array = html.css(self.css_price)
           price_array.each do |price|
-            price.content = price.text.strip.gsub(/\u00a0|\s/, '').mb_chars.downcase.to_s[r]
+            if price.content.scan(/\d\.\d{3}/).count > 0
+              price.content = price.content.gsub('.', '') #костыль специально для kosilka.by
+            end
+
+            price.content = price.text.strip.gsub(/\u00a0|\s/, '').gsub('\'','').mb_chars.downcase.to_s[r]
           end
 
           if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
@@ -209,8 +214,8 @@ class Site < ActiveRecord::Base
         end while !html.at_css(css_page).nil? && site_url != last_page #цикл пагинации
 
       end #цикл по списку адресов с товаром сайта
-      result_array.sort_by { |item_array| item_array[2] }
-      result_array.reverse
+      result_array.sort_by { |item_array| item_array[2].to_f }
+
     rescue => e
       puts "error parsing site: " + self.name
       puts e.inspect
@@ -226,77 +231,106 @@ class Site < ActiveRecord::Base
       items+=group.items
     end
 
-    self.urls.delete_all
+    self.urls.where(locked: false).destroy_all
     items = items.sort_by { |item| item.name.size }
     items = items.reverse
 
     result_array.each do |item_array|
-      price = item_array[2]
-
-      if price.empty?
-        Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
-                    log_type: "No price", site_id: self.id)
-        next
-      end
-
-      item = find_item(item_array[0], price, items)
-      if item.nil?
-        Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
-                    log_type: "Item not found", site_id: self.id)
-        next
-      end
-      items.delete(item)
       url_str = item_array[1]
-      update_url(price, url_str, item)
+      price = item_array[2]
+      price = price.to_f < items[0].group.settings.rate ? price.to_f*items[0].group.settings.rate : price.to_f
+      url = Url.find_by_url(url_str)
 
-      Log.create!(message: item_array.to_s, price_found: price, name_found: item.name,
-                  log_type: "OK", site_id: self.id)
+      if url.nil?
+        if price == 0
+          Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
+                      log_type: "No price", site_id: self.id)
+          next
+        end
+
+        item = find_item(item_array[0], price, items)
+        if item.nil?
+          Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
+                      log_type: "Item not found", site_id: self.id)
+          next
+        end
+
+        items.delete(item)
+        update_url(price, url_str, item)
+
+        Log.create!(message: item_array.to_s, price_found: price, name_found: item.name,
+                    log_type: "OK", site_id: self.id)
+      else
+        items.delete(url.item)
+        url.price = price
+        url.save if url.changed?
+        Log.create!(message: item_array.to_s, price_found: price, name_found: url.item.name,
+                    log_type: "OK found in DB", site_id: self.id)
+      end
     end
+
+    self.urls.where(locked: true).each do |url|
+      url.destroy if !include_locked_url?(result_array, url.url)
+    end
+
+
+    puts "-------------- update_urls DONE ------------"
+
+
     self.save
   end
 
+  def include_locked_url?(result_array, url)
+    result_array.each do |item_array|
+      return true if item_array[1]==url
+    end
+    false
+  end
+
   def find_item(text, price, items)
-    #p '------', text
-    text = text.downcase.split(' ')
-    text = text.keep_if { |word| word.scan(/[а-яА-Я]/).empty? }
-    compressed_text = text.join
+    #begin
+      #p '------', text
+      text = text.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
+      text = text.split(' ')
+      text = text.keep_if { |word| word.scan(/[а-яА-Я]/).empty? }
+      compressed_text = text.join
 
-    items_found = []
-    items.each do |item|
-      if compressed_text.include?(item.name.downcase.gsub(' ', ''))
-        #p "Found: " + item.name + text.to_s
-        return item if (item.get_standard_price/price.to_f - 1).abs < 0.3
-      end
-    end
-
-
-    items_found = []
-    items.each do |item|
-      item_name = item.name.gsub('/', ' ').downcase.split(' ')
-      if (item_name&text).size == item_name.size
-        return item if (item.get_standard_price/price.to_f - 1).abs < 0.4
-      end
-    end
-
-    #p "Found: ", items_found.first.name, " ", text if items_found.size == 1
-    return items_found.first if items_found.size == 1
-
-    if items_found.size > 1
-      deltas = []
-      items_found.each do |item|
-
-        #deltas += item.price - price
+      items.each do |item|
+        item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
+        item_name = item_name.gsub(' ', '')
+        if compressed_text.include?(item_name)
+          #p "Found: " + item.name + text.to_s
+          return item if price_fit?(item, price)
+        end
       end
 
-      min_delta = deltas.min
-      p 'Найдено по дельте: ' + text + ' ' + item.name
-      return items_found[deltas.index(min_delta)]
 
-    else
+
+
+      items.each do |item|
+        item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
+        item_name = item_name.split(' ')
+        if (item_name&text).size == item_name.size
+          return item if price_fit?(item, price)
+        end
+      end
+
       p 'Не найдено: ' + compressed_text
       return nil
-    end
 
+    #rescue => e
+    #  p "error find_item"
+    #  p e.inspect
+    #end
+  end
+
+  def price_fit?(item, price)
+    standard_price = (item.urls & item.group.sites.where(standard: true).first.urls).first.price
+    if (standard_price/price.to_f - 1).abs < 0.4
+      true
+    else
+      false
+    end
   end
 
   def update_url(price, url_str, item)
@@ -305,7 +339,13 @@ class Site < ActiveRecord::Base
     url.item = item
     url.url = url_str
     url.price = price.to_f < item.group.settings.rate ? price.to_f*item.group.settings.rate : price.to_f
+
     url.save
+
+    if item.name.include?('32')
+      #dsf
+    end
+
 
     allowed_error = url.item.group.settings.allowed_error
     allowed_error = allowed_error.include?('%') ? allowed_error.gsub('%', '').to_f/100 * url.price : allowed_error.to_f
@@ -313,7 +353,6 @@ class Site < ActiveRecord::Base
     standard_price = url.item.get_standard_price
     #p '---', allowed_error, standard_price
     url.check_for_violation(standard_price, allowed_error)
-
 
   end
 end

@@ -97,6 +97,8 @@ class Url < ActiveRecord::Base
         log.site = self.site
         log.log_type = 'Standard price = ' + standard_price.to_s
         log.price_found = self.price
+        log.name_found = self.item.name
+        log.message = self.item.name + ', ' + self.url
         log.save
       end
     else
