@@ -359,16 +359,15 @@ class Site < ActiveRecord::Base
 
     url.save
 
-    if item.name.include?('32')
-      #dsf
-    end
-
-
     allowed_error = url.item.group.settings.allowed_error
     allowed_error = allowed_error.include?('%') ? allowed_error.gsub('%', '').to_f/100 * url.price : allowed_error.to_f
 
     standard_price = url.item.get_standard_price
     #p '---', allowed_error, standard_price
+    if item.name.include?('1033')
+      #dsf
+    end
+
     url.check_for_violation(standard_price, allowed_error)
 
   end
