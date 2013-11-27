@@ -60,13 +60,20 @@ class Site < ActiveRecord::Base
   def update_prices
     return if self.standard
     begin
-      self.logs.delete_all
+      p "------ start update_price ------"
+      p "method: " + self.method.to_s
+      case self.method.to_i
+        when 2
+          self.logs.delete_all
 
-      result_array = self.parsing_site
-      self.update_urls(result_array)
+          result_array = self.parsing_site
+          self.update_urls(result_array)
 
-      self.check_for_violation
-
+          self.check_for_violation
+        when 1
+        else
+          p "error get method"
+        end
       #rescue => e
       #  p "error update_price"
       #  p e.inspect
