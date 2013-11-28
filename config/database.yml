@@ -6,7 +6,7 @@ development:
   pool: 5
   username: distributor
   password: 12345678
-test:
+test: &test
   adapter: postgresql
   encoding: unicode
   database: distributor_test
@@ -22,3 +22,5 @@ production:
     pool: 5
     username: distributor
     password: 12345678
+cucumber:
+  <<: *test
