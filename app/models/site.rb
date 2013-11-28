@@ -172,7 +172,7 @@ class Site < ActiveRecord::Base
 
   def parsing_site #функция парсинга сайта
     begin
-      puts "--------------start parsing function--------------" + self.name
+      puts "------ start parsing function " + self.name + "------"
 
       css_page = self.css_pagination
       css_page = "no" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
@@ -217,6 +217,7 @@ class Site < ActiveRecord::Base
             puts "----------error---------"
             puts "amount name: " + name_array.size.to_s
             puts "amount price: " + price_array.size.to_s
+            last_page = site_url
             next
           end #проверка соответствия кол-ва товаров и цен
           name_array.each_with_index do |product, index|
