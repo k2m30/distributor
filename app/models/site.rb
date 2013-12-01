@@ -173,7 +173,7 @@ class Site < ActiveRecord::Base
 
   def parsing_site #функция парсинга сайта
     begin
-      puts "--------------start parsing function--------------" + self.name
+      puts "------ start parsing function " + self.name + "------"
 
       css_page = self.css_pagination
       css_page = "-" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
@@ -193,6 +193,7 @@ class Site < ActiveRecord::Base
         puts "------------"
         begin
           puts site_url
+          last_page = site_url
           page = open(site_url, "Cookie" => cookies, "Referer" => referer)
           html = Nokogiri::HTML page
           name_array = html.css(self.css_item)
@@ -228,7 +229,7 @@ class Site < ActiveRecord::Base
 
           end #цикл по списку товаров на странице
           puts html.at_css(css_page)
-          last_page = site_url
+          #last_page = site_url
           if !html.at_css(css_page).nil? #проверка на наличие след. страницы
             site_url = html.at_css(css_page)["href"]
             site_url = check_link(site_url, url_site_start)
