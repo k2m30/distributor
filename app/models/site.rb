@@ -193,12 +193,8 @@ class Site < ActiveRecord::Base
         puts "------------"
         begin
           puts site_url
-<<<<<<< HEAD
-          page = open(site_url, "Cookie" => previous_page.meta["set-cookie"], "Referer" => referer)
           last_page = site_url
-=======
           page = open(site_url, "Cookie" => cookies, "Referer" => referer)
->>>>>>> 67fd68f325ee2253199da811c418ab66a5c1081a
           html = Nokogiri::HTML page
           name_array = html.css(self.css_item)
           name_array.each do |name|
