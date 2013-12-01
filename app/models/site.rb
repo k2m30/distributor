@@ -197,6 +197,7 @@ class Site < ActiveRecord::Base
         begin
           puts site_url
           page = open(site_url, "Cookie" => previous_page.meta["set-cookie"], "Referer" => referer)
+          last_page = site_url
           html = Nokogiri::HTML page
           name_array = html.css(self.css_item)
           name_array.each do |name|
@@ -217,7 +218,6 @@ class Site < ActiveRecord::Base
             puts "----------error---------"
             puts "amount name: " + name_array.size.to_s
             puts "amount price: " + price_array.size.to_s
-            last_page = site_url
             next
           end #проверка соответствия кол-ва товаров и цен
           name_array.each_with_index do |product, index|
@@ -232,7 +232,7 @@ class Site < ActiveRecord::Base
 
           end #цикл по списку товаров на странице
           puts html.at_css(css_page)
-          last_page = site_url
+          #last_page = site_url
           if !html.at_css(css_page).nil? #проверка на наличие след. страницы
             site_url = html.at_css(css_page)["href"]
             site_url = check_link(site_url, url_site_start)
