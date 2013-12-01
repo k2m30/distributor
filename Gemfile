@@ -49,6 +49,8 @@ gem 'rack-mini-profiler'
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'delayed_job_web'
+gem 'selenium-webdriver'
+gem 'watir-webdriver'
 
 group :development do
   gem 'better_errors'
