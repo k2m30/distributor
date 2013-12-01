@@ -63,6 +63,7 @@ class Site < ActiveRecord::Base
       p "------ start update_price ------"
       p "method: " + self.method.to_s
       case self.method.to_i
+        when 1
         when 2
           self.logs.delete_all
 
@@ -70,7 +71,7 @@ class Site < ActiveRecord::Base
           self.update_urls(result_array)
 
           self.check_for_violation
-        when 1
+
         else
           p "error get method"
         end
@@ -175,7 +176,7 @@ class Site < ActiveRecord::Base
       puts "--------------start parsing function--------------" + self.name
 
       css_page = self.css_pagination
-      css_page = "no" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
+      css_page = "-" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
 
       start_page = "http://" + self.name
       referer = start_page
@@ -186,17 +187,13 @@ class Site < ActiveRecord::Base
 
         url_site_start = site_url
         previous_page = open(site_url, "Referer" => referer)
-        if previous_page.meta["set-cookie"].nil? #присвоение хоть чего нибудь, если cookie отсутсвует     previous_page.meta["set-cookie"]||=""
-          previous_page.meta["set-cookie"] = ""
-        end #присвоение хоть чего нибудь, если cookie отсутсвует
-        if start_page == "http://technostil.by" #затычка для technostil.by
-          previous_page.meta["set-cookie"] = ""
-        end #затычка для technostil.by
+        cookies = previous_page.meta["set-cookie"] || ""
+        cookies = "" if start_page == "http://technostil.by" #затычка для technostil.by
 
         puts "------------"
         begin
           puts site_url
-          page = open(site_url, "Cookie" => previous_page.meta["set-cookie"], "Referer" => referer)
+          page = open(site_url, "Cookie" => cookies, "Referer" => referer)
           html = Nokogiri::HTML page
           name_array = html.css(self.css_item)
           name_array.each do |name|
