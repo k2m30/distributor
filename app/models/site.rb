@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'watir-webdriver'
 require 'open-uri'
 require 'rubyXL'
 require 'open-uri'
@@ -62,19 +63,13 @@ class Site < ActiveRecord::Base
     begin
       p "------ start update_price ------"
       p "method: " + self.method.to_s
-      case self.method.to_i
-        when 1
-        when 2
-          self.logs.delete_all
+      self.logs.delete_all
 
-          result_array = self.parsing_site
-          self.update_urls(result_array)
+      result_array = self.parsing_site
+      self.update_urls(result_array)
 
-          self.check_for_violation
+      self.check_for_violation
 
-        else
-          p "error get method"
-        end
       #rescue => e
       #  p "error update_price"
       #  p e.inspect
@@ -145,7 +140,9 @@ class Site < ActiveRecord::Base
       puts "error check link"
       puts e.inspect
     end
-  end #исправление относительной ссылки
+  end
+
+  #исправление относительной ссылки
 
   def save_file(site_name, result_array=[]) #сохранение таблицы в файл xlsx
     begin
@@ -167,13 +164,18 @@ class Site < ActiveRecord::Base
       puts "error save file" + site_name + ".xlsx"
       puts e.inspect
     end
-  end  #сохранение таблицы в файл xlsx
+  end
+
+  #сохранение таблицы в файл xlsx
 
   #сохранение таблицы в файл xlsx
 
   def parsing_site #функция парсинга сайта
     begin
       puts "------ start parsing function " + self.name + "------"
+
+      asd
+      browser = Watir::Browser.new :chrome if self.method.to_i == 1
 
       css_page = self.css_pagination
       css_page = "-" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
@@ -194,8 +196,18 @@ class Site < ActiveRecord::Base
         begin
           puts site_url
           last_page = site_url
-          page = open(site_url, "Cookie" => cookies, "Referer" => referer)
-          html = Nokogiri::HTML page
+
+          case self.method.to_i
+            when 1
+              browser.goto site_url
+              html = Nokogiri::HTML browser.html
+            when 2
+              page = open(site_url, "Cookie" => cookies, "Referer" => referer)
+              html = Nokogiri::HTML page
+            else
+              raise MethodError
+          end
+
           name_array = html.css(self.css_item)
           name_array.each do |name|
             name.content = name.text.strip.gsub('Е', 'E').gsub('Н', 'H').gsub('О', 'O').gsub('Р', 'P').gsub('А', 'A').gsub('В', 'B').gsub('С', 'C').gsub('М', 'M').gsub('Т', 'T').gsub('К', 'K').gsub('Х', 'X').gsub('/', ' ').gsub('\\', ' ')
@@ -208,7 +220,7 @@ class Site < ActiveRecord::Base
               price.content = price.content.gsub('.', '') #костыль специально для kosilka.by
             end
 
-            price.content = price.text.strip.gsub(/\u00a0|\s/, '').gsub('\'','').mb_chars.downcase.to_s[r]
+            price.content = price.text.strip.gsub(/\u00a0|\s/, '').gsub('\'', '').mb_chars.downcase.to_s[r]
           end
 
           if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
@@ -242,10 +254,10 @@ class Site < ActiveRecord::Base
       puts "------done parsing function: " + self.name + "------"
       return result_array
 
-    rescue => e
-      puts "error parsing site: " + self.name
-      puts e.inspect
-      Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+    #rescue => e
+    #  puts "error parsing site: " + self.name
+    #  puts e.inspect
+    #  Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
     end
   end
 
@@ -315,30 +327,30 @@ class Site < ActiveRecord::Base
 
   def find_item(text, price, items)
     #begin
-      #p '------', text
-      text = text.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
-      text = text.split(' ')
-      text = text.keep_if { |word| word.scan(/[а-яА-Я]/).empty? }
-      compressed_text = text.join
+    #p '------', text
+    text = text.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
+    text = text.split(' ')
+    text = text.keep_if { |word| word.scan(/[а-яА-Я]/).empty? }
+    compressed_text = text.join
 
-      items.each do |item|
-        item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
-        item_name = item_name.gsub(' ', '')
-        if compressed_text.include?(item_name)
-          return item if price_fit?(item, price)
-        end
+    items.each do |item|
+      item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
+      item_name = item_name.gsub(' ', '')
+      if compressed_text.include?(item_name)
+        return item if price_fit?(item, price)
       end
+    end
 
-      items.each do |item|
-        item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
-        item_name = item_name.split(' ')
-        if (item_name&text).size == item_name.size
-          return item if price_fit?(item, price)
-        end
+    items.each do |item|
+      item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
+      item_name = item_name.split(' ')
+      if (item_name&text).size == item_name.size
+        return item if price_fit?(item, price)
       end
+    end
 
-      p 'Не найдено: ' + compressed_text
-      return nil
+    p 'Не найдено: ' + compressed_text
+    return nil
 
     #rescue => e
     #  p "error find_item"
