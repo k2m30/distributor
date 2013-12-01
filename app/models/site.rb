@@ -64,8 +64,16 @@ class Site < ActiveRecord::Base
       p "------ start update_price ------"
       p "method: " + self.method.to_s
       self.logs.delete_all
+      case self.method.to_i
+        when 1
+          result_array = self.parsing_site_method1
+        when 2
+          result_array = self.parsing_site_method2
+        else
+      end
 
-      result_array = self.parsing_site
+      result_array = self.clear_result_array(result_array)
+
       self.update_urls(result_array)
 
       self.check_for_violation
@@ -103,7 +111,7 @@ class Site < ActiveRecord::Base
         puts css_name
         puts css_p
         puts css_page
-        parsing_site(url_site_array, css_name, css_p, css_page)
+        parsing_site_method2(url_site_array, css_name, css_p, css_page)
       end #проверка на наличие исходных данных
     end
   end
@@ -169,16 +177,72 @@ class Site < ActiveRecord::Base
   #сохранение таблицы в файл xlsx
 
   #сохранение таблицы в файл xlsx
+  def clear_result_array(result_array)
+    r = Regexp.new(self.regexp)
+    result_array.each do |item_array|
+      item_array[0] = item_array[0].strip.gsub('Е', 'E').gsub('Н', 'H').gsub('О', 'O').gsub('Р', 'P').gsub('А', 'A').gsub('В', 'B').gsub('С', 'C').gsub('М', 'M').gsub('Т', 'T').gsub('К', 'K').gsub('Х', 'X').gsub('/', ' ').gsub('\\', ' ')
 
-  def parsing_site #функция парсинга сайта
+      if item_array[2].scan(/\d\.\d{3}/).count > 0
+        item_array[2] = item_array[2].gsub('.', '') #костыль специально для kosilka.by
+      end
+
+      item_array[2] = item_array[2].strip.gsub(/\u00a0|\s/, '').gsub('\'', '').mb_chars.downcase.to_s[r]
+
+    end
+    result_array = result_array.sort_by { |item_array| item_array[2].to_f }
+    return result_array
+  end
+
+  def parsing_site_method1
+    begin
+      puts "------ start parsing function method1 " + self.name + "------"
+      # headless = Headless.new
+      # headless.start
+      css_page = self.css_pagination
+      css_page = "no" if css_page.nil? || css_page.empty?
+      result_array = []
+
+      browser = Watir::Browser.new :chrome
+      self.search_url.split(/[,]+/).each do |site_url|
+        browser.goto site_url
+        begin
+          browser.refresh
+          items = browser.elements(:css => self.css_item)
+          prices = browser.elements(:css => self.css_price)
+          last_url = browser.url
+
+          items.to_a.each_index do |index|
+            result_array << [items[index].text, items[index].attribute_value("href"), prices[index].text]
+          end
+
+          browser.element(:css => css_page).click if browser.element(:css => css_page).exists?
+        end while browser.element(:css => css_page).exists? && last_url != browser.url
+
+      end
+      #browser.goto 'http://zeta.by/search/karcher'
+      #items = browser.elements(:css => '.product-item .desc-wrap a')
+      #prices = browser.elements(:css => '.price-2 .actual-price')
+      #p divs.size
+      #divs.to_a.each_index { |i| p '-', divs[i].text, divs[i].attribute_value("href"), prices[i].text }
+
+      browser.close
+      # headless.destroy
+
+      puts "------done parsing function method1 " + self.name + "------"
+      return result_array
+    #rescue => e
+    #  puts "error parsing site: " + self.name
+    #  puts e.inspect
+    #  Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+    end
+  end
+
+  def parsing_site_method2 #функция парсинга сайта
     begin
       puts "------ start parsing function " + self.name + "------"
 
-      asd
-      browser = Watir::Browser.new :chrome if self.method.to_i == 1
-
       css_page = self.css_pagination
-      css_page = "-" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
+      css_page = "no" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
 
       start_page = "http://" + self.name
       referer = start_page
@@ -197,31 +261,12 @@ class Site < ActiveRecord::Base
           puts site_url
           last_page = site_url
 
-          case self.method.to_i
-            when 1
-              browser.goto site_url
-              html = Nokogiri::HTML browser.html
-            when 2
-              page = open(site_url, "Cookie" => cookies, "Referer" => referer)
-              html = Nokogiri::HTML page
-            else
-              raise MethodError
-          end
+          page = open(site_url, "Cookie" => cookies, "Referer" => referer)
+          html = Nokogiri::HTML page
 
           name_array = html.css(self.css_item)
-          name_array.each do |name|
-            name.content = name.text.strip.gsub('Е', 'E').gsub('Н', 'H').gsub('О', 'O').gsub('Р', 'P').gsub('А', 'A').gsub('В', 'B').gsub('С', 'C').gsub('М', 'M').gsub('Т', 'T').gsub('К', 'K').gsub('Х', 'X').gsub('/', ' ').gsub('\\', ' ')
-          end
 
-          r = Regexp.new(self.regexp)
           price_array = html.css(self.css_price)
-          price_array.each do |price|
-            if price.content.scan(/\d\.\d{3}/).count > 0
-              price.content = price.content.gsub('.', '') #костыль специально для kosilka.by
-            end
-
-            price.content = price.text.strip.gsub(/\u00a0|\s/, '').gsub('\'', '').mb_chars.downcase.to_s[r]
-          end
 
           if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
             puts "----------error---------"
@@ -250,8 +295,8 @@ class Site < ActiveRecord::Base
         end while !html.at_css(css_page).nil? && site_url != last_page #цикл пагинации
 
       end #цикл по списку адресов с товаром сайта
-      result_array = result_array.sort_by { |item_array| item_array[2].to_f }
-      puts "------done parsing function: " + self.name + "------"
+
+      puts "------done parsing function " + self.name + "------"
       return result_array
 
     #rescue => e

@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 20131123112214) do
     t.string   "name"
     t.string   "css_item"
     t.string   "css_price"
-    t.string   "css_pagination", default: "-"
+    t.string   "css_pagination", default: "no"
     t.text     "search_url"
     t.string   "method",         default: "2"
     t.string   "regexp",         default: "/d+/"
