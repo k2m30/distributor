@@ -78,10 +78,10 @@ class Site < ActiveRecord::Base
 
       self.check_for_violation
 
-      #rescue => e
-      #  p "error update_price"
-      #  p e.inspect
-      #  Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+    rescue => e
+      p 'Method update_prices' + e.inspect
+      Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
+      return [[], [], []]
     end
 
   end
@@ -219,21 +219,17 @@ class Site < ActiveRecord::Base
         end while browser.element(:css => css_page).exists? && last_url != browser.url
 
       end
-      #browser.goto 'http://zeta.by/search/karcher'
-      #items = browser.elements(:css => '.product-item .desc-wrap a')
-      #prices = browser.elements(:css => '.price-2 .actual-price')
-      #p divs.size
-      #divs.to_a.each_index { |i| p '-', divs[i].text, divs[i].attribute_value("href"), prices[i].text }
 
       browser.close
       # headless.destroy
 
       puts "------done parsing function method1 " + self.name + "------"
       return result_array
-    #rescue => e
-    #  puts "error parsing site: " + self.name
-    #  puts e.inspect
-    #  Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+    rescue => e
+      puts "Method parsing_site_method1: " + self.name
+      puts e.inspect
+      Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+      return [[], [], []]
     end
   end
 
@@ -299,10 +295,11 @@ class Site < ActiveRecord::Base
       puts "------done parsing function " + self.name + "------"
       return result_array
 
-    #rescue => e
-    #  puts "error parsing site: " + self.name
-    #  puts e.inspect
-    #  Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+    rescue => e
+      puts "Method parsing_site_method2: " + self.name
+      puts e.inspect
+      Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
+      return [[], [], []]
     end
   end
 
@@ -371,36 +368,36 @@ class Site < ActiveRecord::Base
   end
 
   def find_item(text, price, items)
-    #begin
-    #p '------', text
-    text = text.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
-    text = text.split(' ')
-    text = text.keep_if { |word| word.scan(/[а-яА-Я]/).empty? }
-    compressed_text = text.join
+    begin
+      #p '------', text
+      text = text.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
+      text = text.split(' ')
+      text = text.keep_if { |word| word.scan(/[а-яА-Я]/).empty? }
+      compressed_text = text.join
 
-    items.each do |item|
-      item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
-      item_name = item_name.gsub(' ', '')
-      if compressed_text.include?(item_name)
-        return item if price_fit?(item, price)
+      items.each do |item|
+        item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
+        item_name = item_name.gsub(' ', '')
+        if compressed_text.include?(item_name)
+          return item if price_fit?(item, price)
+        end
       end
-    end
 
-    items.each do |item|
-      item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
-      item_name = item_name.split(' ')
-      if (item_name&text).size == item_name.size
-        return item if price_fit?(item, price)
+      items.each do |item|
+        item_name = item.name.downcase.gsub('/', ' ').gsub('.', '').gsub(',', '').gsub('-', ' ')
+        item_name = item_name.split(' ')
+        if (item_name&text).size == item_name.size
+          return item if price_fit?(item, price)
+        end
       end
+
+      p 'Не найдено: ' + compressed_text
+      return nil
+
+    rescue => e
+      p "Method find_item" + self.name
+      p e.inspect
     end
-
-    p 'Не найдено: ' + compressed_text
-    return nil
-
-    #rescue => e
-    #  p "error find_item"
-    #  p e.inspect
-    #end
   end
 
   def price_fit?(item, price)
@@ -425,13 +422,10 @@ class Site < ActiveRecord::Base
     allowed_error = allowed_error.include?('%') ? allowed_error.gsub('%', '').to_f/100 * url.price : allowed_error.to_f
 
     standard_price = url.item.get_standard_price
-    #p '---', allowed_error, standard_price
-    if item.name.include?('1033')
-      #dsf
-    end
 
     url.check_for_violation(standard_price, allowed_error)
 
   end
 end
+
 
