@@ -70,6 +70,7 @@ class Site < ActiveRecord::Base
         when 2
           result_array = self.parsing_site_method2
         else
+          puts "error case metod"
       end
 
       result_array = self.clear_result_array(result_array)
@@ -114,9 +115,7 @@ class Site < ActiveRecord::Base
         parsing_site_method2(url_site_array, css_name, css_p, css_page)
       end #проверка на наличие исходных данных
     end
-  end
-
-  #парсинг с исходными данными из файла
+  end  #парсинг с исходными данными из файла
 
   def check_link(url, start_url) #исправление относительной ссылки
     begin
@@ -148,9 +147,7 @@ class Site < ActiveRecord::Base
       puts "error check link"
       puts e.inspect
     end
-  end
-
-  #исправление относительной ссылки
+  end  #исправление относительной ссылки
 
   def save_file(site_name, result_array=[]) #сохранение таблицы в файл xlsx
     begin
@@ -172,11 +169,8 @@ class Site < ActiveRecord::Base
       puts "error save file" + site_name + ".xlsx"
       puts e.inspect
     end
-  end
+  end  #сохранение таблицы в файл xlsx
 
-  #сохранение таблицы в файл xlsx
-
-  #сохранение таблицы в файл xlsx
   def clear_result_array(result_array)
     r = Regexp.new(self.regexp)
     result_array.each do |item_array|
@@ -187,7 +181,15 @@ class Site < ActiveRecord::Base
       end
 
       item_array[2] = item_array[2].strip.gsub(/\u00a0|\s/, '').gsub('\'', '').mb_chars.downcase.to_s[r]
-
+      puts item_array[0]
+      puts item_array[2].inspect
+      array = item_array[2].scan(r).sort_by { |elem| elem.to_f}
+      case array.size
+        when 1..2
+          item_array[2] = array[0]
+        when 3
+          item_array[2] = array[1]
+      end
     end
     result_array = result_array.sort_by { |item_array| item_array[2].to_f }
     return result_array
@@ -301,9 +303,7 @@ class Site < ActiveRecord::Base
       Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
       return [[], [], []]
     end
-  end
-
-  #функция парсинга сайта
+  end  #функция парсинга сайта
 
   def update_urls(result_array)
     items = []
@@ -353,9 +353,7 @@ class Site < ActiveRecord::Base
       url.destroy if !include_locked_url?(result_array, url.url)
     end
 
-
     puts "------ update_urls DONE ------"
-
 
     self.save
   end
