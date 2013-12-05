@@ -37,7 +37,7 @@ gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
 
-gem 'quiet_assets', group: :development
+#gem 'quiet_assets', group: :development
 
 gem 'rubyXL'
 gem 'nokogiri'
@@ -75,7 +75,11 @@ gem 'whenever', :require => false
 gem 'unicorn'
 
 # Use Capistrano for deployment
-gem 'capistrano', group: :development
+#gem 'capistrano', require: false, group: :development
+#gem 'capistrano-rails'
+#gem 'capistrano-bundler'
+#gem 'capistrano-rvm', '~> 0.1.0'
+gem 'capistrano', '~> 2.15'
 
 # Use debugger
 #gem 'debugger', group: [:development, :test]
