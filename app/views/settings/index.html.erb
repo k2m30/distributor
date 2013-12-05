@@ -42,14 +42,16 @@
     <%= submit_tag 'Импорт списка магазинов для групп товаров', :class => 'btn btn-primary' %>
 <% end %>
 
-<%= form_tag all_settings_path, multipart: true do %>
-    <%= file_field_tag 'sites' %>
-    <%= submit_tag 'Импорт настроек сайтов', :class => 'btn btn-primary' %>
+
+
+<% if current_user.admin? %>
+    <%= form_tag all_settings_path, multipart: true do %>
+        <%= file_field_tag 'sites' %>
+        <%= submit_tag 'Импорт настроек сайтов', :class => 'btn btn-primary' %>
+    <% end %>
+
+    <%= link_to 'Экспорт', export_shops_preview_settings_path, class: 'btn' %>
+
+
+
 <% end %>
-
-
-<%# if current_user.admin? %>
-
-
-
-<%# end %>
