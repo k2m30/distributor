@@ -172,28 +172,43 @@ class Site < ActiveRecord::Base
   end  #сохранение таблицы в файл xlsx
 
   def clear_result_array(result_array)
-    r = Regexp.new(self.regexp)
-    result_array.each do |item_array|
-      item_array[0] = item_array[0].strip.gsub('Е', 'E').gsub('Н', 'H').gsub('О', 'O').gsub('Р', 'P').gsub('А', 'A').gsub('В', 'B').gsub('С', 'C').gsub('М', 'M').gsub('Т', 'T').gsub('К', 'K').gsub('Х', 'X').gsub('/', ' ').gsub('\\', ' ')
-
-      if item_array[2].scan(/\d\.\d{3}/).count > 0
-        item_array[2] = item_array[2].gsub('.', '') #костыль специально для kosilka.by
+    begin
+      if result_array.nil? || result_array.empty?
+        return nil
       end
+      r = Regexp.new(self.regexp)
+      result_array.each do |item_array|
+        item_array[0] = item_array[0].strip.gsub('Е', 'E').gsub('Н', 'H').gsub('О', 'O').gsub('Р', 'P').gsub('А', 'A').gsub('В', 'B').gsub('С', 'C').gsub('М', 'M').gsub('Т', 'T').gsub('К', 'K').gsub('Х', 'X').gsub('/', ' ').gsub('\\', ' ')
 
-      item_array[2] = item_array[2].strip.gsub(/\u00a0|\s/, '').gsub('\'', '').mb_chars.downcase.to_s[r]
-      puts item_array[0]
-      puts item_array[2].inspect
-      array = item_array[2].scan(r).sort_by { |elem| elem.to_f}
-      case array.size
-        when 1..2
-          item_array[2] = array[0]
-        when 3
-          item_array[2] = array[1]
+        if item_array[2].scan(/\d\.\d{3}/).count > 0
+          item_array[2] = item_array[2].gsub('.', '') #костыль специально для kosilka.by
+        end
+
+        item_array[2] = item_array[2].strip.gsub(/\u00a0|\s/, '').gsub('\'', '').mb_chars.downcase.to_s[r]
+
+        if item_array[2].nil?
+          item_array[2] = 0
+        else
+          array = item_array[2].scan(r).sort_by { |elem| elem.to_f}
+          case array.size
+            when 1..2
+              item_array[2] = array[0]
+            when 3
+              item_array[2] = array[1]
+          end
+        end
+
+        puts item_array[0]
+        puts item_array[2].inspect
+
       end
+      result_array = result_array.sort_by { |item_array| item_array[2].to_f }
+      p "------ clear_result_array done ------"
+      return result_array
     end
-    result_array = result_array.sort_by { |item_array| item_array[2].to_f }
-    return result_array
-  end
+    rescue => e
+      p "error clear_result_array: " + e.inspect
+    end
 
   def parsing_site_method1
     begin
@@ -228,7 +243,7 @@ class Site < ActiveRecord::Base
       puts "------done parsing function method1 " + self.name + "------"
       return result_array
     rescue => e
-      puts "Method parsing_site_method1: " + self.name
+      puts "error method parsing_site_method1: " + self.name
       puts e.inspect
       Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
       return [[], [], []]
@@ -278,13 +293,12 @@ class Site < ActiveRecord::Base
               str = str.gsub("http://ydachnik.by", "http://ydachnik.by/catalog")
             end #затычка для ydachnik.by
 
-            result_array << [product.text, str, price_array[index].text]
+            result_array << [product.text.strip, str, price_array[index].text]
 
-            puts product.text
+            puts product.text.strip
 
           end #цикл по списку товаров на странице
-          puts html.at_css(css_page)
-          #last_page = site_url
+
           if !html.at_css(css_page).nil? #проверка на наличие след. страницы
             site_url = html.at_css(css_page)["href"]
             site_url = check_link(site_url, url_site_start)
@@ -298,7 +312,7 @@ class Site < ActiveRecord::Base
       return result_array
 
     rescue => e
-      puts "Method parsing_site_method2: " + self.name
+      puts "error method parsing_site_method2: " + self.name
       puts e.inspect
       Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
       return [[], [], []]
