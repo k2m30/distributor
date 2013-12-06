@@ -203,7 +203,7 @@ class SettingsController < ApplicationController
         site = Site.where(name: row['name']).first || Site.new
 
         site.attributes = row.to_hash
-        site.regexp = Regexp.new('\d{5,}').to_s
+        #site.regexp = Regexp.new('\d{5,}').to_s
         site.save!
       end
 

@@ -79,7 +79,9 @@ gem 'unicorn'
 #gem 'capistrano-rails'
 #gem 'capistrano-bundler'
 #gem 'capistrano-rvm', '~> 0.1.0'
+gem 'rvm-capistrano'
 gem 'capistrano', '~> 2.15'
+
 
 # Use debugger
 #gem 'debugger', group: [:development, :test]

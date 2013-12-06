@@ -9,7 +9,7 @@ set :application, 'distributor'
 set :user, 'deployer'
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
-set :use_sudo, false
+set :use_sudo, true
 
 set :scm, 'git'
 set :repository, 'https://github.com/k2m30/distributor'
@@ -17,6 +17,7 @@ set :branch, 'master'
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
+default_run_options[:shell] = '/bin/bash --login'
 
 after 'deploy', 'deploy:cleanup' # keep only the last 5 releases
 
