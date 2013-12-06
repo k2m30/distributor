@@ -1,4 +1,4 @@
 git add .
-git commit -m "beta"
+git commit -m $1
 git push distributor
 cap deploy
