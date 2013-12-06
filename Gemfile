@@ -51,6 +51,7 @@ gem 'daemons'
 gem 'delayed_job_web'
 gem 'selenium-webdriver'
 gem 'watir-webdriver'
+gem 'headless'
 
 group :development do
   gem 'better_errors'

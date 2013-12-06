@@ -1,28 +1,92 @@
-== README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
 * Deployment instructions
 
-* ...
+## Server Commands
+
+apt-get -y update
+apt-get -y updrade
+apt-get -y install curl git-core python-software-properties g++ mc htop
+
+#remove apache
+apt-get --purge remove apache*
+#change timezone
+ln -sf /usr/share/zoneinfo/Europe/Minsk /etc/localtime
+echo 'Europe/Minsk' >> /etc/timezone
+reboot
+
+# nginx
+add-apt-repository ppa:nginx/stable
+apt-get -y update
+apt-get -y install nginx
+service nginx start
+
+# PostgreSQL
+add-apt-repository ppa:pitti/postgresql
+apt-get -y update
+apt-get -y install postgresql libpq-dev
+sudo -u postgres psql
+\password
+create user distributor with password '12345678';
+create database distributor_production owner distributor;
+alter user distributor superuser createrole createdb replication;
+\q
+
+# Add deployer user
+adduser deployer --ingroup root
+sudo usermod -a -G sudo deployer
+su deployer
+cd
+
+# Ruby with rvm
+sudo \curl -sSL https://get.rvm.io | bash -s stable --ruby=2.0.0-p247 --rails
+source /home/deployer/.rvm/scripts/rvm
+ssh git@github.com
+
+-----------#locally
+cat ~/.ssh/id_rsa.pub | ssh deployer@78.47.161.129 'cat >> ~/.ssh/authorized_keys'
+ssh-add -K
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+---------- local cap setup
+cap deploy:setup
+
+#Server commands
+cd
+touch ds
+sudo mcedit ds
+echo 'cd ~/apps/distributor/current' >> ds
+sudo chmod +x ds
+. ./ds
+RAILS_ENV=production rake db:drop
+sudo -u postgres psql
+UPDATE pg_database SET datistemplate = FALSE WHERE datname = 'template1';
+DROP DATABASE template1;
+CREATE DATABASE template1 WITH TEMPLATE = template0 ENCODING = 'UNICODE';
+UPDATE pg_database SET datistemplate = TRUE WHERE datname = 'template1';
+\c template1
+VACUUM FREEZE;
+UPDATE pg_database SET datallowconn = FALSE WHERE datname = 'template1';
+\q
+
+RAILS_ENV=production rake db:create
+RAILS_ENV=production rake db:schema:load
+RAILS_ENV=production rake db:migrate
+
+---------- local cap deploy cold
+cap deploy:cold
+
+# Server
+sudo rm /etc/nginx/sites-enabled/default
+sudo service nginx restart
+sudo /usr/sbin/update-rc.d -f unicorn_distributor defaults
+
+#install google chrome
+sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+sudo apt-get update
+sudo apt-get install google-chrome-stable
+
+#install chromedriver
+wget http://chromedriver.storage.googleapis.com/2.7/chromedriver_linux64.zip
+unzip chromedriver_linux64.zip
+sudo cp chromedriver /usr/local/bin
+sudo chmod +x /usr/local/bin/chromedriver
