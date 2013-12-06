@@ -8,7 +8,6 @@
       <thead>
       <tr>
         <th>Группа</th>
-        <th><%= model_class.human_attribute_name(:ban_time) %></th>
         <th><%= model_class.human_attribute_name(:allowed_error) %></th>
         <th><%= model_class.human_attribute_name(:rate) %></th>
         <th></th>
@@ -16,8 +15,7 @@
       </thead>
       <tbody>
       <tr>
-        <td><%= group.name %></td>
-        <td><%= group.settings.ban_time %></td>
+        <td class="span3"><%= group.name %></td>
         <td><%= group.settings.allowed_error %></td>
         <td><%= group.settings.rate %></td>
         <td><%= link_to 'Изменить', edit_setting_path(group.settings), :class => 'btn btn-mini' %></td>
@@ -32,26 +30,23 @@
 <br>
 <br>
 
-<%= form_tag import_preview_settings_path, multipart: true do %>
-    <%= file_field_tag 'file', value: './import/import_css.xlsx' %>
-    <%= submit_tag 'Импорт стандартных цен', :class => 'btn btn-primary' %>
-<% end %>
-
-<%= form_tag import_shops_preview_settings_path, multipart: true do %>
-    <%= file_field_tag 'shops' %>
-    <%= submit_tag 'Импорт списка магазинов для групп товаров', :class => 'btn btn-primary' %>
-<% end %>
-
-
-
 <% if current_user.admin? %>
+    <%= link_to 'Экспорт', export_shops_preview_settings_path, class: 'btn btn-primary' %>
+    <br/>
     <%= form_tag all_settings_path, multipart: true do %>
         <%= file_field_tag 'sites' %>
         <%= submit_tag 'Импорт настроек сайтов', :class => 'btn btn-primary' %>
     <% end %>
+<% end %>
 
-    <%= link_to 'Экспорт', export_shops_preview_settings_path, class: 'btn' %>
+<%= form_tag import_preview_settings_path, multipart: true do %>
+    <%= file_field_tag 'file' %>
+    <%= submit_tag 'Импорт стандартных цен', :class => 'btn btn-primary', :disabled => !@sites_exist %>
+<% end %>
 
 
 
+<%= form_tag import_shops_preview_settings_path, multipart: true do %>
+    <%= file_field_tag 'shops' %>
+    <%= submit_tag 'Импорт списка магазинов для групп товаров', :class => 'btn btn-primary', :disabled => !@user_standard_site_exists  %>
 <% end %>

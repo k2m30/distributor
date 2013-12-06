@@ -97,7 +97,7 @@ class SettingsController < ApplicationController
       spreadsheet = Roo::Excelx.new('./tmp/' + current_user.username + '_shops'+'.xlsx', nil, :ignore)
       spreadsheet.sheets.each do |sheet|
         spreadsheet.default_sheet = sheet
-        group = Group.where(name: sheet).first
+        group = Group.where(name: sheet, 'user' => current_user).first
         next if group.nil?
         sites = group.sites.where(standard: false)
         group.sites.delete(sites)
@@ -159,13 +159,13 @@ class SettingsController < ApplicationController
   def import_standard_prices
 
     begin
-      site = Site.where(standard: true).first || create_new_standard_site
-
+      #site = Site.where(standard: true).first || create_new_standard_site
+      site = Site.joins(:groups).where(standard: true, groups: {'user' =>  current_user}).uniq.first || create_new_standard_site
       spreadsheet = Roo::Excelx.new('./tmp/' + current_user.username + '.xlsx', nil, :ignore)
       spreadsheet.sheets.each do |sheet|
         spreadsheet.default_sheet = sheet
         @header = spreadsheet.row(1)
-        group = Group.where(name: sheet).first || create_new_group(sheet, site, current_user)
+        group = Group.where(name: sheet, 'user' => current_user).first || create_new_group(sheet, site, current_user)
         site.groups << group if !site.groups.include?(group)
 
         (2..spreadsheet.last_row).each do |i|
@@ -241,7 +241,8 @@ class SettingsController < ApplicationController
   #параметры сайтов
 
   def index
-
+    @sites_exist = !Site.all.empty?
+    @user_standard_site_exists = !Site.joins(:groups).where(standard: true, groups: {'user' =>  current_user}).uniq.empty?
     if current_user.admin?
       @groups = Group.all
     else

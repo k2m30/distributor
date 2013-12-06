@@ -42,7 +42,7 @@ class SitesController < ApplicationController
 
 
   def index
-    @sites = Site.all.order("name")
+    @sites = Site.joins(:groups).where(groups: {'user' =>  current_user}).uniq.order(:name)
   end
 
   def show
