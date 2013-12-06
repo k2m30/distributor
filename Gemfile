@@ -1,13 +1,9 @@
 source 'http://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.1'
+gem 'rails', '>=4.0.2'
 
 gem 'pg'
-#gem 'sqlite3'
-
-# Use SCSS for stylesheets
-#gem 'sass-rails', '~> 4.0.1'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -75,15 +71,5 @@ gem 'whenever', :require => false
 # Use unicorn as the app server
 gem 'unicorn'
 
-# Use Capistrano for deployment
-#gem 'capistrano', require: false, group: :development
-#gem 'capistrano-rails'
-#gem 'capistrano-bundler'
-#gem 'capistrano-rvm', '~> 0.1.0'
 gem 'rvm-capistrano'
 gem 'capistrano', '~> 2.15'
-
-
-# Use debugger
-#gem 'debugger', group: [:development, :test]
-

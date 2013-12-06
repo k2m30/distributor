@@ -3,8 +3,9 @@ require 'watir-webdriver'
 require 'open-uri'
 require 'rubyXL'
 require 'open-uri'
-require "nokogiri"
-require "axlsx"
+require 'nokogiri'
+require 'axlsx'
+require 'headless'
 
 class Site < ActiveRecord::Base
   has_many :urls
@@ -16,7 +17,7 @@ class Site < ActiveRecord::Base
     urls = self.urls.where(violator: true)
     self.violator = urls.empty? ? false : true
     self.save
-    p "--", self.name, urls.count, self.violator
+   logger.debug "--", self.name, urls.count, self.violator
     #if !urls.empty?
     #  self.violator = true
     #  if self.out_of_ban_time.nil? || (Time.now > self.out_of_ban_time) #no ban before, or violator with ban time expired
@@ -61,8 +62,8 @@ class Site < ActiveRecord::Base
   def update_prices
     return if self.standard
     begin
-      p "------ start update_price ------"
-      p "method: " + self.method.to_s
+     logger.debug "------ start update_price ------"
+     logger.debug "method: " + self.method.to_s
       self.logs.delete_all
       case self.method.to_i
         when 1
@@ -70,7 +71,7 @@ class Site < ActiveRecord::Base
         when 2
           result_array = self.parsing_site_method2
         else
-          puts "error case metod"
+          logger.error "error case metod"
       end
 
       result_array = self.clear_result_array(result_array)
@@ -80,7 +81,7 @@ class Site < ActiveRecord::Base
       self.check_for_violation
 
     rescue => e
-      p 'Method update_prices' + e.inspect
+     logger.error 'Method update_prices' + e.inspect
       Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
       return [[], [], []]
     end
@@ -98,7 +99,7 @@ class Site < ActiveRecord::Base
     table_sites = file[0].get_table([name, search_url, css_item, css_price, css_pagination])
     table_sites.values[0].each do |hash|
       if !hash.empty? #проверка на наличие исходных данных
-        puts "-----------data file:-----------"
+        logger.debug "-----------data file:-----------"
         url_site_array = hash[search_url]
         url_site_array = url_site_array.gsub("amp;", "") #удаление текстового обозначения &
         array = url_site_array.split(/[,]+/)
@@ -108,14 +109,16 @@ class Site < ActiveRecord::Base
         css_page = hash[css_pagination]
         css_page = "" if css_page.nil? #проверка на отсутствие css пагинации
         css_page = css_page.gsub("amp;", "") #удаление текстового обозначения &
-        puts array
-        puts css_name
-        puts css_p
-        puts css_page
+        logger.debug array
+        logger.debug css_name
+        logger.debug css_p
+        logger.debug css_page
         parsing_site_method2(url_site_array, css_name, css_p, css_page)
       end #проверка на наличие исходных данных
     end
-  end  #парсинг с исходными данными из файла
+  end
+
+  #парсинг с исходными данными из файла
 
   def check_link(url, start_url) #исправление относительной ссылки
     begin
@@ -144,10 +147,12 @@ class Site < ActiveRecord::Base
       return str
 
     rescue => e
-      puts "error check link"
-      puts e.inspect
+      logger.error "error check link"
+      logger.error e.inspect
     end
-  end  #исправление относительной ссылки
+  end
+
+  #исправление относительной ссылки
 
   def save_file(site_name, result_array=[]) #сохранение таблицы в файл xlsx
     begin
@@ -163,13 +168,15 @@ class Site < ActiveRecord::Base
       end
 
       file.serialize(site_name + ".xlsx")
-      puts "-----------save file: " + site_name + ".xlsx -------------"
+      logger.debug "-----------save file: " + site_name + ".xlsx -------------"
 
     rescue => e
-      puts "error save file" + site_name + ".xlsx"
-      puts e.inspect
+      logger.error "error save file" + site_name + ".xlsx"
+      logger.error e.inspect
     end
-  end  #сохранение таблицы в файл xlsx
+  end
+
+  #сохранение таблицы в файл xlsx
 
   def clear_result_array(result_array)
     begin
@@ -189,7 +196,7 @@ class Site < ActiveRecord::Base
         if item_array[2].nil?
           item_array[2] = 0
         else
-          array = item_array[2].scan(r).sort_by { |elem| elem.to_f}
+          array = item_array[2].scan(r).sort_by { |elem| elem.to_f }
           case array.size
             when 1..2
               item_array[2] = array[0]
@@ -198,23 +205,25 @@ class Site < ActiveRecord::Base
           end
         end
 
-        puts item_array[0]
-        puts item_array[2].inspect
+        logger.debug item_array[0]
+        logger.debug item_array[2].inspect
 
       end
       result_array = result_array.sort_by { |item_array| item_array[2].to_f }
-      p "------ clear_result_array done ------"
+     logger.debug "------ clear_result_array done ------"
       return result_array
     end
-    rescue => e
-      p "error clear_result_array: " + e.inspect
-    end
+  rescue => e
+   logger.error "error clear_result_array: " + e.inspect
+  end
 
   def parsing_site_method1
     begin
-      puts "------ start parsing function method1 " + self.name + "------"
-      # headless = Headless.new
-      # headless.start
+      logger.debug "------ start parsing function method1 " + self.name + "------"
+      if ENV['RAILS_ENV'] == 'production'
+        headless = Headless.new
+        headless.start
+      end
       css_page = self.css_pagination
       css_page = "no" if css_page.nil? || css_page.empty?
       result_array = []
@@ -238,13 +247,15 @@ class Site < ActiveRecord::Base
       end
 
       browser.close
-      # headless.destroy
+      if ENV['RAILS_ENV'] == 'production'
+        headless.destroy
+      end
 
-      puts "------done parsing function method1 " + self.name + "------"
+      logger.debug "------done parsing function method1 " + self.name + "------"
       return result_array
     rescue => e
-      puts "error method parsing_site_method1: " + self.name
-      puts e.inspect
+      logger.error "error method parsing_site_method1: " + self.name
+      logger.error e.inspect
       Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
       return [[], [], []]
     end
@@ -252,7 +263,7 @@ class Site < ActiveRecord::Base
 
   def parsing_site_method2 #функция парсинга сайта
     begin
-      puts "------ start parsing function " + self.name + "------"
+      logger.debug "------ start parsing function " + self.name + "------"
 
       css_page = self.css_pagination
       css_page = "no" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
@@ -269,9 +280,9 @@ class Site < ActiveRecord::Base
         cookies = previous_page.meta["set-cookie"] || ""
         cookies = "" if start_page == "http://technostil.by" #затычка для technostil.by
 
-        puts "------------"
+        logger.debug "------------"
         begin
-          puts site_url
+          logger.debug site_url
           last_page = site_url
 
           page = open(site_url, "Cookie" => cookies, "Referer" => referer)
@@ -282,9 +293,9 @@ class Site < ActiveRecord::Base
           price_array = html.css(self.css_price)
 
           if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
-            puts "----------error---------"
-            puts "amount name: " + name_array.size.to_s
-            puts "amount price: " + price_array.size.to_s
+            logger.debug "----------error---------"
+            logger.debug "amount name: " + name_array.size.to_s
+            logger.debug "amount price: " + price_array.size.to_s
             next
           end #проверка соответствия кол-ва товаров и цен
           name_array.each_with_index do |product, index|
@@ -295,7 +306,7 @@ class Site < ActiveRecord::Base
 
             result_array << [product.text.strip, str, price_array[index].text]
 
-            puts product.text.strip
+            logger.debug product.text.strip
 
           end #цикл по списку товаров на странице
 
@@ -308,16 +319,18 @@ class Site < ActiveRecord::Base
 
       end #цикл по списку адресов с товаром сайта
 
-      puts "------done parsing function " + self.name + "------"
+      logger.debug "------done parsing function " + self.name + "------"
       return result_array
 
     rescue => e
-      puts "error method parsing_site_method2: " + self.name
-      puts e.inspect
+      logger.error "error method parsing_site_method2: " + self.name
+      logger.error e.inspect
       Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
       return [[], [], []]
     end
-  end  #функция парсинга сайта
+  end
+
+  #функция парсинга сайта
 
   def update_urls(result_array)
     items = []
@@ -367,7 +380,7 @@ class Site < ActiveRecord::Base
       url.destroy if !include_locked_url?(result_array, url.url)
     end
 
-    puts "------ update_urls DONE ------"
+    logger.debug "------ update_urls DONE ------"
 
     self.save
   end
@@ -403,12 +416,12 @@ class Site < ActiveRecord::Base
         end
       end
 
-      p 'Не найдено: ' + compressed_text
+     logger.debug 'Не найдено: ' + compressed_text
       return nil
 
     rescue => e
-      p "Method find_item" + self.name
-      p e.inspect
+     logger.error "Method find_item" + self.name
+     logger.error e.inspect
     end
   end
 
