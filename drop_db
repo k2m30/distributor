@@ -1,0 +1,5 @@
+rake db:drop
+rake db:create
+rake db:schema:load
+rake db:migrate
+ruby create_new_user.rb
