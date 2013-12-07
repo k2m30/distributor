@@ -119,7 +119,7 @@ GEM
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.6.9)
-    jbuilder (1.5.2)
+    jbuilder (1.5.3)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2.0)
     jquery-rails (3.0.4)
@@ -129,7 +129,7 @@ GEM
       railties (>= 3.1.0)
     json (1.8.1)
     kgio (2.8.1)
-    launchy (2.4.1)
+    launchy (2.4.2)
       addressable (~> 2.3)
     less (2.4.0)
       commonjs (~> 0.2.7)
@@ -196,7 +196,7 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
-    roo (1.12.2)
+    roo (1.13.0)
       nokogiri
       rubyzip
       spreadsheet (> 0.6.4)
@@ -217,7 +217,7 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
-    spreadsheet (0.9.5)
+    spreadsheet (0.9.6)
       ruby-ole (>= 1.0)
     sprockets (2.10.1)
       hike (~> 1.2)
@@ -238,7 +238,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    turbolinks (1.3.1)
+    turbolinks (2.0.0)
       coffee-rails
     twitter-bootstrap-rails (2.2.8)
       actionpack (>= 3.1)
@@ -246,7 +246,7 @@ GEM
       rails (>= 3.1)
       railties (>= 3.1)
     tzinfo (0.3.38)
-    uglifier (2.3.1)
+    uglifier (2.3.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     unf (0.1.3)

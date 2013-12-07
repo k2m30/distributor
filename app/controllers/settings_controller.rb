@@ -175,6 +175,7 @@ class SettingsController < ApplicationController
           else
             next
           end
+
           price = row['price']
           if !item.nil? && !site.nil?
             set_price(item, site, price)
@@ -186,8 +187,8 @@ class SettingsController < ApplicationController
 
       File.delete('./tmp/' + current_user.username + '.xlsx')
       redirect_to settings_path, success: 'Цены импортированы'
-    rescue
-      redirect_to settings_path, alert: 'Произошла ошибка импорта.'
+    #rescue
+    #  redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
   end
 

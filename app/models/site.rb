@@ -80,10 +80,10 @@ class Site < ActiveRecord::Base
 
       self.check_for_violation
 
-    rescue => e
-    logger.error 'Method update_prices' + e.inspect
-      Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
-      return [[], [], []]
+    #rescue => e
+    #logger.error 'Method update_prices' + e.inspect
+    #  Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
+    #  return [[], [], []]
     end
 
   end
