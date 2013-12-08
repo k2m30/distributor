@@ -17,7 +17,7 @@ class Site < ActiveRecord::Base
     urls = self.urls.where(violator: true)
     self.violator = urls.empty? ? false : true
     self.save
-    p "--", self.name, urls.count, self.violator
+    p [self.name, 'violators - ', urls.size]
     #if !urls.empty?
     #  self.violator = true
     #  if self.out_of_ban_time.nil? || (Time.now > self.out_of_ban_time) #no ban before, or violator with ban time expired

@@ -1,7 +1,8 @@
 require 'roo'
+require 'rspec/expectations'
 
 Given(/^user is ydachnik$/) do
-  @user = User.first || User.create!(username: 'ydachnik', email: 'office@ydachnik.by', password: '123QWEasd')
+  @user = User.create!(username: 'ydachnik', email: 'office@ydachnik.by', password: '123QWEasd')
 end
 
 And(/^no sites exist$/) do
@@ -17,24 +18,24 @@ When(/^user tries to import all sites xlsx file$/) do
 end
 
 Then(/^there are no groups created$/) do
-  @groups_delta == 0
+  @groups_delta.should == 0
 end
 
 And(/^there are no items created$/) do
-  @items_delta == 0
+  @items_delta.should == 0
 end
 
 And(/^sites numbers increases to total number of rows on all sheets in file$/) do
   spreadsheet = Roo::Excelx.new(@filename)
-  @sites_delta == spreadsheet.last_row-1
+  @sites_delta.should == spreadsheet.last_row-1
 end
 
 And(/^there are no sites created$/) do
-  @sites_delta == 0
+  @sites_delta.should == 0
 end
 
 And(/^sites exist$/) do
-  Site.all.size > 0
+  Site.all.size.should > 0
 end
 
 def import_all_sites_file(filename)
@@ -93,34 +94,41 @@ end
 
 Then(/^groups are created$/) do
   spreadsheet = Roo::Excelx.new(@filename)
-  @groups_delta == spreadsheet.sheets.size
+  @groups_delta.should == spreadsheet.sheets.size
 end
 
 And(/^items are created$/) do
   spreadsheet = Roo::Excelx.new(@filename)
   items_in_file = 0
   spreadsheet.sheets.each do |sheet|
-    items_in_file+=spreadsheet.last_row(sheet)-1
+    items = spreadsheet.column(3, sheet).select {|item| !item.nil?}
+    items_in_file += items.size-1
   end
-  @sites_delta == items_in_file
+  @items_delta.should == items_in_file
 end
 
 And(/^standard site is created$/) do
- !Site.joins(:groups).where(standard: true, groups: {'user' =>  @user}).uniq.empty?
+ !Site.joins(:groups).where(standard: true, groups: {'user' =>  @user}).uniq.empty?.should == true
 end
 
 When(/^user tries to import shop xlsx file$/) do
   import_shops_file('./import/ydachnik/shops.xlsx')
 end
 
-Then(/^user groups contains sites from file$/) do
+Then(/^user groups contain sites from file$/) do
   spreadsheet = Roo::Excelx.new(@filename)
-  result = true
   spreadsheet.sheets.each do |sheet|
     spreadsheet.default_sheet = sheet
     group = Group.where(name: sheet, 'user' => @user).first
-    result = result && !group.nil?
-    result = result && (group.sites.size == spreadsheet.last_row-1)
+    group.nil?.should_not == true
+    p [group.name, 'сайтов:', group.sites.size]
+    group.sites.size.should == (Site.all.map(&:name) & spreadsheet.column(1, sheet)).size + 1
   end
-  result
+end
+
+
+And(/^standard site is in every group$/) do
+  @user.groups.each do |group|
+    group.sites.where(standard: true).size.should == 1
+  end
 end

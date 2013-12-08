@@ -189,7 +189,7 @@ class SettingsController < ApplicationController
   def update
     respond_to do |format|
       if @setting.update(setting_params)
-        format.html { redirect_to @setting, notice: 'Settings was successfully updated.' }
+        format.html { redirect_to @setting, notice: 'Настройки успешно обновлены.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

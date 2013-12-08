@@ -290,6 +290,7 @@ ru:
     attributes:
       site:
         name: "Название"
+        group: "Группы товаров"
         company_name: "Юр. лицо"
         standard: "Стандарт"
         violator: "Нарушитель"
