@@ -2,39 +2,6 @@ class SettingsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_setting, only: [:show, :edit, :update, :destroy]
 
-
-  def create_new_group(name, site, user)
-    group = Group.new
-    group.name = name
-    group.user = user
-    group.sites << site
-    group.save
-
-    settings = Settings.new
-    settings.group = group
-    settings.save
-
-    return group
-  end
-
-  def create_new_item(name, group)
-    item = Item.new
-    item.name = name
-    item.group = group
-    item.save
-
-    return item
-  end
-
-  def create_new_standard_site
-    site = Site.new
-    site.name = 'Standard'
-    site.standard = true
-    site.save
-
-    return site
-  end
-
   def export_shops()
     sites = Site.all
     create_sites_file(sites)
@@ -59,7 +26,6 @@ class SettingsController < ApplicationController
     end
 
   end
-
 
   def import_user_sites_preview
     begin
@@ -92,25 +58,9 @@ class SettingsController < ApplicationController
 
   #список магазинов по группам
 
-  def import_user_sites
+  def import_user_sites(filename='./tmp/' + current_user.username + '_shops'+'.xlsx')
     begin
-      spreadsheet = Roo::Excelx.new('./tmp/' + current_user.username + '_shops'+'.xlsx', nil, :ignore)
-      spreadsheet.sheets.each do |sheet|
-        spreadsheet.default_sheet = sheet
-        group = Group.where(name: sheet, 'user' => current_user).first
-        next if group.nil?
-        sites = group.sites.where(standard: false)
-        group.sites.delete(sites)
-
-        (2..spreadsheet.last_row).each do |i|
-          site = Site.where(name: spreadsheet.row(i)[0]).first
-          group.sites << site if !site.nil? && !group.sites.include?(site)
-        end
-
-        group.save
-      end
-
-      File.delete('./tmp/' + current_user.username + '_shops'+ '.xlsx')
+      current_user.shops_file_import(filename)
       redirect_to settings_path, success: 'Список могазинов обновлен.'
 
     rescue
@@ -156,59 +106,20 @@ class SettingsController < ApplicationController
 
   #стандартные цены
 
-  def import_standard_prices
-
+  def import_standard_prices(filename='./tmp/' + current_user.username)
     begin
-      #site = Site.where(standard: true).first || create_new_standard_site
-      site = Site.joins(:groups).where(standard: true, groups: {'user' =>  current_user}).uniq.first || create_new_standard_site
-      spreadsheet = Roo::Excelx.new('./tmp/' + current_user.username + '.xlsx', nil, :ignore)
-      spreadsheet.sheets.each do |sheet|
-        spreadsheet.default_sheet = sheet
-        @header = spreadsheet.row(1)
-        group = Group.where(name: sheet, 'user' => current_user).first || create_new_group(sheet, site, current_user)
-        site.groups << group if !site.groups.include?(group)
-
-        (2..spreadsheet.last_row).each do |i|
-          row = Hash[[@header, spreadsheet.row(i)].transpose]
-          if !row['item_id'].nil?
-            item = group.items.where(name: row['item_id']).first || create_new_item(row['item_id'], group)
-          else
-            next
-          end
-
-          price = row['price']
-          if !item.nil? && !site.nil?
-            set_price(item, site, price)
-          end
-        end
-        group.settings.last_updated = Time.now
-        group.settings.save
-      end
-
-      File.delete('./tmp/' + current_user.username + '.xlsx')
+      current_user.standard_site_import(filename)
       redirect_to settings_path, success: 'Цены импортированы'
-    #rescue
-    #  redirect_to settings_path, alert: 'Произошла ошибка импорта.'
+    rescue
+      redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
   end
 
   #стандартные цены
 
-  def all_sites_import
+  def all_sites_import(filename='./tmp/sites_' + current_user.username + '.xlsx')
     begin
-      spreadsheet = Roo::Excelx.new('./tmp/sites_' + current_user.username + '.xlsx', nil, :ignore)
-      @header = spreadsheet.row(1)
-      @rows = []
-      (2..spreadsheet.last_row).each do |i|
-        row = Hash[[@header, spreadsheet.row(i)].transpose]
-        site = Site.where(name: row['name']).first || Site.new
-
-        site.attributes = row.to_hash
-        #site.regexp = Regexp.new('\d{5,}').to_s
-        site.save!
-      end
-
-      File.delete('./tmp/sites_' + current_user.username + '.xlsx')
+      current_user.all_sites_import(filename)
       redirect_to sites_path, success: 'Информация о сайтах импортирована'
     rescue
       redirect_to settings_path, alert: 'Произошла ошибка импорта.'
