@@ -111,7 +111,7 @@ class UrlsController < ApplicationController
     #current_user.settings.save
     #current_site.delay(run_at: 10.seconds.from_now).check_for_violation
 
-    flash[:notice] = "Цены обновляются. Обычно это занимает 1-2 минуты для каждого сайта."
+    flash[:notice] = "Цены обновляются. Обычно это занимает 1-2 минуты для каждого сайта. Обновите страницу позже."
 
 
     redirect_to site_path(current_site)

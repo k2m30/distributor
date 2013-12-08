@@ -221,6 +221,7 @@ class Site < ActiveRecord::Base
     begin
       logger.debug "------ start parsing function method1 " + self.name + "------"
       if ENV['RAILS_ENV'] == 'production'
+        logger.error 'Headless started'
         headless = Headless.new
         headless.start
       end
@@ -228,7 +229,7 @@ class Site < ActiveRecord::Base
       css_page = "no" if css_page.nil? || css_page.empty?
       result_array = []
 
-      browser = Watir::Browser.new :chrome
+      browser = Watir::Browser.new :ff
       self.search_url.split(/[,]+/).each do |site_url|
         browser.goto site_url
         begin
@@ -249,6 +250,7 @@ class Site < ActiveRecord::Base
       browser.close
       if ENV['RAILS_ENV'] == 'production'
         headless.destroy
+        logger.debug 'Headless destroyed'
       end
 
       logger.debug "------done parsing function method1 " + self.name + "------"
