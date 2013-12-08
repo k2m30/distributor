@@ -106,12 +106,12 @@ class SettingsController < ApplicationController
 
   #стандартные цены
 
-  def import_standard_prices(filename='./tmp/' + current_user.username)
+  def import_standard_prices(filename='./tmp/' + current_user.username + '.xlsx')
     begin
       current_user.standard_site_import(filename)
       redirect_to settings_path, success: 'Цены импортированы'
-    rescue
-      redirect_to settings_path, alert: 'Произошла ошибка импорта.'
+    #rescue
+    #  redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
   end
 
