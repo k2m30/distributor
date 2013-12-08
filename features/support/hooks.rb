@@ -1,6 +1,13 @@
 
 
 #prepare testing db
+Site.delete_all
+Item.delete_all
+Group.delete_all
+Url.delete_all
+Log.delete_all
+User.delete_all
+Settings.delete_all
 @test_user = User.create!(username: 'qwer', email: 'office@test.by', password: '123QWEasd')
 p @test_user.username
 @test_user.all_sites_import('./import/ydachnik/all_sites.xlsx')
@@ -18,11 +25,5 @@ Before('@scenario') do |scenario|
 end
 
 at_exit do
-  Site.delete_all
-  Item.delete_all
-  Group.delete_all
-  Url.delete_all
-  Log.delete_all
-  User.delete_all
-  Settings.delete_all
+
 end
