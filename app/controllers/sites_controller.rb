@@ -98,7 +98,7 @@ class SitesController < ApplicationController
   private
 # Use callbacks to share common setup or constraints between actions.
   def set_site
-    @site = Site.joins(:groups).where(id: params[:id], groups: {'user' =>  current_user}).uniq.first
+    @site = Site.joins(:groups).where(id: params[:id], groups: {'user' =>  current_user}).readonly(false).uniq.first
   end
 
 # Never trust parameters from the scary internet, only allow the white list through.

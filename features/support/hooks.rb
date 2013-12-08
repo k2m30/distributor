@@ -1,5 +1,5 @@
 Before do |scenario|
-  p scenario.scenario_outline.name + scenario.name
+  #p scenario.scenario_outline.name + scenario.name
 end
 
 #p User.first.inspect
