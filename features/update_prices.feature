@@ -14,7 +14,7 @@ Feature: update prices
 #    | 24real.by          |
 #    | 24shop.by          |
 #    | 360.shop.by        |
-#    | 50.by              |
+    | 50.by              |
 #    | 7sotok.by          |
 #    | agro-shop.by       |
 #    | amd.by             |
@@ -51,7 +51,7 @@ Feature: update prices
 #    | pcbox.by           |
 #    | pingvin.shop.by    |
 #    | premium.shop.by    |
-    | pro-karcher.by     |
+#    | pro-karcher.by     |
 #    | radiomarket.by     |
 #    | rodnoi.by          |
 #    | rsmarket.by        |
