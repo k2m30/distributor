@@ -51,7 +51,7 @@ Feature: update prices
 #    | pcbox.by           |
 #    | pingvin.shop.by    |
 #    | premium.shop.by    |
-    | pro-karcher.by     |
+#    | pro-karcher.by     |
 #    | radiomarket.by     |
 #    | rodnoi.by          |
 #    | rsmarket.by        |
