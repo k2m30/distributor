@@ -42,3 +42,7 @@ Given(/^admin credentials$/) do
   @username = 'ydachnik'
   @password = '123QWEasd'
 end
+
+Given(/^no user groups exists$/) do
+  pending
+end
