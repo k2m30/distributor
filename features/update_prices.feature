@@ -11,24 +11,24 @@ Feature: update prices
   Examples:
     | site               |
 #    | 21vek.by           |
-    | 24real.by          |
+#    | 24real.by          |
 #    | 24shop.by          |
 #    | 360.shop.by        |
-    | 50.by              |
+#    | 50.by              |
 #    | 7sotok.by          |
 #    | agro-shop.by       |
-    | amd.by             |
+#    | amd.by             |
 #    | antamedia.by       |
 #    | belmall.by         |
 #    | bes.shop.by        |
-    | bez-nal.by         |
+#    | bez-nal.by         |
 #    | bikord.of.by       |
 #    | camera.shop.by     |
 #    | clean.by           |
 #    | cleanhouse.by      |
 #    | delomastera.by     |
 #    | dvrka.by           |
-    | elmarket.by        |
+#    | elmarket.by        |
 #    | extrastore.by      |
 #    | fazenda.shop.by    |
 #    | gepard.by          |
@@ -53,12 +53,12 @@ Feature: update prices
 #    | premium.shop.by    |
 #    | pro-karcher.by     |
 #    | radiomarket.by     |
-#    | rodnoi.by          |
+    | rodnoi.by          |
 #    | rsmarket.by        |
 #    | slavno.by          |
 #    | star-sys.shop.by   |
 #    | stroitel.shop.by   |
-    | suseki.by          |
+#    | suseki.by          |
 #    | svoiludi.by        |
 #    | technostil.by      |
 #    | torgsin.shop.by    |

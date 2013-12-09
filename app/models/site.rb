@@ -62,8 +62,8 @@ class Site < ActiveRecord::Base
   def update_prices
     return if self.standard
     begin
-     logger.debug "------ start update_price ------"
-     logger.debug "method: " + self.method.to_s
+     logger.warn "------ start update_price ------"
+     logger.warn "method: " + self.method.to_s
       self.logs.delete_all
       case self.method.to_i
         when 1
@@ -99,7 +99,7 @@ class Site < ActiveRecord::Base
     table_sites = file[0].get_table([name, search_url, css_item, css_price, css_pagination])
     table_sites.values[0].each do |hash|
       if !hash.empty? #проверка на наличие исходных данных
-        logger.debug "-----------data file:-----------"
+        logger.warn "-----------data file:-----------"
         url_site_array = hash[search_url]
         url_site_array = url_site_array.gsub("amp;", "") #удаление текстового обозначения &
         array = url_site_array.split(/[,]+/)
@@ -109,10 +109,10 @@ class Site < ActiveRecord::Base
         css_page = hash[css_pagination]
         css_page = "" if css_page.nil? #проверка на отсутствие css пагинации
         css_page = css_page.gsub("amp;", "") #удаление текстового обозначения &
-        logger.debug array
-        logger.debug css_name
-        logger.debug css_p
-        logger.debug css_page
+        logger.warn array
+        logger.warn css_name
+        logger.warn css_p
+        logger.warn css_page
         parsing_site_method2(url_site_array, css_name, css_p, css_page)
       end #проверка на наличие исходных данных
     end
@@ -168,7 +168,7 @@ class Site < ActiveRecord::Base
       end
 
       file.serialize(site_name + ".xlsx")
-      logger.debug "-----------save file: " + site_name + ".xlsx -------------"
+      logger.warn "-----------save file: " + site_name + ".xlsx -------------"
 
     rescue => e
       logger.error "error save file" + site_name + ".xlsx"
@@ -191,6 +191,10 @@ class Site < ActiveRecord::Base
           item_array[2] = item_array[2].gsub('.', '') #костыль специально для kosilka.by
         end
 
+        if item_array[2].scan(/\d\,\d{3}/).count > 0
+          item_array[2] = item_array[2].gsub(',', '') #костыль специально для rodnoi.by
+        end
+
         item_array[2] = item_array[2].strip.gsub(/\u00a0|\s/, '').gsub('\'', '').mb_chars.downcase.to_s[r]
 
         if item_array[2].nil?
@@ -205,12 +209,12 @@ class Site < ActiveRecord::Base
           end
         end
 
-        logger.debug item_array[0]
-        logger.debug item_array[2].inspect
+        logger.warn item_array[0]
+        logger.warn item_array[2].inspect
 
       end
       result_array = result_array.sort_by { |item_array| item_array[2].to_f }
-      logger.debug "------ clear_result_array done ------"
+      logger.warn "------ clear_result_array done ------"
       return result_array
     end
   rescue => e
@@ -219,7 +223,7 @@ class Site < ActiveRecord::Base
 
   def parsing_site_method1
     begin
-      logger.debug "------ start parsing function method1 " + self.name + "------"
+      logger.warn "------ start parsing function method1 " + self.name + "------"
       if ENV['RAILS_ENV'] == 'production'
         logger.error 'Headless started'
         headless = Headless.new
@@ -233,7 +237,7 @@ class Site < ActiveRecord::Base
       self.search_url.split(/[,]+/).each do |site_url|
         browser.goto site_url
         begin
-          browser.refresh
+          #browser.refresh
           items = browser.elements(:css => self.css_item)
           prices = browser.elements(:css => self.css_price)
           last_url = browser.url
@@ -241,7 +245,7 @@ class Site < ActiveRecord::Base
           items.to_a.each_index do |index|
             result_array << [items[index].text, items[index].attribute_value("href"), prices[index].text]
           end
-
+          sleep(5)
           browser.element(:css => css_page).click if browser.element(:css => css_page).exists?
         end while browser.element(:css => css_page).exists? && last_url != browser.url
 
@@ -250,10 +254,10 @@ class Site < ActiveRecord::Base
       browser.close
       if ENV['RAILS_ENV'] == 'production'
         headless.destroy
-        logger.debug 'Headless destroyed'
+        logger.warn 'Headless destroyed'
       end
 
-      logger.debug "------done parsing function method1 " + self.name + "------"
+      logger.warn "------done parsing function method1 " + self.name + "------"
       return result_array
     rescue => e
       logger.error "error method parsing_site_method1: " + self.name
@@ -265,7 +269,7 @@ class Site < ActiveRecord::Base
 
   def parsing_site_method2 #функция парсинга сайта
     begin
-      logger.debug "------ start parsing function " + self.name + "------"
+      logger.warn "------ start parsing function " + self.name + "------"
 
       css_page = self.css_pagination
       css_page = "no" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
@@ -282,9 +286,9 @@ class Site < ActiveRecord::Base
         cookies = previous_page.meta["set-cookie"] || ""
         cookies = "" if start_page == "http://technostil.by" #затычка для technostil.by
 
-        logger.debug "------------"
+        logger.warn "------------"
         begin
-          logger.debug site_url
+          logger.warn site_url
           last_page = site_url
 
           page = open(site_url, "Cookie" => cookies, "Referer" => referer)
@@ -295,9 +299,9 @@ class Site < ActiveRecord::Base
           price_array = html.css(self.css_price)
 
           if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
-            logger.debug "----------error---------"
-            logger.debug "amount name: " + name_array.size.to_s
-            logger.debug "amount price: " + price_array.size.to_s
+            logger.warn "----------error---------"
+            logger.warn "amount name: " + name_array.size.to_s
+            logger.warn "amount price: " + price_array.size.to_s
             next
           end #проверка соответствия кол-ва товаров и цен
           name_array.each_with_index do |product, index|
@@ -308,7 +312,7 @@ class Site < ActiveRecord::Base
 
             result_array << [product.text.strip, str, price_array[index].text]
 
-            logger.debug product.text.strip
+            logger.warn product.text.strip
 
           end #цикл по списку товаров на странице
 
@@ -321,7 +325,7 @@ class Site < ActiveRecord::Base
 
       end #цикл по списку адресов с товаром сайта
 
-      logger.debug "------done parsing function " + self.name + "------"
+      logger.warn "------done parsing function " + self.name + "------"
       return result_array
 
     rescue => e
@@ -349,6 +353,10 @@ class Site < ActiveRecord::Base
       price = item_array[2]
       price = price.to_f < items[0].group.settings.rate ? price.to_f*items[0].group.settings.rate : price.to_f
       url = Url.find_by_url(url_str)
+
+      if item_array[0].include?('MTD')
+        true
+      end
 
       if url.nil?
         if price == 0
@@ -382,7 +390,7 @@ class Site < ActiveRecord::Base
       url.destroy if !include_locked_url?(result_array, url.url)
     end
 
-    logger.debug "------ update_urls DONE ------"
+    logger.warn "------ update_urls DONE ------"
 
     self.save
   end
@@ -418,7 +426,7 @@ class Site < ActiveRecord::Base
         end
       end
 
-     logger.debug 'Не найдено: ' + compressed_text
+     logger.warn 'Не найдено: ' + compressed_text
       return nil
 
     rescue => e

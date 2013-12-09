@@ -33,8 +33,6 @@ gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
 
-#gem 'quiet_assets', group: :development
-
 gem 'rubyXL'
 gem 'nokogiri'
 gem 'rubyzip',  '~> 0.9.9'
@@ -53,6 +51,7 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'letter_opener'
+  gem 'quiet_assets'
 end
 
 group :test do
