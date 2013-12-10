@@ -1,0 +1,25 @@
+<%= params %>
+<%= @items.size %>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Сайт</th>
+    <% @items.each do |item| %>
+        <th>
+          <%= item.group.name %>
+          <%= item.name %>
+        </th>
+    <% end %>
+  </tr>
+  </thead>
+  <tbody>
+  <% @sites.each do |site| %>
+      <tr>
+        <td><%= site.name %></td>
+        <% @items.each do |item| %>
+            <td><%= spaces(get_price_str(item, site)) %></td>
+        <% end %>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -12,6 +12,19 @@ class SitesController < ApplicationController
     @names = Item.all.order(:name).pluck(:id, :name)
   end
 
+  def search
+    @items = []
+    query = params[:item_search].upcase.gsub(/\s*,\s*/,',')
+    query.split(',').each do |query|
+      @items += Item.where('name like ?', query)
+    end
+    @sites = []
+    @items.each do |item|
+      @sites = @sites | item.sites
+    end
+    @sites = @sites.sort_by{|site| site.name}
+  end
+
   def logs_submit
     @site.logs.each do |log|
       url = Url.find_by_url(log.message.split(", ")[1].gsub("\"", ""))
