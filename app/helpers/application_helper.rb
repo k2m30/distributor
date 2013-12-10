@@ -7,15 +7,12 @@ module ApplicationHelper
   end
 
   def find_violating_urls(site, group)
-    Url.joins(:site, item: :group).where(violator: true, site: site, items: {'group_id'=> group}).order('items.name ASC')
+    #Url.joins(:site, item: :group).where(violator: true, site: site, items: {'group_id'=> group}).order('items.name ASC')
 
 
-    #Rails.cache.fetch([site.cache_key, group.cache_key, 'url']) do
-    #  urls = site.urls.where(violator: true).find_all { |url| url.item.get_group_name == group.name }
-    #  p urls.count
-    #  urls = urls.sort_by {|url| url.item.name}
-
-    #end
+    Rails.cache.fetch([site, group, 'url']) do
+      Url.joins(:site, item: :group).where(violator: true, site: site, items: {'group_id'=> group}).order('items.name ASC')
+    end
   end
 
 

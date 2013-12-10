@@ -35,7 +35,7 @@ class Site < ActiveRecord::Base
   end
 
   def get_violating_urls
-    Rails.cache.fetch([self, 'violators']) { self.urls.where(violator: true) }
+    Rails.cache.fetch([self, 'violators']) { self.urls.joins(item: :group).where(violator:true).order('groups.name ASC, items.name ASC') }
   end
 
   def get_items
