@@ -4,7 +4,7 @@
 </div>
 
 <% @sites.each do |site| %>
-    <%#= cache(site) do %>
+    <%= cache(site) do %>
     <table class="table table-striped">
       <tbody>
       <tr>
@@ -28,7 +28,7 @@
       </thead>
       <tbody>
       <%#= site.urls.joins(item: :group).where(violator:true).order('groups.name ASC, items.name ASC') %>
-
+      <%#= site.get_violating_urls_table.html_safe %>
       <% site.get_violating_urls.each do |url| %>
           <% if !url.item.get_standard_price.nil? %>
               <tr>
@@ -44,7 +44,6 @@
           <% end %>
       <% end %>
 
-
       </tbody>
     </table>
     <hr>
@@ -53,5 +52,5 @@
     <br>
     <br>
     <br>
-    <%# end %>
+    <% end %>
 <% end %>

@@ -26,3 +26,5 @@ module Distibutor
     config.assets.enabled = true
   end
 end
+
+

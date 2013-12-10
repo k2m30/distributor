@@ -35,8 +35,36 @@ class Site < ActiveRecord::Base
   end
 
   def get_violating_urls
-    Rails.cache.fetch([self, 'violators']) { self.urls.joins(item: :group).where(violator:true).order('groups.name ASC, items.name ASC') }
+    Rails.cache.fetch([self, 'violators']) { self.urls.joins(item: :group).where(violator: true).order('groups.name ASC, items.name ASC') }
   end
+
+  #def get_violating_urls_table
+  #  Rails.cache.fetch([self, 'violators_table']) do
+  #    str_to_return = ''
+  #
+  #    self.get_violating_urls.each do |url|
+  #      standard_price = url.item.get_standard_price
+  #      if !standard_price.nil?
+  #        str_to_return << '<tr>'
+  #        str_to_return << '<td>' << url.item.group.name << '</td>'
+  #        str_to_return << '<td>' << url.item.name << '</td>'
+  #        str_to_return << '<td style=\"white-space: nowrap; text-align: right\">'
+  #        str_to_return << '<a class=\"tdfade\" href=\"' << url.url << '\">' << spaces(url.price.to_s) << '</a></td>'
+  #        str_to_return << '<td style=\"white-space: nowrap; text-align: right\">' << spaces(standard_price) << '</td>'
+  #        str_to_return << '<td style=\"white-space: nowrap; text-align: right\">' << spaces(standard_price - url.price) << '</td>'
+  #        str_to_return << '<td style=\"white-space: nowrap; text-align: right\">' << '%.1f' % ((standard_price/url.price - 1)*100) << '%'<< '</td>'
+  #        str_to_return << '</tr>'
+  #      end
+  #    end
+  #    str_to_return
+  #  end
+  #end
+  #
+  #def spaces(x)
+  #  str = x.to_i.to_s.reverse
+  #  str.gsub!(/([0-9]{3})/, "\\1 ")
+  #  return str.gsub(/,$/, '').reverse
+  #end
 
   def get_items
     Rails.cache.fetch([self, 'items']) { self.items }
@@ -58,12 +86,11 @@ class Site < ActiveRecord::Base
   end
 
   ###################### update price ###################
-
   def update_prices
     return if self.standard
     begin
-     logger.warn "------ start update_price ------"
-     logger.warn "method: " + self.method.to_s
+      logger.warn "------ start update_price ------"
+      logger.warn "method: " + self.method.to_s
       self.logs.delete_all
       case self.method.to_i
         when 1
@@ -81,11 +108,13 @@ class Site < ActiveRecord::Base
       self.check_for_violation
 
     rescue => e
-    logger.error 'Method update_prices' + e.inspect
+      logger.error 'Method update_prices' + e.inspect
       Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
-    #  return [[], [], []]
+      self.touch
+      #  return [[], [], []]
     end
-
+    self.touch
+    logger.warn "------ finished update_price ----- " + self.name
   end
 
   def update_prices_from_file
@@ -218,7 +247,7 @@ class Site < ActiveRecord::Base
       return result_array
     end
   rescue => e
-   logger.error "error clear_result_array: " + e.inspect
+    logger.error "error clear_result_array: " + e.inspect
   end
 
   def parsing_site_method1
@@ -426,12 +455,12 @@ class Site < ActiveRecord::Base
         end
       end
 
-     logger.warn 'Не найдено: ' + compressed_text
+      logger.warn 'Не найдено: ' + compressed_text
       return nil
 
     rescue => e
-     logger.error "Method find_item" + self.name
-     logger.error e.inspect
+      logger.error "Method find_item" + self.name
+      logger.error e.inspect
     end
   end
 

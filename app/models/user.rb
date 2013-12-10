@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
     if filename.include?('tmp')
       File.delete(filename)
     end
+    Site.all.each {|site| site.touch}
   end
 
   def standard_site_import(filename)
@@ -57,6 +58,7 @@ class User < ActiveRecord::Base
     if filename.include?('tmp')
       File.delete(filename)
     end
+    Site.all.each {|site| site.touch}
   end
 
   def shops_file_import(filename)
@@ -78,6 +80,9 @@ class User < ActiveRecord::Base
     if filename.include?('tmp')
       File.delete(filename)
     end
+    Site.all.each {|site| site.touch}
+    Item.all.each {|item| item.touch}
+    Group.all.each {|group| group.touch}
   end
 
   private
