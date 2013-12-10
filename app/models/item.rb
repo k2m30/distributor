@@ -1,7 +1,7 @@
 class Item < ActiveRecord::Base
   has_many :urls
   has_many :sites, through: :urls
-  belongs_to :group, touch: true
+  belongs_to :group
 
   def get_group_name
     Rails.cache.fetch([self, 'group_name']){self.group.name}

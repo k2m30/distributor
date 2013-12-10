@@ -38,34 +38,6 @@ class Site < ActiveRecord::Base
     Rails.cache.fetch([self, 'violators']) { self.urls.joins(item: :group).where(violator: true).order('groups.name ASC, items.name ASC') }
   end
 
-  #def get_violating_urls_table
-  #  Rails.cache.fetch([self, 'violators_table']) do
-  #    str_to_return = ''
-  #
-  #    self.get_violating_urls.each do |url|
-  #      standard_price = url.item.get_standard_price
-  #      if !standard_price.nil?
-  #        str_to_return << '<tr>'
-  #        str_to_return << '<td>' << url.item.group.name << '</td>'
-  #        str_to_return << '<td>' << url.item.name << '</td>'
-  #        str_to_return << '<td style=\"white-space: nowrap; text-align: right\">'
-  #        str_to_return << '<a class=\"tdfade\" href=\"' << url.url << '\">' << spaces(url.price.to_s) << '</a></td>'
-  #        str_to_return << '<td style=\"white-space: nowrap; text-align: right\">' << spaces(standard_price) << '</td>'
-  #        str_to_return << '<td style=\"white-space: nowrap; text-align: right\">' << spaces(standard_price - url.price) << '</td>'
-  #        str_to_return << '<td style=\"white-space: nowrap; text-align: right\">' << '%.1f' % ((standard_price/url.price - 1)*100) << '%'<< '</td>'
-  #        str_to_return << '</tr>'
-  #      end
-  #    end
-  #    str_to_return
-  #  end
-  #end
-  #
-  #def spaces(x)
-  #  str = x.to_i.to_s.reverse
-  #  str.gsub!(/([0-9]{3})/, "\\1 ")
-  #  return str.gsub(/,$/, '').reverse
-  #end
-
   def get_items
     Rails.cache.fetch([self, 'items']) { self.items }
   end
@@ -85,12 +57,33 @@ class Site < ActiveRecord::Base
     end
   end
 
+  def get_row(group)
+    Rails.cache.fetch([self, group, 'row']) do
+      str = []
+      urls = self.get_urls
+      group.items.order(:name).includes(:urls).each do |item|
+        str << (urls & item.urls).first
+      end
+      str
+    end
+  end
+
   def update_cache
     self.touch
     self.get_group_name
     self.get_items
     self.get_urls
     self.get_violating_urls
+    self.items.each do |item|
+      item.get_standard_price
+      item.get_standard_url
+      item.get_group_name
+      item.get_urls
+    end
+    self.groups.each do |group|
+      self.get_row(group)
+    end
+    logger.warn '------ cache is updated ------'
   end
 
   ###################### update price ###################

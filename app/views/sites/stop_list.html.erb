@@ -1,4 +1,3 @@
-<%- model_class = Site -%>
 <div class="page-header">
   <h2>Стоп лист</h2>
 </div>
@@ -32,7 +31,7 @@
       <% site.get_violating_urls.each do |url| %>
           <% if !url.item.get_standard_price.nil? %>
               <tr>
-                <td><%= url.item.group.name %></td>
+                <td><%= url.item.get_group_name %></td>
                 <td><%= url.item.name %></td>
                 <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.price), url.url, target: '_blank' %></td>
                 <td style="white-space: nowrap; text-align: right"><%= spaces(url.item.get_standard_price) %></td>

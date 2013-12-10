@@ -94,23 +94,6 @@ class UrlsController < ApplicationController
     #sdf
     #LogMailer.update_report(current_site).deliver
 
-    #if current_site.nil?
-    #  redirect_to sites_path
-    #end
-    #rate = current_user.settings.rate
-    #allowed_error = current_user.settings.allowed_error
-    #urls = params[:site].nil? ? Url.all : current_site.urls
-    #p urls.count
-    #urls.each do |url|
-    #  css = url.site.css
-    #  regexp = url.site.regexp
-    #  url.delay(run_at: 10.seconds.from_now).update_price(css, regexp, rate)
-    #  url.delay(run_at: 10.seconds.from_now).check_for_violation(url.item.get_standard_price ,allowed_error)
-    #end
-    #current_user.settings.last_updated = Time.now
-    #current_user.settings.save
-    #current_site.delay(run_at: 10.seconds.from_now).check_for_violation
-
     flash[:notice] = "Цены обновляются. Обычно это занимает 1-2 минуты для каждого сайта. Обновите страницу позже."
 
 

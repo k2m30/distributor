@@ -7,7 +7,7 @@ class GroupsController < ApplicationController
   def index
     @groups = Group.where('user_id = ?', current_user.id)
     @items = []
-    
+
     @groups.each do |group|
       @items << group.items.order('id DESC')
     end
@@ -24,7 +24,10 @@ class GroupsController < ApplicationController
   # GET /groups/1
   # GET /groups/1.json
   def show
-
+    @table =[]
+    @group.sites.order(:name).each do |site|
+      @table << site.get_row(@group)
+    end
   end
 
   # GET /groups/new
@@ -57,7 +60,7 @@ class GroupsController < ApplicationController
   # PATCH/PUT /groups/1.json
   def update
     respond_to do |format|
-      
+
       if @group.update(group_params)
         format.html { redirect_to @group, notice: 'Group was successfully updated.' }
         format.json { head :no_content }
@@ -79,15 +82,14 @@ class GroupsController < ApplicationController
   end
 
 
-
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_group
-      @group = Group.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_group
+    @group = Group.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def group_params
-      params.require(:group).permit(:name)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def group_params
+    params.require(:group).permit(:name)
+  end
 end
