@@ -85,12 +85,20 @@ class Site < ActiveRecord::Base
     end
   end
 
+  def update_cache
+    self.touch
+    self.get_group_name
+    self.get_items
+    self.get_urls
+    self.get_violating_urls
+  end
+
   ###################### update price ###################
   def update_prices
     return if self.standard
     begin
-      logger.warn "------ start update_price ------"
-      logger.warn "method: " + self.method.to_s
+      logger.warn '------ start update_price ------'
+      logger.warn 'method: ' + self.method.to_s
       self.logs.delete_all
       case self.method.to_i
         when 1
@@ -98,7 +106,7 @@ class Site < ActiveRecord::Base
         when 2
           result_array = self.parsing_site_method2
         else
-          logger.error "error case metod"
+          logger.error 'error case metod'
       end
 
       result_array = self.clear_result_array(result_array)
@@ -110,11 +118,11 @@ class Site < ActiveRecord::Base
     rescue => e
       logger.error 'Method update_prices' + e.inspect
       Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
-      self.touch
+      self.update_cache
       #  return [[], [], []]
     end
-    self.touch
-    logger.warn "------ finished update_price ----- " + self.name
+    self.update_cache
+    logger.warn '------ finished update_price ----- ' + self.name
   end
 
   def update_prices_from_file
