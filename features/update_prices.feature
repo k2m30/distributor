@@ -48,12 +48,12 @@ Feature: update prices
 #    | nvd.by             |
 #    | orion.shop.by      |
 #    | papa-karlo.shop.by |
-#    | pcbox.by           |
+    | pcbox.by           |
 #    | pingvin.shop.by    |
 #    | premium.shop.by    |
 #    | pro-karcher.by     |
 #    | radiomarket.by     |
-    | rodnoi.by          |
+#    | rodnoi.by          |
 #    | rsmarket.by        |
 #    | slavno.by          |
 #    | star-sys.shop.by   |

@@ -40,6 +40,7 @@ Distibutor::Application.routes.draw do
   resources :sites do
     collection do
       get 'stop_list' => 'sites#stop_list'
+      get 'search' => 'sites#search'
     end
 
     member do
