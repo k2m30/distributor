@@ -67,15 +67,26 @@ class User < ActiveRecord::Base
       spreadsheet.default_sheet = sheet
       group = Group.where(name: sheet, 'user' => self).first
       next if group.nil?
-      sites = group.sites.where(standard: false)
+      sites = group.sites.where(standard: [false, nil])
+      #p ['sites size',sites.size]
+      #p sites.map(&:name)
+      #p ['group sites size',group.sites.size]
       group.sites.delete(sites)
-
+      #p ['group sites size',group.sites.size]
       (2..spreadsheet.last_row).each do |i|
+        #p ['--', spreadsheet.row(i)]
         site = Site.where(name: spreadsheet.row(i)[0]).first
         group.sites << site if !site.nil? && !group.sites.include?(site)
+
+        #if site.name == '7sotok.by'
+        #  p site.name
+        #  p site.groups.map(&:name)
+        #  p group.sites.map(&:name)
+        #end
       end
 
       group.save
+      p ['----------------------',group.name, group.sites.size]
     end
     if filename.include?('tmp')
       File.delete(filename)
