@@ -20,7 +20,7 @@ module ApplicationHelper
   end
 
   def sortable(column, search)
-    direction = params[:sort] && params[:direction] == 'asc' ? 'desc' : 'asc'
+    direction = params[:sort] == column && params[:direction] == 'asc' ? 'desc' : 'asc'
     link_to column, :sort=>column, :item_search=> search, :direction => direction
   end
 end
