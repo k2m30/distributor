@@ -6,6 +6,10 @@ module ApplicationHelper
     return str.gsub(/,$/, '').reverse
   end
 
+  def get_url_str (item, site)
+    (item.urls & site.urls).first
+  end
+
   def find_violating_urls(site, group)
     #Url.joins(:site, item: :group).where(violator: true, site: site, items: {'group_id'=> group}).order('items.name ASC')
 
@@ -15,5 +19,8 @@ module ApplicationHelper
     end
   end
 
-
+  def sortable(column, search)
+    direction = params[:sort] == column && params[:direction] == 'asc' ? 'desc' : 'asc'
+    link_to column, :sort=>column, :item_search=> search, :direction => direction
+  end
 end
