@@ -93,3 +93,17 @@ sudo chmod +x /usr/local/bin/chromedriver
 
 #install xvfb
 sudo apt-get install xvfb
+
+#/etc/hosts file
+127.0.0.1 www.google-analytics.com
+127.0.0.1 vk.com
+127.0.0.1 stats.g.doubleclick.net
+127.0.0.1 st2.vk.me
+127.0.0.1 mc.yandex.ru
+127.0.0.1 fbstatic-a.akamaihd.net
+127.0.0.1 connect.facebook.net
+127.0.0.1 counter.rambler.ru
+127.0.0.1 static.facetz.net
+127.0.0.1 static.siteheart.com
+127.0.0.1 vkontakte.ru
+127.0.0.1 widget.siteheart.com
