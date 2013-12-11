@@ -11,7 +11,7 @@ Feature: update prices
   Examples:
     | site               |
 #    | 21vek.by           |
-#    | 24real.by          |
+    | 24real.by          |
 #    | 24shop.by          |
 #    | 360.shop.by        |
 #    | 50.by              |
@@ -53,7 +53,7 @@ Feature: update prices
 #    | premium.shop.by    |
 #    | pro-karcher.by     |
 #    | radiomarket.by     |
-    | rodnoi.by          |
+#    | rodnoi.by          |
 #    | rsmarket.by        |
 #    | slavno.by          |
 #    | star-sys.shop.by   |

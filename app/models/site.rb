@@ -179,6 +179,7 @@ class Site < ActiveRecord::Base
     rescue => e
       logger.error "error check link"
       logger.error e.inspect
+      return nil
     end
   end
 
@@ -300,6 +301,7 @@ class Site < ActiveRecord::Base
   def parsing_site_method2 #функция парсинга сайта
     begin
       logger.warn "------ start parsing function " + self.name + "------"
+      p "------ start parsing function " + self.name + "------"
 
       css_page = self.css_pagination
       css_page = "no" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
@@ -335,7 +337,13 @@ class Site < ActiveRecord::Base
             next
           end #проверка соответствия кол-ва товаров и цен
           name_array.each_with_index do |product, index|
+
             str = check_link(product["href"], start_page)
+
+            if str.nil? #проверка на наличие ссылки в css_item
+              str = start_page #вставляет стартовую страницу
+            end
+
             if start_page == "http://ydachnik.by" #затычка для ydachnik.by
               str = str.gsub("http://ydachnik.by", "http://ydachnik.by/catalog")
             end #затычка для ydachnik.by
@@ -378,17 +386,22 @@ class Site < ActiveRecord::Base
     items = items.sort_by { |item| item.name.size }
     items = items.reverse
 
+    start_page = "http://" + self.name
+
     result_array.each do |item_array|
       url_str = item_array[1]
       price = item_array[2]
       price = price.to_f < items[0].group.settings.rate ? price.to_f*items[0].group.settings.rate : price.to_f
-      url = Url.find_by_url(url_str)
+
+      if url_str != start_page #проверка на нормальность ссылки
+        url = Url.find_by_url(url_str)
+      end
 
       if item_array[0].include?('MTD')
         true
       end
 
-      if url.nil?
+      if url.nil? || url_str == start_page
         if price == 0
           Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
                       log_type: "No price", site_id: self.id)
