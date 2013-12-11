@@ -6,13 +6,8 @@ module ApplicationHelper
     return str.gsub(/,$/, '').reverse
   end
 
-  def get_price_str (item, site)
-    common_url = item.urls & site.urls
-    if !(common_url).empty?
-      return common_url.first.price.to_s
-    else
-      return '-'
-    end
+  def get_url_str (item, site)
+    (item.urls & site.urls).first
   end
 
   def find_violating_urls(site, group)

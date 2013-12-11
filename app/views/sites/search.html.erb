@@ -1,23 +1,22 @@
-<%= params %>
-<%= @items.size %>
 <table class="table table-striped">
   <thead>
-  <tr>
     <th>Сайт</th>
     <% @items.each do |item| %>
-        <th>
+        <th style="text-align: right">
           <%= item.group.name %>
           <%= item.name %>
         </th>
     <% end %>
-  </tr>
   </thead>
   <tbody>
   <% @sites.each do |site| %>
-      <tr>
-        <td><%= site.name %></td>
+      <tr <%= (site.standard?) ? " class=\"success\"".html_safe : ''%> >
+        <td><%= link_to site.name, site_path(site) %></td>
         <% @items.each do |item| %>
-            <td><%= spaces(get_price_str(item, site)) %></td>
+            <td style="white-space: nowrap; text-align: right">
+              <%- url = get_url_str(item, site) %>
+              <%= url.nil? || url.price.nil? ? '-' : link_to(spaces(url.price), url.url) %>
+            </td>
         <% end %>
       </tr>
   <% end %>

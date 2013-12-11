@@ -16,13 +16,16 @@ class SitesController < ApplicationController
     @items = []
     query = params[:item_search].upcase.gsub(/\s*,\s*/,',')
     query.split(',').each do |query|
-      @items += Item.where('name like ?', query)
+      @items += Item.item_search(query)
     end
+
+
     @sites = []
     @items.each do |item|
       @sites = @sites | item.sites
     end
     @sites = @sites.sort_by{|site| site.name}
+
   end
 
   def logs_submit

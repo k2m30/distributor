@@ -46,7 +46,7 @@
         </ul>
         <%= form_tag search_sites_path, method: :get, class: 'navbar-form pull-left' do %>
             <%= search_field_tag 'item_search', nil, class: 'span4', placeholder: 'введите название товара'%>
-            <%= submit_tag 'Искать', :class => 'btn' %>
+            <%= submit_tag 'Искать', :hidden => true, :class => 'btn' %>
         <% end %>
 
         <ul class="nav pull-right">
