@@ -1,0 +1,31 @@
+<table class="table table-striped">
+  <thead>
+    <th>Сайт</th>
+    <% @items.each do |item| %>
+        <th style="text-align: right">
+          <%= sortable(item.name, params[:item_search]) %>
+          <% if params[:sort].present? && params[:sort] == item.name %>
+              <%-arrow_class = 'icon-chevron-' %>
+              <%-arrow_class += params[:direction]=='asc' ? 'down' : 'up' %>
+              <i class=<%= arrow_class %>></i>
+          <% else %>
+
+          <% end %>
+
+        </th>
+    <% end %>
+  </thead>
+  <tbody>
+  <% @sites.each do |site| %>
+      <tr <%= (site.standard?) ? " class=\"success\"".html_safe : ''%> >
+        <td><%= link_to site.name, site_path(site) %></td>
+        <% @items.each do |item| %>
+            <td style="white-space: nowrap; text-align: right">
+              <%- url = get_url_str(item, site) %>
+              <%= url.nil? || url.price.nil? ? '-' : link_to(spaces(url.price), url.url) %>
+            </td>
+        <% end %>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
