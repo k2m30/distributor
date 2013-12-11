@@ -3,8 +3,15 @@
     <th>Сайт</th>
     <% @items.each do |item| %>
         <th style="text-align: right">
-          <%= item.group.name %>
-          <%= item.name %>
+          <%= sortable(item.name, params[:item_search]) %>
+          <% if params[:sort].present? && params[:sort] == item.name %>
+              <%-arrow_class = 'icon-chevron-' %>
+              <%-arrow_class += params[:direction]=='asc' ? 'down' : 'up' %>
+              <i class=<%= arrow_class %>></i>
+          <% else %>
+
+          <% end %>
+
         </th>
     <% end %>
   </thead>

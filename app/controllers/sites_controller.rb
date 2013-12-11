@@ -14,17 +14,24 @@ class SitesController < ApplicationController
 
   def search
     @items = []
-    query = params[:item_search].upcase.gsub(/\s*,\s*/,',')
-    query.split(',').each do |query|
-      @items += Item.item_search(query)
-    end
-
-
     @sites = []
-    @items.each do |item|
-      @sites = @sites | item.sites
+
+    if params[:item_search].present?
+      params[:direction] = %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+      query = params[:item_search].upcase.gsub(/\s*,\s*/, ',')
+      query.split(',').each do |query|
+        @items += Item.item_search(query)
+      end
+
+      @items.each do |item|
+        @sites = @sites | item.sites
+      end
+
+      if !@items.empty?
+        params[:sort] = @items.map(&:name).include?(params[:sort]) ? params[:sort] : @items.first.name
+        @sites = Site.where(id: @sites.map(&:id)).includes(:urls).joins(:items).where(items: {name: params[:sort]}).order('urls.price' + ' ' + params[:direction])
+      end
     end
-    @sites = @sites.sort_by{|site| site.name}
 
   end
 
@@ -58,11 +65,11 @@ class SitesController < ApplicationController
 
 
   def index
-    @sites = Site.joins(:groups).where(groups: {'user' =>  current_user}).uniq.order(:name)
+    @sites = Site.joins(:groups).where(groups: {'user' => current_user}).uniq.order(:name)
   end
 
   def show
-   @urls = @site.urls.joins(item: :group).order('groups.name ASC, items.name ASC')
+    @urls = @site.urls.joins(item: :group).order('groups.name ASC, items.name ASC')
   end
 
   def new
@@ -108,13 +115,13 @@ class SitesController < ApplicationController
 
   def stop_list
     @groups = current_user.groups.order("name")
-    @sites = Site.joins(:groups).where(violator: true, groups: {'user' =>  current_user}).uniq.order(:name)
+    @sites = Site.joins(:groups).where(violator: true, groups: {'user' => current_user}).uniq.order(:name)
   end
 
   private
 # Use callbacks to share common setup or constraints between actions.
   def set_site
-    @site = Site.joins(:groups).where(id: params[:id], groups: {'user' =>  current_user}).readonly(false).uniq.first
+    @site = Site.joins(:groups).where(id: params[:id], groups: {'user' => current_user}).readonly(false).uniq.first
   end
 
 # Never trust parameters from the scary internet, only allow the white list through.
