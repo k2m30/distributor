@@ -63,8 +63,8 @@ class SettingsController < ApplicationController
       current_user.shops_file_import(filename)
       redirect_to settings_path, success: 'Список могазинов обновлен.'
 
-    #rescue
-    #  redirect_to settings_path, alert: 'Произошла ошибка импорта.'
+    rescue
+      redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
   end
 
