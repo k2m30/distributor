@@ -47,7 +47,7 @@
         <%= form_tag search_sites_path, method: :get, class: 'navbar-form pull-left' do %>
             <div class="input-prepend">
               <span class="add-on"><i class="icon-search"></i></span>
-              <%= search_field_tag 'item_search', nil, class: 'span4', placeholder: 'пример: MTD 46 PB, K 2.300' %>
+              <%= search_field_tag 'item_search', nil, class: 'span3', placeholder: 'пример: MTD 46 PB, K 2.300' %>
               <%= submit_tag 'Искать', :hidden => true, :class => 'btn btn-inverse' %>
             </div>
         <% end %>
@@ -55,7 +55,7 @@
         <ul class="nav pull-right">
           <% if user_signed_in? %>
               <li class=<%= 'active' if current_page?(controller: 'settings', action: 'index') %>><%= link_to (t 'nav.settings'), settings_path %></li>
-              <li><%= link_to((t('nav.logout') + ' ' + current_user.username), destroy_user_session_path, :method => :delete) %></li>
+              <li><%= link_to((t('nav.logout')), destroy_user_session_path, :method => :delete) %></li>
           <% else %>
               <li><%= link_to(t('nav.login'), new_user_session_path) %></li>
 
