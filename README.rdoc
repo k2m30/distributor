@@ -1,9 +1,11 @@
 * Deployment instructions
+#locally
+sudo mate /Users/Mikhail/.ssh/known_hosts
 
 ## Server Commands
 
 apt-get -y update
-apt-get -y updrade
+apt-get -y upgrade
 apt-get -y install curl git-core python-software-properties g++ mc htop
 
 #remove apache
@@ -37,12 +39,14 @@ su deployer
 cd
 
 # Ruby with rvm
-sudo \curl -sSL https://get.rvm.io | bash -s stable --ruby=2.0.0-p247 --rails
+sudo \curl -sSL https://get.rvm.io | bash -s stable --ruby --rails
 source /home/deployer/.rvm/scripts/rvm
 ssh git@github.com
 
 -----------#locally
 cat ~/.ssh/id_rsa.pub | ssh deployer@78.47.161.129 'cat >> ~/.ssh/authorized_keys'
+#cat ~/.ssh/id_rsa.pub | ssh deployer@144.76.161.235 'cat >> ~/.ssh/authorized_keys'
+
 ssh-add -K
 
 
