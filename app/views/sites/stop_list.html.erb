@@ -2,54 +2,59 @@
   <h2>Стоп лист</h2>
 </div>
 
-<% @sites.each do |site| %>
-    <%= cache(site) do %>
-    <table class="table table-striped">
-      <tbody>
-      <tr>
-        <td><%= site.company_name %></td>
-        <td><%= link_to site.name, site_path(site), class: 'tdfade' %></td>
-        <td>email: <%= site.email %></td>
-      </tr>
-      </tbody>
-    </table>
+<div class="accordion" id="accordion_site">
 
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th>Бренд</th>
-        <th>Позиция</th>
-        <th style="white-space: nowrap; text-align: right">Цена сайта</th>
-        <th style="white-space: nowrap; text-align: right">Эталон</th>
-        <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
-        <th style="white-space: nowrap; text-align: right">Разница, %</th>
-      </tr>
-      </thead>
-      <tbody>
-      <%#= site.urls.joins(item: :group).where(violator:true).order('groups.name ASC, items.name ASC') %>
-      <%#= site.get_violating_urls_table.html_safe %>
-      <% site.get_violating_urls.each do |url| %>
-          <% if !url.item.get_standard_price.nil? %>
-              <tr>
-                <td><%= url.item.get_group_name %></td>
-                <td><%= url.item.name %></td>
-                <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.price), url.url, target: '_blank' %></td>
-                <td style="white-space: nowrap; text-align: right"><%= spaces(url.item.get_standard_price) %></td>
-                <td style="white-space: nowrap; text-align: right"><%= spaces(url.item.get_standard_price - url.price) %></td>
-                <td style="white-space: nowrap; text-align: right"><%= '%.1f' % ((url.item.get_standard_price/url.price - 1)*100) %>
-                  %
-                </td>
-              </tr>
+  <% @sites.each do |site| %>
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_site" href=<%= '#collapse' + site.id.to_s %>>
+          <table class="table ">
+            <th class="span3 btn"><%= site.name %></th>
+            <th class="span3 btn"> <%= site.company_name %></th>
+            <th class="span2 btn">Товаров -
+              <%= site.urls.size %></th>
+            <th class="span2 btn">Нарушений -
+              <%= site.urls.where(violator: true).size %></th>
+          </table>
+        </a>
+
+      </div>
+      <div class="accordion-body collapse" id=<%= 'collapse' + site.id.to_s %>>
+        <div class="accordion-inner">
+          <%= cache(site) do %>
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>Бренд</th>
+                  <th>Позиция</th>
+                  <th style="white-space: nowrap; text-align: right">Цена сайта</th>
+                  <th style="white-space: nowrap; text-align: right">Эталон</th>
+                  <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
+                  <th style="white-space: nowrap; text-align: right">Разница, %</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%#= site.urls.joins(item: :group).where(violator:true).order('groups.name ASC, items.name ASC') %>
+                <%#= site.get_violating_urls_table.html_safe %>
+                <% site.get_violating_urls.each do |url| %>
+                    <% if !url.item.get_standard_price.nil? %>
+                        <tr>
+                          <td><%= url.item.get_group_name %></td>
+                          <td><%= url.item.name %></td>
+                          <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.price), url.url, target: '_blank' %></td>
+                          <td style="white-space: nowrap; text-align: right"><%= spaces(url.item.get_standard_price) %></td>
+                          <td style="white-space: nowrap; text-align: right"><%= spaces(url.item.get_standard_price - url.price) %></td>
+                          <td style="white-space: nowrap; text-align: right"><%= '%.1f' % ((url.item.get_standard_price/url.price - 1)*100) %>
+                            %
+                          </td>
+                        </tr>
+                    <% end %>
+                <% end %>
+
+                </tbody>
+              </table>
           <% end %>
-      <% end %>
+        </div>
+      </div>
+  <% end %>
 
-      </tbody>
-    </table>
-    <hr>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <% end %>
-<% end %>
+</div>
