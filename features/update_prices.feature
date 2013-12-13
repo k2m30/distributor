@@ -48,7 +48,7 @@ Feature: update prices
 #    | nvd.by             |
 #    | orion.shop.by      |
 #    | papa-karlo.shop.by |
-    | pcbox.by           |
+#    | pcbox.by           |
 #    | pingvin.shop.by    |
 #    | premium.shop.by    |
 #    | pro-karcher.by     |

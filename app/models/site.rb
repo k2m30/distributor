@@ -338,11 +338,17 @@ class Site < ActiveRecord::Base
           end #проверка соответствия кол-ва товаров и цен
           name_array.each_with_index do |product, index|
 
-            str = check_link(product["href"], start_page)
-
-            if str.nil? #проверка на наличие ссылки в css_item
-              str = start_page #вставляет стартовую страницу
+            if product["href"].nil?
+              str = start_page
+            else
+              str = check_link(product["href"], start_page)
             end
+
+            #str = check_link(product["href"], start_page)
+            #
+            #if str.nil? #проверка на наличие ссылки в css_item
+            #  str = start_page #вставляет стартовую страницу
+            #end
 
             if start_page == "http://ydachnik.by" #затычка для ydachnik.by
               str = str.gsub("http://ydachnik.by", "http://ydachnik.by/catalog")
