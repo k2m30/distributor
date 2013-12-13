@@ -1,9 +1,11 @@
 * Deployment instructions
+#locally
+sudo mate /Users/Mikhail/.ssh/known_hosts
 
 ## Server Commands
 
 apt-get -y update
-apt-get -y updrade
+apt-get -y upgrade
 apt-get -y install curl git-core python-software-properties g++ mc htop
 
 #remove apache
@@ -37,12 +39,14 @@ su deployer
 cd
 
 # Ruby with rvm
-sudo \curl -sSL https://get.rvm.io | bash -s stable --ruby=2.0.0-p247 --rails
+sudo \curl -sSL https://get.rvm.io | bash -s stable --ruby --rails
 source /home/deployer/.rvm/scripts/rvm
 ssh git@github.com
 
 -----------#locally
 cat ~/.ssh/id_rsa.pub | ssh deployer@78.47.161.129 'cat >> ~/.ssh/authorized_keys'
+#cat ~/.ssh/id_rsa.pub | ssh deployer@144.76.161.235 'cat >> ~/.ssh/authorized_keys'
+
 ssh-add -K
 
 
@@ -93,3 +97,17 @@ sudo chmod +x /usr/local/bin/chromedriver
 
 #install xvfb
 sudo apt-get install xvfb
+
+#/etc/hosts file
+127.0.0.1 www.google-analytics.com
+127.0.0.1 vk.com
+127.0.0.1 stats.g.doubleclick.net
+127.0.0.1 st2.vk.me
+127.0.0.1 mc.yandex.ru
+127.0.0.1 fbstatic-a.akamaihd.net
+127.0.0.1 connect.facebook.net
+127.0.0.1 counter.rambler.ru
+127.0.0.1 static.facetz.net
+127.0.0.1 static.siteheart.com
+127.0.0.1 vkontakte.ru
+127.0.0.1 widget.siteheart.com
