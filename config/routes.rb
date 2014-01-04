@@ -1,4 +1,5 @@
 Distibutor::Application.routes.draw do
+  get "main/index"
   resources :logs do
     collection do
       get 'clear_log' => 'logs#clear_log'
