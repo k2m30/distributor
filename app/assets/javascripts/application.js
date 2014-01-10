@@ -22,11 +22,6 @@ function showSpin() {
     $('.spin').fadeIn("slow");
 }
 
-function hideSpin() {
-    $('.row-fluid').show();
-    $('.spin').hide();
-}
-
 $(document).ready(function () {
     $('.tooltip_cell').tooltip({container: 'body'});
     var spin = $('.spin');
