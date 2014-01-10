@@ -1,8 +1,9 @@
-* Deployment instructions
+#Deployment instructions
 #locally
+
 sudo mate /Users/Mikhail/.ssh/known_hosts
 
-## Server Commands
+#server
 
 apt-get -y update
 
@@ -11,16 +12,20 @@ apt-get -y upgrade
 apt-get -y install curl git-core python-software-properties g++ mc htop
 
 
-#remove apache
+* remove apache
+
 apt-get --purge remove apache*
+
 #change timezone
+
 ln -sf /usr/share/zoneinfo/Europe/Minsk /etc/localtime
 
 echo 'Europe/Minsk' >> /etc/timezone
 
 reboot
 
-# nginx
+* nginx
+
 add-apt-repository ppa:nginx/stable
 
 apt-get -y update
@@ -29,7 +34,8 @@ apt-get -y install nginx
 
 service nginx start
 
-# PostgreSQL
+* PostgreSQL
+
 add-apt-repository ppa:pitti/postgresql
 
 apt-get -y update
@@ -48,7 +54,7 @@ alter user distributor superuser createrole createdb replication;
 
 \q
 
-# Add deployer user
+* Add deployer user
 adduser deployer --ingroup root
 
 sudo usermod -a -G sudo deployer
@@ -57,7 +63,7 @@ su deployer
 
 cd
 
-# Ruby with rvm
+* Ruby with rvm
 sudo \curl -sSL https://get.rvm.io | bash -s stable --ruby --rails
 
 source /home/deployer/.rvm/scripts/rvm
@@ -66,7 +72,7 @@ gem update bundler
 
 ssh git@github.com
 
------------#locally
+# locally
 cat ~/.ssh/id_rsa.pub | ssh deployer@78.47.161.129 'cat >> ~/.ssh/authorized_keys'
 
 #cat ~/.ssh/id_rsa.pub | ssh deployer@144.76.161.235 'cat >> ~/.ssh/authorized_keys'
@@ -74,10 +80,11 @@ cat ~/.ssh/id_rsa.pub | ssh deployer@78.47.161.129 'cat >> ~/.ssh/authorized_key
 ssh-add -K
 
 
----------- local cap setup
+* local cap setup
 cap deploy:setup
 
 #Server commands
+
 cd
 
 touch ds
@@ -116,18 +123,19 @@ RAILS_ENV=production rake db:schema:load
 
 RAILS_ENV=production rake db:migrate
 
----------- local cap deploy cold
+# local cap deploy cold
 
 cap deploy:cold
 
 # Server
+
 sudo rm /etc/nginx/sites-enabled/default
 
 sudo service nginx restart
 
 sudo /usr/sbin/update-rc.d -f unicorn_distributor defaults
 
-#install google chrome
+* install google chrome
 
 sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 
@@ -137,7 +145,7 @@ sudo apt-get update
 
 sudo apt-get install google-chrome-stable
 
-#install chromedriver
+* install chromedriver
 wget http://chromedriver.storage.googleapis.com/2.7/chromedriver_linux64.zip
 
 unzip chromedriver_linux64.zip
@@ -146,11 +154,11 @@ sudo cp chromedriver /usr/local/bin
 
 sudo chmod +x /usr/local/bin/chromedriver
 
-#install xvfb
+* install xvfb
 
 sudo apt-get install xvfb
 
-#/etc/hosts file
+* /etc/hosts file
 
 127.0.0.1 www.google-analytics.com
 
