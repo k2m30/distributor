@@ -5,8 +5,11 @@ sudo mate /Users/Mikhail/.ssh/known_hosts
 ## Server Commands
 
 apt-get -y update
+
 apt-get -y upgrade
+
 apt-get -y install curl git-core python-software-properties g++ mc htop
+
 
 #remove apache
 apt-get --purge remove apache*
