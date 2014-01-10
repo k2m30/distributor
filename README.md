@@ -41,6 +41,7 @@ cd
 # Ruby with rvm
 sudo \curl -sSL https://get.rvm.io | bash -s stable --ruby --rails
 source /home/deployer/.rvm/scripts/rvm
+gem update bundler
 ssh git@github.com
 
 -----------#locally

@@ -24,7 +24,6 @@
       </a>
 
 
-
       <div class="nav-collapse">
         <ul class="nav">
           <li><%= link_to 'B2B Soft', root_path, class: 'brand' %></li>
@@ -49,7 +48,10 @@
                   </div>
               <% end %>
               <li class="divider-vertical"></li>
+          <% else %>
+
           <% end %>
+
         </ul>
 
         <ul class="nav pull-right">
@@ -57,7 +59,11 @@
               <li class=<%= 'active' if current_page?(controller: 'settings', action: 'index') %>><%= link_to (t 'nav.settings'), settings_path %></li>
               <li><%= link_to((t('nav.logout')), destroy_user_session_path, :method => :delete) %></li>
           <% else %>
-              <li><%= link_to(t('nav.login'), new_user_session_path) %></li>
+
+              <li><a class="brand" href="#">Позвоните нам +375 29 650 24 98 или</a></li>
+              <li><a class="brand" style="color: #0077aa" mailto:sales@b2bsoft.by">напишите</a></li>
+              <li><a href=""></a></li>
+              <li><%= link_to(t('nav.login'), new_user_session_path, class: 'brand') %></li>
 
           <% end %>
         </ul>
