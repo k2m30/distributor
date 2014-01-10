@@ -60,10 +60,11 @@
               <li><%= link_to((t('nav.logout')), destroy_user_session_path, :method => :delete) %></li>
           <% else %>
 
-              <li><a class="brand" href="#">Позвоните нам +375 29 650 24 98 или</a></li>
-              <li><a class="brand" style="color: #0077aa" mailto:sales@b2bsoft.by">напишите</a></li>
+              <li><a class="brand no_spin" href="#">Позвоните нам +375 29 650 24 98 или</a></li>
+              <li><a class="brand no_spin" style="color: #0077aa" href="mailto:sales@b2bsoft.by">напишите</a></li>
+              <li class="divider-vertical"></li>
               <li><a href=""></a></li>
-              <li><%= link_to(t('nav.login'), new_user_session_path, class: 'brand') %></li>
+              <li><%= link_to(t('nav.login'), new_user_session_path, class: 'brand no_spin') %></li>
 
           <% end %>
         </ul>

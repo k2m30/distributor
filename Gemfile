@@ -39,7 +39,7 @@ gem 'rubyzip',  '~> 0.9.9'
 gem 'roo'
 
 gem 'axlsx'
-gem 'rack-mini-profiler'
+gem 'rack-mini-profiler', '~> 0.1.31'
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'delayed_job_web'

@@ -18,18 +18,28 @@
 //= require best_in_place
 
 function showSpin() {
-    //$('.spin').toggle();
     $('.row-fluid').hide();
     $('.spin').fadeIn("slow");
-//    console.log('clicked');
+}
+
+function hideSpin() {
+    $('.row-fluid').show();
+    $('.spin').hide();
 }
 
 $(document).ready(function () {
     $('.tooltip_cell').tooltip({container: 'body'});
     var spin = $('.spin');
     spin.hide();//css('background', '#444');
-    $('.nav').on('click','a', showSpin);
+    $('.nav a:not(.no_spin)').on('click', showSpin);
     $('.tdfade').on('click', showSpin);
+    $('.carousel').carousel({
+        interval: 15000
+    });
+    $(window).bind("unload", function() {
+        $('.spin').hide();
+        $('.row-fluid').show();
+    });
 
 
 });
