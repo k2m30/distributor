@@ -16,7 +16,7 @@ apt-get -y install curl git-core python-software-properties g++ mc htop
 
 apt-get --purge remove apache*
 
-#change timezone
+* change timezone
 
 ln -sf /usr/share/zoneinfo/Europe/Minsk /etc/localtime
 
@@ -64,6 +64,7 @@ su deployer
 cd
 
 * Ruby with rvm
+
 sudo \curl -sSL https://get.rvm.io | bash -s stable --ruby --rails
 
 source /home/deployer/.rvm/scripts/rvm
@@ -73,6 +74,7 @@ gem update bundler
 ssh git@github.com
 
 # locally
+
 cat ~/.ssh/id_rsa.pub | ssh deployer@78.47.161.129 'cat >> ~/.ssh/authorized_keys'
 
 #cat ~/.ssh/id_rsa.pub | ssh deployer@144.76.161.235 'cat >> ~/.ssh/authorized_keys'
@@ -81,6 +83,7 @@ ssh-add -K
 
 
 * local cap setup
+
 cap deploy:setup
 
 #Server commands
@@ -146,6 +149,7 @@ sudo apt-get update
 sudo apt-get install google-chrome-stable
 
 * install chromedriver
+
 wget http://chromedriver.storage.googleapis.com/2.7/chromedriver_linux64.zip
 
 unzip chromedriver_linux64.zip
