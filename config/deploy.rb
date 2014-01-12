@@ -14,6 +14,7 @@ set :use_sudo, false
 set :scm, 'git'
 set :repository, 'https://github.com/k2m30/distributor'
 set :branch, 'master'
+set :host, '144.76.161.235'
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
