@@ -7,8 +7,6 @@
   <![endif]-->
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'jquery.spin', 'data-turbolinks-track' => true %>
-  <%= stylesheet_link_tag 'jquery.spin', media: 'all', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=yes">
 </head>
@@ -74,7 +72,11 @@
   </div>
 </div>
 
-<div class="spin" data-spin></div>
+
+
+<%= image_tag 'indicator.gif', class: 'spin', hidden: true, style: 'margin: 20px' %>
+
+
 
 <div class="container-fluid">
   <div class="row-fluid">

@@ -24,10 +24,12 @@ function showSpin() {
 
 $(document).ready(function () {
     $('.tooltip_cell').tooltip({container: 'body'});
-    var spin = $('.spin');
-    spin.hide();//css('background', '#444');
+
+    //$('.spin').hide();
+
     $('.nav a:not(.no_spin)').on('click', showSpin);
     $('.tdfade').on('click', showSpin);
+
     $('.carousel').carousel({
         interval: 15000
     });
