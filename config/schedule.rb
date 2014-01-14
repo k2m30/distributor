@@ -19,19 +19,19 @@
 
 # Learn more: http://github.com/javan/whenever
 
-env :PATH, '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
-set :output, "#{path}/log/cron.log"
-env :PATH, '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
-#set :environment, 'development'
-
-#every 30.minutes do
-#  runner "Url.first.update_all_prices"
+#env :PATH, '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
+#set :output, "#{path}/log/cron.log"
+#env :PATH, '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
+##set :environment, 'development'
+#
+##every 30.minutes do
+##  runner "Url.first.update_all_prices"
+##end
+#
+#every :day, :at => '2:46 pm' do
+#  runner 'Site.all.each { |site| site.update_prices }'
 #end
-
-every :day, :at => '2:46 pm' do
-  runner 'Site.all.each { |site| site.update_prices }'
-end
-
-every :day, :at => '9:46 am' do
-  runner 'Site.all.each { |site| site.update_prices }'
-end
+#
+#every :day, :at => '9:46 am' do
+#  runner 'Site.all.each { |site| site.update_prices }'
+#end
