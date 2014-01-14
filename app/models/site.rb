@@ -265,13 +265,13 @@ class Site < ActiveRecord::Base
       result_array = []
 
       profile = Selenium::WebDriver::Firefox::Profile.new
-      profile
-      browser = Watir::Browser.new :ff
+      profile['permissions.default.image']=2
+      browser = Watir::Browser.new :ff, :profile => profile
+
       self.search_url.split(/[,]+/).each do |site_url|
         browser.goto site_url
         browser.wait
         begin
-          #browser.refresh
           items = browser.elements(:css => self.css_item)
           prices = browser.elements(:css => self.css_price)
           last_url = browser.url
