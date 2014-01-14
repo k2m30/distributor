@@ -264,9 +264,12 @@ class Site < ActiveRecord::Base
       css_page = "no" if css_page.nil? || css_page.empty?
       result_array = []
 
+      profile = Selenium::WebDriver::Firefox::Profile.new
+      profile
       browser = Watir::Browser.new :ff
       self.search_url.split(/[,]+/).each do |site_url|
         browser.goto site_url
+        browser.wait
         begin
           #browser.refresh
           items = browser.elements(:css => self.css_item)
@@ -276,8 +279,10 @@ class Site < ActiveRecord::Base
           items.to_a.each_index do |index|
             result_array << [items[index].text, items[index].attribute_value("href"), prices[index].text]
           end
-          sleep(5)
-          browser.element(:css => css_page).click if browser.element(:css => css_page).exists?
+          if browser.element(:css => css_page).exists?
+            browser.element(:css => css_page).click
+            browser.wait
+          end
         end while browser.element(:css => css_page).exists? && last_url != browser.url
 
       end
