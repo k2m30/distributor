@@ -47,7 +47,7 @@ namespace :deploy do
 
   desc 'Make sure local git is in sync with remote.'
   task :check_revision, roles: :web do
-    unless `git rev-parse HEAD` == `git rev-parse distributor/master`
+    unless `git rev-parse HEAD` == `git rev-parse origin/master`
       puts 'WARNING: HEAD is not the same as distributor/master'
       puts 'Run `git push` to sync changes.'
       exit
@@ -55,17 +55,17 @@ namespace :deploy do
   end
   before 'deploy', 'deploy:check_revision'
 
-  namespace :assets do
-    desc 'Run the precompile task locally and rsync with shared'
-    task :precompile, :roles => :web, :except => { :no_release => true } do
-      from = source.next_revision(current_revision)
-      if releases.length <= 1 || capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
-        %x{bundle exec rake assets:precompile}
-        %x{rsync --recursive --times --rsh=ssh --compress --human-readable --progress public/assets #{user}@#{host}:#{shared_path}}
-        %x{bundle exec rake assets:clean}
-      else
-        logger.info 'Skipping asset pre-compilation because there were no asset changes'
-      end
-    end
-  end
+  #namespace :assets do
+  #  desc 'Run the precompile task locally and rsync with shared'
+  #  task :precompile, :roles => :web, :except => { :no_release => true } do
+  #    from = source.next_revision(current_revision)
+  #    if releases.length <= 1 || capture("cd #{latest_release} && #{source.local.log(from)} vendor/assets/ app/assets/ | wc -l").to_i > 0
+  #      %x{bundle exec rake assets:precompile}
+  #      %x{rsync --recursive --times --rsh=ssh --compress --human-readable --progress public/assets #{user}@#{host}:#{shared_path}}
+  #      %x{bundle exec rake assets:clean}
+  #    else
+  #      logger.info 'Skipping asset pre-compilation because there were no asset changes'
+  #    end
+  #  end
+  #end
 end
