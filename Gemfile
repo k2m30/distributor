@@ -62,7 +62,7 @@ end
 
 gem 'best_in_place', :git => 'https://github.com/aaronchi/best_in_place.git'
 
-gem 'whenever', :require => false
+gem 'whenever', '~> 0.8.4', :require => false
 
 # Use ActiveModel has_secure_password
 
