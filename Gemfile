@@ -35,7 +35,8 @@ gem 'twitter-bootstrap-rails'
 
 gem 'rubyXL'
 gem 'nokogiri'
-gem 'rubyzip',  '~> 0.9.9'
+gem 'zip'
+gem 'rubyzip'
 gem 'roo'
 
 gem 'axlsx'
@@ -43,7 +44,7 @@ gem 'rack-mini-profiler', '~> 0.1.31'
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'delayed_job_web'
-gem 'selenium-webdriver'
+gem 'selenium-webdriver', '>= 2.39.0'
 gem 'watir-webdriver'
 gem 'headless'
 
