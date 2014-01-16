@@ -36,10 +36,10 @@ GEM
     addressable (2.3.5)
     arel (4.0.1)
     atomic (1.1.14)
-    axlsx (2.0.0)
+    axlsx (1.3.6)
       htmlentities (~> 4.3.1)
       nokogiri (>= 1.4.1)
-      rubyzip (= 0.9.9)
+      rubyzip (>= 0.9.5)
     bcrypt-ruby (3.1.2)
     better_errors (1.1.0)
       coderay (>= 1.0.0)
@@ -90,12 +90,13 @@ GEM
     delayed_job_active_record (4.0.0)
       activerecord (>= 3.0, < 4.1)
       delayed_job (>= 3.0, < 4.1)
-    delayed_job_web (1.2.1)
+    delayed_job_web (1.2.2)
       activerecord (> 3.0.0)
       delayed_job (> 2.0.3)
       haml (>= 3.1.3)
       rdoc
       sinatra (>= 0.9.2)
+      tilt (= 1.4.1)
     devise (3.2.2)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -180,7 +181,7 @@ GEM
     rack (1.5.2)
     rack-mini-profiler (0.1.31)
       rack (>= 1.1.3)
-    rack-protection (1.5.1)
+    rack-protection (1.5.2)
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -216,16 +217,16 @@ GEM
     rspec-mocks (2.14.4)
     ruby-ole (1.2.11.7)
     rubyXL (1.2.10)
-    rubyzip (0.9.9)
+    rubyzip (1.1.0)
     rvm-capistrano (1.5.1)
       capistrano (~> 2.15.4)
     sdoc (0.4.0)
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
-    selenium-webdriver (2.35.1)
+    selenium-webdriver (2.39.0)
       childprocess (>= 0.2.5)
       multi_json (~> 1.0)
-      rubyzip (< 1.0.0)
+      rubyzip (~> 1.0)
       websocket (~> 1.0.4)
     sinatra (1.4.4)
       rack (~> 1.4)
@@ -281,6 +282,7 @@ GEM
       chronic (>= 0.6.3)
     xpath (2.0.0)
       nokogiri (~> 1.3)
+    zip (2.0.2)
 
 PLATFORMS
   ruby
@@ -314,10 +316,10 @@ DEPENDENCIES
   roo
   rspec
   rubyXL
-  rubyzip (~> 0.9.9)
+  rubyzip
   rvm-capistrano
   sdoc
-  selenium-webdriver
+  selenium-webdriver (>= 2.39.0)
   therubyracer
   turbolinks
   twitter-bootstrap-rails
@@ -325,3 +327,4 @@ DEPENDENCIES
   unicorn
   watir-webdriver
   whenever
+  zip

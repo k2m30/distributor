@@ -1,11 +1,13 @@
 require 'rubygems'
-require 'watir-webdriver'
 require 'open-uri'
 require 'rubyXL'
-require 'open-uri'
-require 'nokogiri'
 require 'axlsx'
+require 'watir-webdriver'
+require 'nokogiri'
+require 'open-uri'
 require 'headless'
+
+class NotLoadedYetError < StandardError ; end
 
 class Site < ActiveRecord::Base
   has_many :urls
@@ -262,30 +264,68 @@ class Site < ActiveRecord::Base
       end
       css_page = self.css_pagination
       css_page = "no" if css_page.nil? || css_page.empty?
+      css_item = self.css_item
+      css_price = self.css_price
+      timeout = 5
+
       result_array = []
 
       profile = Selenium::WebDriver::Firefox::Profile.new
       profile['permissions.default.image']=2
       browser = Watir::Browser.new :ff, :profile => profile
 
+      #self.search_url.split(/[,]+/).each do |site_url|
+      #  browser.goto site_url
+      #  browser.wait
+      #  begin
+      #    items = browser.elements(:css => self.css_item)
+      #    prices = browser.elements(:css => self.css_price)
+      #    last_url = browser.url
+      #
+      #    items.to_a.each_index do |index|
+      #      result_array << [items[index].text, items[index].attribute_value("href"), prices[index].text]
+      #    end
+      #    if browser.element(:css => css_page).exists?
+      #      browser.element(:css => css_page).click
+      #      browser.wait
+      #    end
+      #  end while browser.element(:css => css_page).exists? && last_url != browser.url
+      #
+      #end
+
       self.search_url.split(/[,]+/).each do |site_url|
         browser.goto site_url
-        browser.wait
-        begin
-          items = browser.elements(:css => self.css_item)
-          prices = browser.elements(:css => self.css_price)
-          last_url = browser.url
+        begin #external exception
+          begin #while
+            begin # internal exception
+              browser.element(:css => css_item).wait_until_present
+              result_array += scrap_page(Nokogiri::HTML(browser.html), css_item, css_price)
+              if result_array.size != result_array.uniq.size
+                result_array = result_array.uniq
+                raise NotLoadedYetError, 'same page'
+              end
+              p browser.url
+              p 'click'
+              next_page_link = browser.element(:css => css_page).when_present(timeout).attribute_value('href')
+              browser.element(:css => css_page).when_present(timeout).click
+              browser.wait
+            rescue Selenium::WebDriver::Error::StaleElementReferenceError => e
+              p e.inspect
+            rescue NotLoadedYetError =>e
+              p e.inspect
+            end # internal exception
 
-          items.to_a.each_index do |index|
-            result_array << [items[index].text, items[index].attribute_value("href"), prices[index].text]
-          end
-          if browser.element(:css => css_page).exists?
-            browser.element(:css => css_page).click
-            browser.wait
-          end
-        end while browser.element(:css => css_page).exists? && last_url != browser.url
+          end while next_page_link!=browser.url
 
+        rescue Watir::Exception::UnknownObjectException => e
+          p e.inspect
+        rescue Watir::Wait::TimeoutError => e
+          p 'done'
+        end # external exception
       end
+
+      result_array = result_array.uniq
+      p result_array.size
 
       browser.close
       if ENV['RAILS_ENV'] == 'production'
@@ -514,6 +554,22 @@ class Site < ActiveRecord::Base
 
     url.check_for_violation(standard_price, allowed_error)
 
+  end
+
+  def scrap_page(html, css_item, css_price)
+    result_array = []
+    items = html.css css_item
+    prices = html.css css_price
+    p items.size
+    p prices.size
+    if items.size == 0
+      p 'page is not loaded'
+      raise NotLoadedYetError, 'trying again'
+    end
+    items.to_a.each_index do |index|
+      result_array << [items[index].text, items[index]['href'], prices[index].text] unless prices[index].nil?
+    end
+    result_array
   end
 end
 
