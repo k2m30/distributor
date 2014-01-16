@@ -35,8 +35,8 @@ gem 'twitter-bootstrap-rails'
 
 gem 'rubyXL'
 gem 'nokogiri'
-gem 'zip'
-gem 'rubyzip'
+gem 'zip-zip'
+gem 'rubyzip'#, :require => 'zip/zip'
 gem 'roo'
 
 gem 'axlsx'

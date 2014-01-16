@@ -75,9 +75,7 @@ ssh git@github.com
 
 # locally
 
-cat ~/.ssh/id_rsa.pub | ssh deployer@78.47.161.129 'cat >> ~/.ssh/authorized_keys'
-
-#cat ~/.ssh/id_rsa.pub | ssh deployer@144.76.161.235 'cat >> ~/.ssh/authorized_keys'
+cat ~/.ssh/id_rsa.pub | ssh deployer@78.47.161.129 'cat >> ~/.ssh/authorized_keys' #cat ~/.ssh/id_rsa.pub | ssh deployer@144.76.161.235 'cat >> ~/.ssh/authorized_keys'
 
 ssh-add -K
 
