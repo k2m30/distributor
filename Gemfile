@@ -65,6 +65,8 @@ gem 'best_in_place', :git => 'https://github.com/aaronchi/best_in_place.git'
 
 gem 'whenever', :require => false
 
+gem 'dalli'
+
 # Use ActiveModel has_secure_password
 
 # gem 'bcrypt-ruby', '~> 3.0.0'
