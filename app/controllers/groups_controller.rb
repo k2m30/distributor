@@ -25,7 +25,7 @@ class GroupsController < ApplicationController
   # GET /groups/1.json
   def show
     @table =[]
-    @group.sites.order(:name).each do |site|
+    @group.sites.includes(:urls).order(:name).each do |site|
       @table << site.get_row(@group)
     end
   end

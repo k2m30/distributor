@@ -3,7 +3,7 @@ require 'open-uri'
 require 'nokogiri'
 
 class Url < ActiveRecord::Base
-  belongs_to :site
+  belongs_to :site, counter_cache: true
   belongs_to :item
 
   def check_for_violation(standard_price, allowed_error)

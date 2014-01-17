@@ -37,7 +37,10 @@ class Site < ActiveRecord::Base
   end
 
   def get_violating_urls
-    Rails.cache.fetch([self, 'violators']) { self.urls.joins(item: :group).where(violator: true).order('groups.name ASC, items.name ASC') }
+    Rails.cache.fetch([self, 'violators']) {
+      #self.urls.where(violator: true).select("urls.urls, urls.price, groups.name, items.name").order('groups.name ASC, items.name ASC')
+      self.urls.where(violator: true)
+    }
   end
 
   def get_items
@@ -63,7 +66,7 @@ class Site < ActiveRecord::Base
     Rails.cache.fetch([self, group, 'row']) do
       str = []
       urls = self.get_urls
-      group.items.order(:name).includes(:urls).each do |item|
+      group.items.order(:name).each do |item|
         str << (urls & item.urls).first
       end
       str

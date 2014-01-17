@@ -16,6 +16,10 @@ class Item < ActiveRecord::Base
     Rails.cache.fetch([self, 'group_name']) { self.group.name }
   end
 
+  def get_name
+    Rails.cache.fetch([self, 'name']) { self.name }
+  end
+
   def get_urls
     Rails.cache.fetch([self, 'urls']) { self.urls }
   end

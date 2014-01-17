@@ -114,7 +114,7 @@ class SitesController < ApplicationController
   end
 
   def stop_list
-    @groups = current_user.groups.order("name")
+    #@groups = current_user.groups.order("name")
     @sites = Site.joins(:groups).where(violator: true, groups: {'user' => current_user}).uniq.order(:name)
   end
 

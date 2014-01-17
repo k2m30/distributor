@@ -13,7 +13,7 @@
   </tr>
   </thead>
   <tbody>
-  <% @sites.order(:name).each do |site| %>
+  <% @sites.order(:name).includes(:groups).each do |site| %>
       <tr <%= (site.violator?) ? " class=\"error\"".html_safe : '' %>"" >
       <td><%= link_to site.name, site_path(site), class: 'tdfade' %></td>
       <td>

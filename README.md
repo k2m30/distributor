@@ -16,11 +16,39 @@ apt-get -y install curl git-core python-software-properties g++ mc htop memcache
 
 apt-get --purge remove apache*
 
-* change timezone
+* change timezone && set locale
 
 ln -sf /usr/share/zoneinfo/Europe/Minsk /etc/localtime
 
 echo 'Europe/Minsk' >> /etc/timezone
+
+locale-gen ru_RU.UTF-8
+
+* /etc/default/locale
+
+LANG="ru_RU.UTF-8"
+
+LANGUAGE="ru_RU:en"
+
+LC_NUMERIC="ru_RU.UTF-8"
+
+LC_TIME="ru_RU.UTF-8"
+
+LC_MONETARY="ru_RU.UTF-8"
+
+LC_PAPER="ru_RU.UTF-8"
+
+LC_IDENTIFICATION="ru_RU.UTF-8"
+
+LC_NAME="ru_RU.UTF-8"
+
+LC_ADDRESS="ru_RU.UTF-8"
+
+LC_TELEPHONE="ru_RU.UTF-8"
+
+LC_MEASUREMENT="ru_RU.UTF-8"
+
+* -
 
 reboot
 
