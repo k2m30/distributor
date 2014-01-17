@@ -9,7 +9,7 @@ apt-get -y update
 
 apt-get -y upgrade
 
-apt-get -y install curl git-core python-software-properties g++ mc htop
+apt-get -y install curl git-core python-software-properties g++ mc htop memcached
 
 
 * remove apache
