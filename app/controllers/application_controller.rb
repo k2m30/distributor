@@ -45,4 +45,10 @@ class ApplicationController < ActionController::Base
     stop_list_sites_path
   end
 
+  def authorize
+    if current_user.is_admin?
+      Rack::MiniProfiler.authorize_request
+    end
+  end
+
 end
