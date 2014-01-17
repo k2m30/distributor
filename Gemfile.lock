@@ -319,7 +319,7 @@ DEPENDENCIES
   pg
   pg_search
   quiet_assets
-  rack-mini-profiler (~> 0.1.31)
+  rack-mini-profiler
   rails (>= 4.0.2)
   roo
   rspec

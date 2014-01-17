@@ -40,7 +40,7 @@ gem 'rubyzip'#, :require => 'zip/zip'
 gem 'roo'
 
 gem 'axlsx'
-gem 'rack-mini-profiler', '~> 0.1.31'
+gem 'rack-mini-profiler'
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'delayed_job_web'
