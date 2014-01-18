@@ -4,7 +4,8 @@
 
 <div class="accordion" id="accordion_site">
 
-  <% @sites.includes(:urls).each do |site| %>
+  <% @sites.each do |site| %>
+      <% violating_urls = site.get_violating_urls.includes(:item => :group) %>
       <div class="accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_site" href=<%= '#collapse' + site.id.to_s %>>
           <table class="table ">
@@ -13,7 +14,7 @@
             <th class="span2 btn">Товаров -
               <%= site.urls.count %></th>
             <th class="span2 btn">Нарушений -
-              <%= site.urls.where(violator: true).count %></th>
+              <%= violating_urls.count %></th>
           </table>
         </a>
 
@@ -33,7 +34,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <% site.get_violating_urls.includes(:item => :group).each do |url| %>
+                <% violating_urls.each do |url| %>
                 <% standard_price = url.item.get_standard_price  %>
                     <% if !standard_price.nil? %>
                         <tr>

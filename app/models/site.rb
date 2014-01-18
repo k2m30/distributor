@@ -73,6 +73,10 @@ class Site < ActiveRecord::Base
     end
   end
 
+  def self.get_violators(current_user)
+    Site.joins(:groups).where(violator: true, groups: {'user' => current_user}).uniq.order(:name).includes(:urls)
+  end
+
   def update_cache
     self.touch
     self.get_group_name
