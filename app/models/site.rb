@@ -455,10 +455,6 @@ class Site < ActiveRecord::Base
         url = Url.find_by_url(url_str)
       end
 
-      if item_array[0].include?('MTD')
-        true
-      end
-
       if url.nil? || url_str == start_page
         if price == 0
           Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
@@ -487,9 +483,7 @@ class Site < ActiveRecord::Base
       end
     end
 
-    self.urls.where(locked: true).each do |url|
-      url.destroy if !include_locked_url?(result_array, url.url)
-    end
+
 
     logger.warn "------ update_urls DONE ------"
 

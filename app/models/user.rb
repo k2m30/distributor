@@ -25,11 +25,13 @@ class User < ActiveRecord::Base
     if filename.include?('tmp')
       File.delete(filename)
     end
-    Site.all.each {|site| site.touch}
+    Site.all.each { |site| site.touch }
   end
 
   def standard_site_import(filename)
     #site = Site.where(standard: true).first || create_new_standard_site
+    #TODO make several standard sites and check all standard occurences
+
     site = Site.joins(:groups).where(standard: true, groups: {'user' => self}).uniq.first || create_new_standard_site
     spreadsheet = Roo::Excelx.new(filename)
     spreadsheet.sheets.each do |sheet|
@@ -58,7 +60,7 @@ class User < ActiveRecord::Base
     if filename.include?('tmp')
       File.delete(filename)
     end
-    Site.all.each {|site| site.touch}
+    Site.all.each { |site| site.touch }
   end
 
   def shops_file_import(filename)
@@ -75,14 +77,14 @@ class User < ActiveRecord::Base
       end
 
       group.save
-      logger.warn ['----------------------',group.name, group.sites.size]
+      logger.warn ['----------------------', group.name, group.sites.size]
     end
     if filename.include?('tmp')
       File.delete(filename)
     end
-    Site.all.each {|site| site.touch}
-    Item.all.each {|item| item.touch}
-    Group.all.each {|group| group.touch}
+    Site.all.each { |site| site.touch }
+    Item.all.each { |item| item.touch }
+    Group.all.each { |group| group.touch }
   end
 
   private
