@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131123112214) do
+ActiveRecord::Schema.define(version: 20140121001841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,8 @@ ActiveRecord::Schema.define(version: 20131123112214) do
     t.datetime "updated_at"
   end
 
+  add_index "items", ["name"], name: "index_items_on_name", using: :btree
+
   create_table "logs", force: true do |t|
     t.text     "message"
     t.string   "price_found"
@@ -88,6 +90,8 @@ ActiveRecord::Schema.define(version: 20131123112214) do
     t.string   "company_name"
   end
 
+  add_index "sites", ["name"], name: "index_sites_on_name", using: :btree
+
   create_table "urls", force: true do |t|
     t.string   "url"
     t.decimal  "price"
@@ -99,6 +103,11 @@ ActiveRecord::Schema.define(version: 20131123112214) do
     t.decimal  "delta"
     t.boolean  "locked",     default: false
   end
+
+  add_index "urls", ["item_id"], name: "index_urls_on_item_id", using: :btree
+  add_index "urls", ["price"], name: "index_urls_on_price", using: :btree
+  add_index "urls", ["site_id"], name: "index_urls_on_site_id", using: :btree
+  add_index "urls", ["url"], name: "index_urls_on_url", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",    null: false
