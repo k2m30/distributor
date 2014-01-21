@@ -27,9 +27,12 @@ class Item < ActiveRecord::Base
   def get_standard_price
     #Rails.cache.fetch([self, 'standard_price']) do
     #rer
-    url = (self.get_urls & self.group.get_standard_site.urls).first
-    url.nil? ? nil : url.price
-    #end
+    if self.standard_price.nil?
+      url = (self.get_urls & self.group.get_standard_site.urls).first
+      self.standard_price = url.nil? ? nil : url.price
+      self.save
+    end
+    self.standard_price
   end
 
   def get_standard_url

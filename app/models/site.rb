@@ -62,11 +62,11 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def get_row(group)
+  def get_row(group, items)
     Rails.cache.fetch([self, group, 'row']) do
       str = []
       urls = self.get_urls
-      group.items.order(:name).each do |item|
+      items.each do |item|
         str << (urls & item.urls).first
       end
       str
