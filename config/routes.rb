@@ -1,11 +1,11 @@
 Distibutor::Application.routes.draw do
   get "main/index"
-  resources :logs do
+  resources :logs, only: [:index, :destroy] do
     collection do
       get 'clear_log' => 'logs#clear_log'
     end
   end
-  resources :settings do
+  resources :settings, only: [:index, :show, :edit, :update] do
     collection do
       post 'import_preview' => 'settings#import_standard_prices_preview'
       get 'import_standard_prices' => 'settings#import_standard_prices'
@@ -21,13 +21,13 @@ Distibutor::Application.routes.draw do
     end
   end
 
-  resources :items do
+  resources :items, only: [:index, :show] do
     collection do
       get 'refine_items' => 'items#refine_items'
     end
   end
 
-  resources :urls do
+  resources :urls, only: [:index] do
     member do
       get 'upd' => 'urls#update_single_price'
     end
@@ -38,7 +38,7 @@ Distibutor::Application.routes.draw do
     end
   end
 
-  resources :sites do
+  resources :sites, only: [:index, :show, :edit, :update, :new] do
     collection do
       get 'stop_list' => 'sites#stop_list'
       get 'search' => 'sites#search'
@@ -53,7 +53,7 @@ Distibutor::Application.routes.draw do
 
   get '/dj' => DelayedJobWeb, :anchor => false
 
-  resources :groups
+  resources :groups, only: [:show]
 
   devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.

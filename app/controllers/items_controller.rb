@@ -5,9 +5,11 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    @items = Item.all.order(:id)
-
-
+    if current_user.admin?
+      @items = Item.all.order(:id)
+    else
+      @items = Item.joins(:group => :user).where(groups: {user_id: current_user.id}).order(:id)
+    end
   end
 
   # GET /items/1
@@ -66,7 +68,7 @@ class ItemsController < ApplicationController
   end
 	
 	def refine_items
-		items = Item.all
+		items = Item.joins(:group => :user).where(groups: {user_id: current_user.id})
 		items.each do |item|
 			name = item.name.gsub('Е', 'E').gsub('Н', 'H').gsub('О', 'O').gsub('Р', 'P').gsub('А', 'A').gsub('В', 'B').gsub('С', 'C').gsub('М', 'M').gsub('Т', 'T').gsub('К', 'K').gsub('Х', 'X').gsub('/', ' ').gsub('\\', ' ')
 			item.name = name
@@ -77,7 +79,12 @@ class ItemsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_item
-    @item = Item.find(params[:id])
+    if current_user.admin?
+      @item = Item.find(params[:id])
+    else
+      @item = Item.joins(:group => :user).where(groups: {user_id: current_user.id}, id: params[:id]).first
+    end
+    redirect_to root_path, alert: 'Некорректный адрес.' if @item.nil?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

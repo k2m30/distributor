@@ -285,6 +285,7 @@ GEM
     whenever (0.9.0)
       activesupport (>= 2.3.4)
       chronic (>= 0.6.3)
+    will_paginate (3.0.5)
     xpath (2.0.0)
       nokogiri (~> 1.3)
     zip-zip (0.2)
@@ -335,4 +336,5 @@ DEPENDENCIES
   unicorn
   watir-webdriver
   whenever
+  will_paginate (~> 3.0)
   zip-zip

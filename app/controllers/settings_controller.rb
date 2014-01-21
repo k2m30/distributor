@@ -208,8 +208,12 @@ class SettingsController < ApplicationController
 
   private
   def set_setting
-    @setting = Settings.find(params[:id])
-
+    if current_user.admin?
+      @setting = Settings.find(params[:id])
+    else
+      @setting = Settings.joins(:group => :user).where(groups: {user_id: current_user.id}, id: params[:id]).readonly(false).first
+    end
+    redirect_to root_path, alert: 'Некорректный адрес.' if @setting.nil?
   end
 
   def setting_params

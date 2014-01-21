@@ -51,6 +51,8 @@ class User < ActiveRecord::Base
         price = row['price']
         if !item.nil? && !site.nil?
           set_price(item, site, price)
+          item.standard_price = price
+          item.save
         end
       end
       group.settings.last_updated = Time.now

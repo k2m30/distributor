@@ -65,7 +65,7 @@ class SitesController < ApplicationController
 
 
   def index
-    @sites = Site.joins(:groups).where(groups: {'user' => current_user}).uniq.order(:name)
+    @sites = current_user.admin? ? Site.all.order(:name) : Site.joins(:groups).where(groups: {'user' => current_user}).uniq.order(:name)
   end
 
   def show
@@ -120,7 +120,8 @@ class SitesController < ApplicationController
   private
 # Use callbacks to share common setup or constraints between actions.
   def set_site
-    @site = Site.joins(:groups).where(id: params[:id], groups: {'user' => current_user}).readonly(false).uniq.first
+    @site = current_user.admin? ? Site.find(params[:id]) : Site.joins(:groups).where(id: params[:id], groups: {'user' => current_user}).readonly(false).uniq.first
+    redirect_to root_path if @site.nil?
   end
 
 # Never trust parameters from the scary internet, only allow the white list through.

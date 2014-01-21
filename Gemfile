@@ -68,6 +68,8 @@ gem 'whenever', :require => false
 
 gem 'dalli'
 
+gem 'will_paginate', '~> 3.0'
+
 # Use ActiveModel has_secure_password
 
 # gem 'bcrypt-ruby', '~> 3.0.0'

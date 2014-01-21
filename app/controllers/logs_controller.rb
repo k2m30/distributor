@@ -1,3 +1,5 @@
+#TODO delete logs instance +db +schema + controller, model, view (?)
+
 class LogsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_log, only: [:show, :edit, :update, :destroy]
@@ -5,8 +7,8 @@ class LogsController < ApplicationController
   # GET /logs
   # GET /logs.json
   def index
-    @logs = Log.where(ok: false).order('created_at DESC')
-    #@logs = Log.all.order('created_at DESC')
+    #@logs = Log.where(ok: false).order('created_at DESC')
+    @logs = Log.all.order('created_at DESC')
   end
 
   def raw
@@ -28,7 +30,7 @@ class LogsController < ApplicationController
   end
 
   def clear_log
-    Log.delete_all
+    Log.destroy_all
     redirect_to logs_path
   end
 
