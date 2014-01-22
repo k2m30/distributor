@@ -1,10 +1,12 @@
 Distibutor::Application.routes.draw do
   get "main/index"
+
   resources :logs, only: [:index, :destroy] do
     collection do
       get 'clear_log' => 'logs#clear_log'
     end
   end
+
   resources :settings, only: [:index, :show, :edit, :update] do
     collection do
       post 'import_preview' => 'settings#import_standard_prices_preview'

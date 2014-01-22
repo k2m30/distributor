@@ -28,10 +28,12 @@
           <% if user_signed_in? %>
               <li class="divider-vertical"></li>
               <%- groups = current_user.admin? ? Group.all.order(:name) : current_user.groups.order(:name) %>
-              <%# current_user.groups.each do |group|  %>
               <% groups.each do |group| %>
-
-                  <li class=<%= 'active' if current_page?(controller: 'groups', action: 'show', id: group.id) %>><%= link_to group.name, group_path(group) %></li>
+                  <%- class_name = 'group' %>
+                  <% if current_page?(controller: 'groups', action: 'show', id: group.id) %>
+                      <%- class_name = class_name + ' active' %>
+                  <% end %>
+                  <li class=<%= class_name %>><%= link_to group.name, group_path(group) %></li>
 
               <% end %>
               <li class="divider-vertical"></li>

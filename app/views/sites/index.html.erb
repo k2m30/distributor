@@ -17,7 +17,8 @@
       <tr <%= (site.violator?) ? " class=\"error\"".html_safe : '' %>"" >
       <td><%= link_to site.name, site_path(site), class: 'tdfade' %></td>
       <td>
-        <% (site.groups & current_user.groups).each do |group| %>
+        <%- groups = current_user.admin? ? site.groups : site.groups & current_user.groups %>
+        <% groups.each do |group| %>
             <%= group.name %>
         <% end %></td>
       <td><%= site.company_name %></td>

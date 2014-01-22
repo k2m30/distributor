@@ -2,7 +2,7 @@ require 'roo'
 require 'rspec/expectations'
 
 Given(/^user is ydachnik$/) do
-  @user = User.create!(username: 'ydachnik', email: 'office@ydachnik.by', password: '123QWEasd')
+  @user = User.find_by_username('ydachnik') || User.create!(username: 'ydachnik', email: 'office@ydachnik.by', password: '123QWEasd')
 end
 
 And(/^no sites exist$/) do

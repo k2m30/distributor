@@ -1,4 +1,4 @@
-@scenario
+@scenario @db_clean
 Feature: import
   As user
   I want to import and reimport my data files
