@@ -1,3 +1,4 @@
+@no_db_clean
 Feature: update prices
   As user
   I want my sites update prices successfully
@@ -5,13 +6,13 @@ Feature: update prices
 
   @outline
   Scenario Outline: user starts updating prices
-    Given user is test_user
+    Given real sites are imported
     When my <site> updates
     Then it is updated properly
   Examples:
     | site               |
-#    | 21vek.by           |
-    | 24real.by          |
+    | 21vek.by           |
+#    | 24real.by          |
 #    | 24shop.by          |
 #    | 360.shop.by        |
 #    | 50.by              |

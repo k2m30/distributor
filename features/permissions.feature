@@ -11,6 +11,7 @@ Feature: Permissions
     Given test_user credentials
     And user logs in
 
+######Group
     When user visits groups controller pages with name = KARCHER that belong to test_user
     Then he can see show page(s)
     But he cannot see index, new, edit page(s)
@@ -23,6 +24,24 @@ Feature: Permissions
     When user visits groups controller pages with name = KARCHER that belong to test_admin
     Then he cannot see index, show, new, edit page(s)
 
+######Site
+    When user visits sites controller pages with name = test_site1 that belong to test_user
+    Then he can see index, show, edit, new page(s)
+
+    When user visits index page
+    Then he should see text test_site1
+    But he should not see text test_site6
+
+######Item
+    When user visits items controller pages with name = MTD_2 that belong to test_user
+    Then he can see index page(s)
+    But he cannot see show, new, edit page(s)
+
+    When user visits index page
+    Then he should see text MTD_10
+    But he should not see text test_item1
+
+
   Scenario: admin logs in and visits pages
     Given test_admin credentials
     And user logs in
@@ -34,15 +53,7 @@ Feature: Permissions
     When user visits show page
     Then he should see text test_site1
     And he should see text test_site6
-    And he sees 6 elements with css = '.group'
+    And he sees 9 elements with css = '.group'
 
     When user visits groups controller pages with name = KARCHER that belong to test_user
     Then he can see show page(s)
-
-
-
-#  Scenario: admin logs in
-#    Given admin credentials
-#    When user visits group controller pages
-#    Then he can see only show page
-#    But he cannot see index, new, create, show, edit, update, destroy pages

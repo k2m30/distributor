@@ -9,20 +9,30 @@ When(/^user visits (.*) controller pages with name = (.+) that belong to (.*)/) 
   #PATCH/PUT	/admin/posts/:id	      update	  admin_post_path(:id)
   #DELETE	    /admin/posts/:id	      destroy 	admin_post_path(:id)
 
-  id = User.find_by_username(username).groups.find_by_name(name).id
+  id = get_id(controller, name, username)
   @pages = get_paths_hash(controller, id)
 
   @current_controller = controller
   @results = Hash.new
 
   @pages.keys.each do |p|
-    begin
       visit @pages[p]
       @results[p] = !(page.text.downcase.include?('error') || current_path == root_path || page.text.downcase.include?('couldn'))
-    rescue => e
-      p e.inspect
-    end
   end
+end
+
+def get_id(controller, name, username)
+  case controller
+    when 'groups'
+      User.find_by_username(username).groups.find_by_name(name).id
+    when 'sites'
+      Site.find_by_name(name).id
+    when 'items'
+      Item.joins(:group => :user).where(name: name, groups: {'user_id'=> User.find_by_username(username).id}).first.id
+    else
+      2
+  end
+
 end
 
 def get_paths_hash(controller, id)
@@ -35,11 +45,11 @@ end
 But(/^he (.*) see (.*) page\(s\)$/) do |action, pages|
   pages.gsub(' ', '').split(',').each do |p|
     begin
-      @results[p].should == expected_value(action)
-    rescue RSpec::Expectations::ExpectationNotMetError => e
-      visit @pages[p]
-      p page.text
-      raise StandardError, 'User: ' + @username + '. '+ @pages[p] + '. ' + e.message
+      expect(@results[p]).to be(expected_value(action)), "#{@username} |  #{@pages[p]} | expected #{expected_value(action)} , got #{@results[p].to_s} "
+    #rescue RSpec::Expectations::ExpectationNotMetError => e
+      #visit @pages[p]
+      #p page.text
+      #raise StandardError, "#{@username} |  #{@pages[p]} | #{e.message} "
     end
 
   end
@@ -56,7 +66,6 @@ And(/^user logs in$/) do
   fill_in 'user[password]', :with => @password
 
   click_on 'form_submit'
-  expect(page).to have_content 'Стоп лист'
 end
 
 Given(/^(.*) credentials$/) do |user|
@@ -78,4 +87,20 @@ end
 
 Then(/^he should see text (.*)$/) do |text|
   expect(page).to have_content text
+end
+
+And(/^test_data import is done$/) do
+  @test_user = User.find_by_username('test_user')
+
+  if @test_user.nil?
+    @test_user = User.create(username: 'test_user', email: 'user@test.by', password: '123QWEasd')
+    @test_user.all_sites_import('./import/test_data/test_user/all_sites.xlsx')
+    @test_user.standard_site_import('./import/test_data/test_user/standard.xlsx')
+    @test_user.shops_file_import('./import/test_data/test_user/shops.xlsx')
+
+    @test_admin = User.create(username: 'test_admin', email: 'admin@test.by', password: '123QWEasd', admin: true)
+    @test_admin.standard_site_import('./import/test_data/test_admin/standard.xlsx')
+    @test_admin.shops_file_import('./import/test_data/test_admin/shops.xlsx')
+  end
+
 end
