@@ -90,7 +90,7 @@ class Site < ActiveRecord::Base
       item.get_urls
     end
     self.groups.each do |group|
-      self.get_row(group)
+      self.get_row(group, group.items.order(:name).to_a)
     end
     logger.warn '------ cache is updated ------'
   end
