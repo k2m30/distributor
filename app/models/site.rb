@@ -436,10 +436,24 @@ class Site < ActiveRecord::Base
 
   def update_urls(result_array)
     items = []
+    p "******************"
+    user_array = User.all
+    p self.name
+    site_groups=self.groups
+    puts site_groups.inspect
+
+    user_array.each do |user|
+      puts user.username
+      user_groups=user.groups
+      puts groups.inspect
+      result_groups= site_groups&user_groups
+      p result_groups.inspect
+    end
+
     self.groups.each do |group|
       items+=group.items
     end
-
+    p "******************"
     self.urls.where(locked: false).destroy_all
     items = items.sort_by { |item| item.name.size }
     items = items.reverse
