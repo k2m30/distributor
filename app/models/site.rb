@@ -117,11 +117,11 @@ class Site < ActiveRecord::Base
 
       self.check_for_violation
 
-    rescue => e
-      logger.error 'Method update_prices' + e.inspect
-      Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
-      self.update_cache
-      #  return [[], [], []]
+    #rescue => e
+    #  logger.error 'Method update_prices' + e.inspect
+    #  Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
+    #  self.update_cache
+    #  #  return [[], [], []]
     end
     self.update_cache
     logger.warn '------ finished update_price ----- ' + self.name
@@ -435,68 +435,96 @@ class Site < ActiveRecord::Base
   #функция парсинга сайта
 
   def update_urls(result_array)
-    items = []
-    p "******************"
+    self.urls.where(locked: false).destroy_all
+
+    puts "******************"
     user_array = User.all
-    p self.name
+    puts "Групы сайта " + self.name
     site_groups=self.groups
+    puts "Кол-во " + site_groups.count.to_s
     puts site_groups.inspect
 
+
     user_array.each do |user|
-      puts user.username
-      user_groups=user.groups
-      puts groups.inspect
-      result_groups= site_groups&user_groups
-      p result_groups.inspect
-    end
+      result_groups = []
+      site_groups.each do |group|
+        puts "group.user_id = " + group.user_id.to_s
+        puts "user.id = " + user.id.to_s
+        if group.user_id == user.id
+          result_groups << group
+        end
+      end
+      puts "Групы сайта для этого юзера"
+      puts "Кол-во " + result_groups.count.to_s
+      puts result_groups.inspect
 
-    self.groups.each do |group|
-      items+=group.items
-    end
-    p "******************"
-    self.urls.where(locked: false).destroy_all
-    items = items.sort_by { |item| item.name.size }
-    items = items.reverse
 
-    start_page = "http://" + self.name
+      items = []
+      result_groups.each do |group|
+        items += Item.joins(:group => :user).where(groups: {name: group.name}, users: {username: user.username})
+      end
+      puts "кол-во items у этого юзера = " + items.count.to_s
 
-    result_array.each do |item_array|
-      url_str = item_array[1]
-      price = item_array[2]
-      price = price.to_f < items[0].group.settings.rate ? price.to_f*items[0].group.settings.rate : price.to_f
+      items = items.sort_by { |item| item.name.size }
+      items = items.reverse
 
-      if url_str != start_page #проверка на нормальность ссылки
-        url = Url.find_by_url(url_str)
+      p "items site " + user.username
+      p "result_array count " + result_array.count.to_s
+      puts items
+
+      result_urls = []
+      start_page = "http://" + self.name
+      items.each do |item|
+        result_urls+=Url.where("item_id = ?", item.id)
       end
 
-      if url.nil? || url_str == start_page
-        if price == 0
-          Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
-                      log_type: "No price", site_id: self.id)
-          next
+      result_array.each do |item_array|
+        url_str = item_array[1]
+        price = item_array[2]
+        price = price.to_f < items[0].group.settings.rate ? price.to_f*items[0].group.settings.rate : price.to_f
+
+        #if url_str != start_page #проверка на нормальность ссылки
+        #  url = result_url.find_by_url(url_str)                  старый вариант
+        #end
+
+        url = nil
+        if url_str != start_page #проверка на нормальность ссылки
+          result_urls.each do |result_url|
+            if result_url.url == url_str
+              url = result_url
+              break
+            end
+          end
         end
 
-        item = find_item(item_array[0], price, items)
-        if item.nil?
-          Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
+        if url.nil? || url_str == start_page
+          if price == 0
+            Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
+                        log_type: "No price", site_id: self.id)
+            next
+          end
+
+          item = find_item(item_array[0], price, items)
+          if item.nil?
+            Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
                       log_type: "Item not found", site_id: self.id)
-          next
+            next
+          end
+
+          items.delete(item)
+          update_url(price, url_str, item)
+          p "OK " + item.name
+          Log.create!(message: item_array.to_s, price_found: price, name_found: item.name,
+                      log_type: "OK", site_id: self.id)
+        else
+          items.delete(url.item)
+          url.price = price
+          url.save if url.changed?
+          Log.create!(message: item_array.to_s, price_found: price, name_found: url.item.name,
+                      log_type: "OK found in DB", site_id: self.id)
         end
-
-        items.delete(item)
-        update_url(price, url_str, item)
-
-        Log.create!(message: item_array.to_s, price_found: price, name_found: item.name,
-                    log_type: "OK", site_id: self.id)
-      else
-        items.delete(url.item)
-        url.price = price
-        url.save if url.changed?
-        Log.create!(message: item_array.to_s, price_found: price, name_found: url.item.name,
-                    log_type: "OK found in DB", site_id: self.id)
       end
     end
-
 
 
     logger.warn "------ update_urls DONE ------"
