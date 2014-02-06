@@ -6,6 +6,7 @@ development:
   pool: 5
   username: distributor
   password: 12345678
+  port: 5432
 test: &test
   adapter: postgresql
   encoding: unicode
