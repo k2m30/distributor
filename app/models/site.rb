@@ -472,6 +472,8 @@ class Site < ActiveRecord::Base
       p "result_array count " + result_array.count.to_s
       puts items
 
+      #Можно удалить эту строчку
+
       result_urls = []
       start_page = "http://" + self.name
       items.each do |item|
