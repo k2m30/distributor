@@ -435,7 +435,7 @@ class Site < ActiveRecord::Base
   #функция парсинга сайта
 
   def update_urls(result_array)
-    self.urls.where(locked: false).destroy_all
+    self.urls.destroy_all
 
     puts "******************"
     user_array = User.all
@@ -461,7 +461,7 @@ class Site < ActiveRecord::Base
 
       items = []
       result_groups.each do |group|
-        items += Item.joins(:group => :user).where(groups: {name: group.name}, users: {username: user.username})
+        items += Item.joins(:group => :user).where(groups: {name: group.name}, users: {username: user.username}).readonly(false)
       end
       puts "кол-во items у этого юзера = " + items.count.to_s
 
