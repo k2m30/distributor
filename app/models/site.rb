@@ -127,38 +127,6 @@ class Site < ActiveRecord::Base
     logger.warn '------ finished update_price ----- ' + self.name
   end
 
-  def update_prices_from_file
-    name = "name"
-    search_url = "search_url"
-    css_item = "css_item"
-    css_price = "css_price"
-    css_pagination = "css_pagination"
-
-    file = RubyXL::Parser.parse("all_sites.xlsx")
-    table_sites = file[0].get_table([name, search_url, css_item, css_price, css_pagination])
-    table_sites.values[0].each do |hash|
-      if !hash.empty? #проверка на наличие исходных данных
-        logger.warn "-----------data file:-----------"
-        url_site_array = hash[search_url]
-        url_site_array = url_site_array.gsub("amp;", "") #удаление текстового обозначения &
-        array = url_site_array.split(/[,]+/)
-        url_site_array = array
-        css_name = hash[css_item]
-        css_p = hash[css_price]
-        css_page = hash[css_pagination]
-        css_page = "" if css_page.nil? #проверка на отсутствие css пагинации
-        css_page = css_page.gsub("amp;", "") #удаление текстового обозначения &
-        logger.warn array
-        logger.warn css_name
-        logger.warn css_p
-        logger.warn css_page
-        parsing_site_method2(url_site_array, css_name, css_p, css_page)
-      end #проверка на наличие исходных данных
-    end
-  end
-
-  #парсинг с исходными данными из файла
-
   def check_link(url, start_url) #исправление относительной ссылки
     begin
       site_name = start_url.scan(/(?:[-a-z_\d])+.(?:[-a-z])*(?:\.[a-z]{2,4})+/).first
@@ -193,30 +161,6 @@ class Site < ActiveRecord::Base
   end
 
   #исправление относительной ссылки
-
-  def save_file(site_name, result_array=[]) #сохранение таблицы в файл xlsx
-    begin
-      file = Axlsx::Package.new
-
-      file.workbook.add_worksheet(:name => "1") do |sheet|
-        sheet.add_row ["NAME", "URL", "PRICE"]
-
-        result_array.each do |product|
-          sheet.add_row [product[0], product[1], product[2]]
-        end
-
-      end
-
-      file.serialize(site_name + ".xlsx")
-      logger.warn "-----------save file: " + site_name + ".xlsx -------------"
-
-    rescue => e
-      logger.error "error save file" + site_name + ".xlsx"
-      logger.error e.inspect
-    end
-  end
-
-  #сохранение таблицы в файл xlsx
 
   def clear_result_array(result_array)
     begin
@@ -471,8 +415,6 @@ class Site < ActiveRecord::Base
       p "items site " + user.username
       p "result_array count " + result_array.count.to_s
       puts items
-
-      #Можно удалить эту строчку
 
       result_urls = []
       start_page = "http://" + self.name
