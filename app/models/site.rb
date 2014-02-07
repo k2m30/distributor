@@ -7,7 +7,8 @@ require 'nokogiri'
 require 'open-uri'
 require 'headless'
 
-class NotLoadedYetError < StandardError ; end
+class NotLoadedYetError < StandardError;
+end
 
 class Site < ActiveRecord::Base
   has_many :urls
@@ -20,20 +21,6 @@ class Site < ActiveRecord::Base
     self.violator = urls.empty? ? false : true
     self.save
     p [self.name, 'violators - ', urls.size]
-    #if !urls.empty?
-    #  self.violator = true
-    #  if self.out_of_ban_time.nil? || (Time.now > self.out_of_ban_time) #no ban before, or violator with ban time expired
-    #    self.out_of_ban_time = Time.now + 1.days
-    #  end
-    #else
-    #  if !self.out_of_ban_time.nil? && (Time.now > self.out_of_ban_time) #ban expired, no violations
-    #    self.violator = false
-    #    self.out_of_ban_time = nil
-    #  end
-    #end
-    #if self.changed?
-    #  self.save
-    #end
   end
 
   def get_violating_urls
@@ -48,11 +35,7 @@ class Site < ActiveRecord::Base
   end
 
   def get_urls
-    Rails.cache.fetch([self, 'urls']) { self.urls }
-  end
-
-  def get_group_name
-    Rails.cache.fetch([self, 'group_name']) { self.groups[0].name }
+    Rails.cache.fetch([self, 'urls']) { urls.where.not(url: nil)}
   end
 
   def find_violating_urls(group)
@@ -69,20 +52,24 @@ class Site < ActiveRecord::Base
       items.each do |item|
         str << (urls & item.urls).first
       end
+      #p 'cache str' << str
       str
     end
   end
 
   def self.get_violators(current_user)
-    Site.joins(:groups).where(violator: true, groups: {'user' => current_user}).uniq.order(:name).includes(:urls)
+    #Site.joins(:groups).where(violator: true, groups: {'user' => current_user}).uniq.order(:name).includes(:urls)
+    #Site.joins(:urls).where(violator: true).uniq.joins(:groups).where(groups: {'user' => current_user} ).order(:name)
+    ids = Url.joins(item: {group: :user}).where(items: {group_id: current_user.groups.map(&:id)}).where(violator: true).map(&:site_id).uniq
+    Site.where(id: ids)
   end
 
   def update_cache
     self.touch
-    self.get_group_name
     self.get_items
     self.get_urls
-    self.get_violating_urls
+    get_urls
+    self.get_violating_urls.size
     self.items.each do |item|
       item.get_standard_price
       item.get_standard_url
@@ -117,11 +104,11 @@ class Site < ActiveRecord::Base
 
       self.check_for_violation
 
-    #rescue => e
-    #  logger.error 'Method update_prices' + e.inspect
-    #  Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
-    #  self.update_cache
-    #  #  return [[], [], []]
+      rescue => e
+        logger.error 'Method update_prices' + e.inspect
+        Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
+        self.update_cache
+        return [[], [], []]
     end
     self.update_cache
     logger.warn '------ finished update_price ----- ' + self.name
@@ -225,25 +212,6 @@ class Site < ActiveRecord::Base
       profile['permissions.default.image']=2
       browser = Watir::Browser.new :ff, :profile => profile
 
-      #self.search_url.split(/[,]+/).each do |site_url|
-      #  browser.goto site_url
-      #  browser.wait
-      #  begin
-      #    items = browser.elements(:css => self.css_item)
-      #    prices = browser.elements(:css => self.css_price)
-      #    last_url = browser.url
-      #
-      #    items.to_a.each_index do |index|
-      #      result_array << [items[index].text, items[index].attribute_value("href"), prices[index].text]
-      #    end
-      #    if browser.element(:css => css_page).exists?
-      #      browser.element(:css => css_page).click
-      #      browser.wait
-      #    end
-      #  end while browser.element(:css => css_page).exists? && last_url != browser.url
-      #
-      #end
-
       self.search_url.split(/[,]+/).each do |site_url|
         browser.goto site_url
         begin #external exception
@@ -262,7 +230,7 @@ class Site < ActiveRecord::Base
               browser.wait
             rescue Selenium::WebDriver::Error::StaleElementReferenceError => e
               p e.inspect
-            rescue NotLoadedYetError =>e
+            rescue NotLoadedYetError => e
               p e.inspect
             end # internal exception
 
@@ -340,12 +308,6 @@ class Site < ActiveRecord::Base
               str = check_link(product["href"], start_page)
             end
 
-            #str = check_link(product["href"], start_page)
-            #
-            #if str.nil? #проверка на наличие ссылки в css_item
-            #  str = start_page #вставляет стартовую страницу
-            #end
-
             if start_page == "http://ydachnik.by" #затычка для ydachnik.by
               str = str.gsub("http://ydachnik.by", "http://ydachnik.by/catalog")
             end #затычка для ydachnik.by
@@ -381,65 +343,38 @@ class Site < ActiveRecord::Base
   def update_urls(result_array)
     self.urls.destroy_all
 
-    puts "******************"
     user_array = User.all
-    puts "Групы сайта " + self.name
     site_groups=self.groups
-    puts "Кол-во " + site_groups.count.to_s
-    puts site_groups.inspect
-
 
     user_array.each do |user|
       result_groups = []
       site_groups.each do |group|
-        puts "group.user_id = " + group.user_id.to_s
-        puts "user.id = " + user.id.to_s
         if group.user_id == user.id
           result_groups << group
         end
       end
-      puts "Групы сайта для этого юзера"
-      puts "Кол-во " + result_groups.count.to_s
-      puts result_groups.inspect
-
 
       items = []
       result_groups.each do |group|
         items += Item.joins(:group => :user).where(groups: {name: group.name}, users: {username: user.username}).readonly(false)
       end
-      puts "кол-во items у этого юзера = " + items.count.to_s
 
       items = items.sort_by { |item| item.name.size }
       items = items.reverse
 
-      p "items site " + user.username
-      p "result_array count " + result_array.count.to_s
-      puts items
-
       result_urls = []
       start_page = "http://" + self.name
-      items.each do |item|
-        result_urls+=Url.where("item_id = ?", item.id)
-      end
+      result_urls = Url.joins(item: {group: :user}).where(items: {group_id: user.groups.map(&:id)})
 
       result_array.each do |item_array|
         url_str = item_array[1]
         price = item_array[2]
         price = price.to_f < items[0].group.settings.rate ? price.to_f*items[0].group.settings.rate : price.to_f
 
-        #if url_str != start_page #проверка на нормальность ссылки
-        #  url = result_url.find_by_url(url_str)                  старый вариант
-        #end
-
-        url = nil
         if url_str != start_page #проверка на нормальность ссылки
-          result_urls.each do |result_url|
-            if result_url.url == url_str
-              url = result_url
-              break
-            end
-          end
+          url = result_urls.where(url: url_str).first
         end
+
 
         if url.nil? || url_str == start_page
           if price == 0
@@ -451,7 +386,7 @@ class Site < ActiveRecord::Base
           item = find_item(item_array[0], price, items)
           if item.nil?
             Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
-                      log_type: "Item not found", site_id: self.id)
+                        log_type: "Item not found", site_id: self.id)
             next
           end
 
@@ -474,13 +409,6 @@ class Site < ActiveRecord::Base
     logger.warn "------ update_urls DONE ------"
 
     self.save
-  end
-
-  def include_locked_url?(result_array, url)
-    result_array.each do |item_array|
-      return true if item_array[1]==url
-    end
-    false
   end
 
   def find_item(text, price, items)
@@ -559,5 +487,3 @@ class Site < ActiveRecord::Base
     result_array
   end
 end
-
-

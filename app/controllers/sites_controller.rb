@@ -69,7 +69,7 @@ class SitesController < ApplicationController
   end
 
   def show
-    @urls = @site.urls.joins(item: :group).order('groups.name ASC, items.name ASC')
+    @urls = @site.urls.joins(item: {group: :user}).where(items: {group_id: current_user.groups.map(&:id)}).order('groups.name ASC, items.name ASC')
   end
 
   def new
