@@ -43,8 +43,6 @@ class SitesController < ApplicationController
         next if item.nil?
 
         url = @site.update_url(log.price_found, log.message.split(", ")[1].gsub("\"", ""), item)
-        #url.locked = true
-        #url.save
       else
         item = Item.find_by_name(log.name_found)
         next if item.nil?
@@ -54,13 +52,9 @@ class SitesController < ApplicationController
         url.item = item
         url.locked = true
         url.save
-
       end
-
     end
-
     redirect_to site_path(@site)
-
   end
 
 
