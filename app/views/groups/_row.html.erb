@@ -1,0 +1,7 @@
+<% @items.count.times do |item_index| %>
+    <%- url = @table[site_index][item_index] %>
+    <%- link_class = (url.nil? || !url.violator?) ? 'muted' : 'text-error' %>
+    <td class="num">
+      <%= url.nil? ? '-' : link_to(spaces(url.price), url.url, class: link_class, target: '_blank') %>
+    </td>
+<% end %>

@@ -60,8 +60,8 @@ class Site < ActiveRecord::Base
   def self.get_violators(current_user)
     #Site.joins(:groups).where(violator: true, groups: {'user' => current_user}).uniq.order(:name).includes(:urls)
     #Site.joins(:urls).where(violator: true).uniq.joins(:groups).where(groups: {'user' => current_user} ).order(:name)
-    ids = Url.joins(item: {group: :user}).where(items: {group_id: current_user.groups.map(&:id)}).where(violator: true).map(&:site_id).uniq
-    Site.where(id: ids)
+    ids = Url.joins(item: {group: :user}).where(violator: true).where(items: {group_id: current_user.groups.map(&:id)}).map(&:site_id).uniq
+    Site.where(id: ids).includes(:urls).order(:name)
   end
 
   def update_cache

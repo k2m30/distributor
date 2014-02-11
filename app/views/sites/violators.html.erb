@@ -1,0 +1,18 @@
+<% @violating_urls.each do |url| %>
+    <% standard_price = url.item.get_standard_price %>
+    <% if !standard_price.nil? %>
+        <tr>
+          <td><%= url.item.get_group_name %></td>
+          <td><%= url.item.get_name %></td>
+          <td class="num"><%= link_to spaces(url.price), url.url, target: '_blank' %></td>
+          <td class="num"><%= spaces(standard_price) %></td>
+          <td class="num"><%= spaces(standard_price - url.price) %></td>
+          <td class="num"><%= '%.1f' % ((standard_price/url.price - 1)*100) %>
+            %
+          </td>
+        </tr>
+    <% end %>
+<% end %>
+<%= javascript_tag do %>
+    $( ".site<%= @site.id %>" ).text("Нарушений - <%= @violating_urls.count %>");
+<% end %>

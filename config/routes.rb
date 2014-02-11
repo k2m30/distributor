@@ -49,6 +49,7 @@ Distibutor::Application.routes.draw do
     member do
       get 'logs' => 'sites#logs'
       get 'logs_submit' => 'sites#logs_submit'
+      get 'violators'
     end
 
   end

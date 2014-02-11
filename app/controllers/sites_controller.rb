@@ -4,8 +4,13 @@ require 'axlsx'
 
 class SitesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_site, only: [:show, :edit, :update, :destroy, :logs, :logs_submit]
+  before_action :set_site, only: [:show, :edit, :update, :destroy, :logs, :logs_submit, :violators]
 
+
+  def violators
+    @violating_urls = @site.get_violating_urls.includes(item: :group).order('groups.name ASC, items.name ASC')
+    render action: "violators", layout: nil
+  end
 
   def logs
     @logs = @site.logs.order(:message)

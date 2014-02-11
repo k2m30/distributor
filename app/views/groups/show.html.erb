@@ -12,13 +12,7 @@
   <% @sites.each_with_index do |site, site_index| %>
       <tr <%= (site.standard?) ? " class=\"success\"".html_safe : '' %>>
         <td><%= site.name %></td>
-        <% @items.count.times do |item_index| %>
-            <%- url = @table[site_index][item_index] %>
-            <%- link_class = (url.nil? || !url.violator?) ? 'muted' : 'text-error' %>
-            <td style="white-space: nowrap; text-align: right">
-              <%= url.nil? ? '-' : link_to(spaces(url.price), url.url, class: link_class, target: '_blank') %>
-            </td>
-        <% end %>
+        <%= render 'groups/row', {site_index: site_index} %>
       </tr>
   <% end %>
 
