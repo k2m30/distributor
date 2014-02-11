@@ -48,7 +48,7 @@ class Site < ActiveRecord::Base
   def get_row(group, items)
     Rails.cache.fetch([self, group, 'row']) do
       str = []
-      urls = self.get_urls
+      urls = self.get_urls.select(:price, :url)
       items.each do |item|
         str << (urls & item.urls).first
       end

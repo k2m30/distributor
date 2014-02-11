@@ -9,10 +9,10 @@
       </th>
   <% end %>
 
-  <% @sites.each_with_index do |site, site_index| %>
-      <tr <%= (site.standard?) ? " class=\"success\"".html_safe : '' %>>
-        <td><%= site.name %></td>
-        <%= render 'groups/row', {site_index: site_index} %>
+  <% @sites.each do |site| %>
+      <tr class=<%= 'success' if site.standard? %> >
+        <td id="site<%= site.id %>"><%= site.name %></td>
+        <%= render 'groups/row', {site: site} %>
       </tr>
   <% end %>
 

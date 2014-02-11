@@ -24,12 +24,8 @@ class GroupsController < ApplicationController
   # GET /groups/1
   # GET /groups/1.json
   def show
-    @table =[]
-    @items = @group.items.order(:name).to_a
-    @sites = @group.sites.order(:name).to_a
-    @sites.each do |site|
-      @table << site.get_row(@group, @items)
-    end
+    @items = @group.items.order(:name)
+    @sites = @group.sites.order(:name)
   end
 
   # GET /groups/new
