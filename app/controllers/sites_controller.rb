@@ -4,13 +4,11 @@ require 'axlsx'
 
 class SitesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_site, only: [:show, :edit, :update, :destroy, :logs, :logs_submit, :violators, :row]
+  before_action :set_site, only: [:show, :edit, :update, :destroy, :logs, :logs_submit, :violators]
 
 
   def row
-    group = Group.find(params[:group])
-    items = group.items.order(:name)
-    @urls = @site.get_row(group, items)
+    @urls = Site.get_row(params[:id], params[:group])
     render action: "row", layout: nil
   end
   def violators

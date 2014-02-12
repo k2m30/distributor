@@ -35,7 +35,8 @@ class Site < ActiveRecord::Base
   end
 
   def get_urls
-    Rails.cache.fetch([self, 'urls']) { urls.where.not(url: nil)}
+    #Rails.cache.fetch([self, 'urls']) { self.urls }
+    self.urls
   end
 
   def find_violating_urls(group)
@@ -45,15 +46,25 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def get_row(group, items)
-    Rails.cache.fetch([self, group, 'row']) do
-      str = []
-      urls = self.get_urls.select(:price, :url)
-      items.each do |item|
-        str << (urls & item.urls).first
+  #def get_row(group, items)
+  #  #Rails.cache.fetch([self, group, 'row']) do
+  #    str = []
+  #    _urls = self.get_urls
+  #    group.items.order(:name).includes(:urls).each do |item|
+  #      str << (_urls & item.urls).first
+  #    end
+  #    str
+  #  #end
+  #end
+
+  def self.get_row(site_id, group_id)
+    Rails.cache.fetch([self, group_id, 'row']) do
+      row = []
+      site_urls = Url.where(site_id: site_id).to_a
+      Item.where(group_id: group_id).order(:name).includes(:urls).each do |item|
+        row << (site_urls & item.urls.to_a).first
       end
-      #p 'cache str' << str
-      str
+      return row
     end
   end
 
@@ -68,7 +79,7 @@ class Site < ActiveRecord::Base
     self.touch
     self.get_items
     self.get_urls
-    get_urls
+    self.get_urls
     self.get_violating_urls.size
     self.items.each do |item|
       item.get_standard_price
@@ -77,7 +88,8 @@ class Site < ActiveRecord::Base
       item.get_urls
     end
     self.groups.each do |group|
-      self.get_row(group, group.items.order(:name).to_a)
+      group.touch
+      Site.get_row(self.id, group.id)
     end
     logger.warn '------ cache is updated ------'
   end
@@ -104,11 +116,11 @@ class Site < ActiveRecord::Base
 
       self.check_for_violation
 
-      rescue => e
-        logger.error 'Method update_prices' + e.inspect
-        Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
-        self.update_cache
-        return [[], [], []]
+    rescue => e
+      logger.error 'Method update_prices' + e.inspect
+      Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
+      self.update_cache
+      return [[], [], []]
     end
     self.update_cache
     logger.warn '------ finished update_price ----- ' + self.name

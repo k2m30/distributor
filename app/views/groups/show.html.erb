@@ -1,18 +1,31 @@
+<style>
+    td, th {
+        white-space: nowrap;
+        text-align: right;
+    }
+</style>
 <h1><%= @group.name %></h1>
-
-
 <table class="table table-condensed">
   <th style="vertical-align:bottom"> <%= t 'groups.index.site' %> </th>
-  <% @items.each do |item| %>
-      <th>
-        <%= item.name %>
-      </th>
+  <% @group.items.order(:name).each do |item| %>
+      <th><%= item.name %></th>
   <% end %>
 
   <% @sites.each do |site| %>
-      <tr class=<%= 'success' if site.standard? %> >
+      <tr<%= ' class=success' if site.standard? %>>
         <td id="site<%= site.id %>"><%= site.name %></td>
-        <%= render 'groups/row', {site: site} %>
+        <%= javascript_tag do -%>
+            $.ajax({
+            type: "GET",
+            cache: false,
+            url: "<%= row_site_path(site, {group: @group}) %>",
+            dataType: "html"
+            })
+            .success(function( data ) {
+            jQuery( "#site<%= site.id %>" ).after( data );
+            return data;
+            });
+        <% end -%>
       </tr>
   <% end %>
 

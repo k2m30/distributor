@@ -11,10 +11,10 @@
 <table class="table table-condensed">
   <th>Производитель</th>
   <th>Позиция</th>
-  <th style="white-space: nowrap; text-align: right">Цена сайта</th>
-  <th style="white-space: nowrap; text-align: right">Эталон</th>
-  <th style="white-space: nowrap; text-align: right">Разница, руб.</th>
-  <th style="white-space: nowrap; text-align: right">Разница, %</th>
+  <th class="num">Цена сайта</th>
+  <th class="num">Эталон</th>
+  <th class="num">Разница, руб.</th>
+  <th class="num">Разница, %</th>
 
   <% @urls.each do |url| %>
       <%= cache(url) do %>
@@ -22,25 +22,18 @@
             <td><%= url.item.group.name %></td>
             <td><%= url.item.name %></td>
             <% if url.price > 0 %>
-                <td style="white-space: nowrap; text-align: right"><%= link_to spaces(url.price), url.url %></td>
+                <td class="num"> <%= link_to spaces(url.price), url.url %></td>
             <% else %>
-                <td style="text-align: right"><%= link_to 'n/a', url.url %></td>
+                <td class="num"> <%= link_to 'n/a', url.url %></td>
             <% end %>
-            <%- standard_site = url.item.group.sites.where(standard: true).first %>
-            <%- standard_url = (standard_site.urls & url.item.urls).first %>
-            <% if !standard_url.nil? && !standard_url.price.nil? && standard_url.price > 0 %>
-                <td style="white-space: nowrap; text-align: right"><%= link_to spaces(standard_url.price), standard_url.url %></td>
-                <% if url.price > 0 && standard_url.price > 0 %>
-                    <td style="white-space: nowrap; text-align: right"><%= spaces(standard_url.price - url.price) %></td>
-                    <td style="white-space: nowrap; text-align: right"><%= '%.1f' % ((standard_url.price/url.price - 1)*100) %>
-                      %
-                    </td>
-                <% else %>
-                    <td></td>
-                    <td></td>
-                <% end %>
+            <%- standard_price = url.item.get_standard_price %>
+            <td class="num"><%= spaces(standard_price) %></td>
+            <% if url.price > 0 && standard_price > 0 %>
+                <td class="num"><%= spaces(standard_price - url.price) %></td>
+                <td class="num"><%= '%.1f' % ((standard_price/url.price - 1)*100) %>
+                %
+                </td>
             <% else %>
-                <td></td>
                 <td></td>
                 <td></td>
             <% end %>

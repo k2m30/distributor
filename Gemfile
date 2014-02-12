@@ -42,6 +42,7 @@ gem 'roo'
 
 gem 'axlsx'
 gem 'rack-mini-profiler'
+gem 'flamegraph'
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'delayed_job_web'

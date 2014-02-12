@@ -1,6 +1,6 @@
-<% @urls.each do |url| %>
-    <td class="num muted">
-      <%= url.nil? ? '-' : link_to(spaces(url.price), url.url, class: url.violator? ? 'text-error' : 'muted', target: '_blank') %>
-    </td>
-<% end %>
+
+    <% @urls.each do |url| %>
+        <td><%= url.nil? ? '-' : link_to(spaces(url.price), url.url, class: !url.violator? ? 'muted' : 'text-error', target: '_blank') %></td>
+    <% end %>
+
 
