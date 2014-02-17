@@ -6,11 +6,12 @@ class SitesController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_site, only: [:show, :edit, :update, :destroy, :logs, :logs_submit, :violators]
 
-
   def row
     @urls = Site.get_row(params[:id], params[:group])
-    render action: "row", layout: nil
+    x = render action: "row", layout: nil
+    saf
   end
+
   def violators
     @violating_urls = @site.get_violating_urls.includes(item: :group).order('groups.name ASC, items.name ASC')
     render action: "violators", layout: nil
@@ -65,7 +66,6 @@ class SitesController < ApplicationController
     end
     redirect_to site_path(@site)
   end
-
 
   def index
     @sites = current_user.admin? ? Site.all.order(:name) : Site.joins(:groups).where(groups: {'user' => current_user}).uniq.order(:name)
