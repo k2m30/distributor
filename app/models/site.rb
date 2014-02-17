@@ -12,6 +12,7 @@ end
 
 class Site < ActiveRecord::Base
   has_many :urls
+  has_many :rows
   has_many :items, through: :urls
   has_and_belongs_to_many :groups
   has_many :logs
@@ -46,26 +47,28 @@ class Site < ActiveRecord::Base
     end
   end
 
-  #def get_row(group, items)
-  #  #Rails.cache.fetch([self, group, 'row']) do
-  #    str = []
-  #    _urls = self.get_urls
-  #    group.items.order(:name).includes(:urls).each do |item|
-  #      str << (_urls & item.urls).first
-  #    end
-  #    str
-  #  #end
-  #end
-
   def self.get_row(site_id, group_id)
-    Rails.cache.fetch([self, group_id, 'row']) do
-      row = []
-      site_urls = Url.where(site_id: site_id).to_a
-      Item.where(group_id: group_id).order(:name).includes(:urls).each do |item|
-        row << (site_urls & item.urls.to_a).first
-      end
-      return row
+    row = Row.find_by(site_id: site_id, group_id: group_id)
+    return row.html if row.present?
+
+    urls = []
+    site_urls = Url.where(site_id: site_id).to_a
+    Item.where(group_id: group_id).order(:name).includes(:urls).each do |item|
+      urls << (site_urls & item.urls.to_a).first
     end
+
+    html = String.new
+    urls.each do |url|
+      if url.present?
+        price = Site.spaces(url.price)
+        css_class = !url.violator? ? 'muted' : 'text-error'
+        html += "<td><a class=#{css_class} href=#{url.url} target=\"_blank\">#{price}</a></td>"
+      else
+        html += "<td>-</td>"
+      end
+    end
+    row = Row.create(site_id: site_id, group_id: group_id, html: html)
+    return row.html
   end
 
   def self.get_violators(current_user)
@@ -79,8 +82,7 @@ class Site < ActiveRecord::Base
     self.touch
     self.get_items
     self.get_urls
-    self.get_urls
-    self.get_violating_urls.size
+    self.get_violating_urls
     self.items.each do |item|
       item.get_standard_price
       item.get_standard_url
@@ -89,12 +91,13 @@ class Site < ActiveRecord::Base
     end
     self.groups.each do |group|
       group.touch
+      self.rows.destroy_all
       Site.get_row(self.id, group.id)
     end
     logger.warn '------ cache is updated ------'
   end
 
-  ###################### update price ###################
+###################### update price ###################
   def update_prices
     return if self.standard
     begin
@@ -118,7 +121,7 @@ class Site < ActiveRecord::Base
 
     rescue => e
       logger.error 'Method update_prices' + e.inspect
-      Log.create!(message: 'Method update_prices' + e.inspect, log_type: "Error", site_id: self.id)
+      Log.create!(message: 'Method update_prices' + e.inspect, log_type: :error, site_id: self.id)
       self.update_cache
       return [[], [], []]
     end
@@ -159,7 +162,7 @@ class Site < ActiveRecord::Base
     end
   end
 
-  #исправление относительной ссылки
+#исправление относительной ссылки
 
   def clear_result_array(result_array)
     begin
@@ -350,7 +353,7 @@ class Site < ActiveRecord::Base
     end
   end
 
-  #функция парсинга сайта
+#функция парсинга сайта
 
   def update_urls(result_array)
     self.urls.destroy_all
@@ -498,4 +501,11 @@ class Site < ActiveRecord::Base
     end
     result_array
   end
+
+  def self.spaces(x)
+    str = x.to_i.to_s.reverse
+    str.gsub!(/([0-9]{3})/,"\\1 ")
+    return str.gsub(/,$/, '').reverse
+  end
+
 end

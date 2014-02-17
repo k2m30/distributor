@@ -7,9 +7,7 @@ class SitesController < ApplicationController
   before_action :set_site, only: [:show, :edit, :update, :destroy, :logs, :logs_submit, :violators]
 
   def row
-    @urls = Site.get_row(params[:id], params[:group])
-    x = render action: "row", layout: nil
-    saf
+    render text: Site.get_row(params[:id], params[:group])
   end
 
   def violators

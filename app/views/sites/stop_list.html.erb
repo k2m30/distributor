@@ -34,7 +34,18 @@
                 <tbody id=<%= 'tbody' + site.id.to_s %>>
                 </tbody>
               </table>
-              <%= render site %>
+              <%= javascript_tag do %>
+                  $.ajax({
+                  type: "GET",
+                  cache: false,
+                  url: "<%= violators_site_path(site) %>",
+                  dataType: "html"
+                  })
+                  .success(function( data ) {
+                  $( "#tbody<%= site.id %>" ).html( data );
+
+                  });
+              <% end %>
           <% end %>
         </div>
       </div>
