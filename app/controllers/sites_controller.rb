@@ -22,23 +22,20 @@ class SitesController < ApplicationController
 
   def search
     @items = []
-    @sites = []
+    @item_sort = []
+    items = []
 
     if params[:item_search].present?
       params[:direction] = %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
-      query = params[:item_search].upcase.gsub(/\s*,\s*/, ',')
-      query.split(',').each do |query|
-        @items += Item.item_search(query)
-      end
 
-      @items.each do |item|
-        @sites = @sites | item.sites
+      queries = params[:item_search].upcase.gsub(/\s*,\s*/, ',')
+      queries.split(',').each do |query|
+        items += Item.item_search(query)
       end
+      @items = items.select { |item| item.group.user == current_user }
+      params[:sort] = @items.map(&:name).include?(params[:sort]) ? params[:sort] : @items.first.name
+      @item_sort = Item.find_by(name: params[:sort]) || @items.first
 
-      if !@items.empty?
-        params[:sort] = @items.map(&:name).include?(params[:sort]) ? params[:sort] : @items.first.name
-        @sites = Site.where(id: @sites.map(&:id)).includes(:urls).joins(:items).where(items: {name: params[:sort]}).order('urls.price' + ' ' + params[:direction])
-      end
     end
 
   end
