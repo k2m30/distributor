@@ -11,7 +11,7 @@ class SitesController < ApplicationController
   end
 
   def violators
-    @violating_urls = @site.get_violating_urls.includes(item: :group).order('groups.name ASC, items.name ASC')
+    @violating_urls = @site.get_violating_urls(current_user).includes(item: :group).order('groups.name ASC, items.name ASC')
     render action: "violators", layout: nil
   end
 
@@ -112,7 +112,7 @@ class SitesController < ApplicationController
   end
 
   def stop_list
-    @sites = Site.get_violators(current_user)
+    @sites = Site.get_violators(current_user).paginate(:page => params[:page], :per_page => 10)
   end
 
   private

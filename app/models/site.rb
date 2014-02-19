@@ -24,10 +24,12 @@ class Site < ActiveRecord::Base
     p [self.name, 'violators - ', urls.size]
   end
 
-  def get_violating_urls
+  def get_violating_urls(current_user)
     Rails.cache.fetch([self, 'violators']) {
       #self.urls.where(violator: true).select("urls.urls, urls.price, groups.name, items.name").order('groups.name ASC, items.name ASC')
-      self.urls.where(violator: true)
+      #self.urls.where(violator: true)
+      self.urls.joins(item: {group: :user}).where(violator: true, items: {group_id: current_user.groups.map(&:id)})
+
     }
   end
 
@@ -72,8 +74,6 @@ class Site < ActiveRecord::Base
   end
 
   def self.get_violators(current_user)
-    #Site.joins(:groups).where(violator: true, groups: {'user' => current_user}).uniq.order(:name).includes(:urls)
-    #Site.joins(:urls).where(violator: true).uniq.joins(:groups).where(groups: {'user' => current_user} ).order(:name)
     ids = Url.joins(item: {group: :user}).where(violator: true).where(items: {group_id: current_user.groups.map(&:id)}).map(&:site_id).uniq
     Site.where(id: ids).includes(:urls).order(:name)
   end

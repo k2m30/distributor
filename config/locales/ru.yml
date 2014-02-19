@@ -281,9 +281,6 @@ ru:
            edit:
               title: "Настройки"
 
-
-
-
   activerecord:
     errors:
       <<: *errors
@@ -307,4 +304,10 @@ ru:
        allowed_error: "Допустимая погрешность (руб./%)"
        rate: "Курс"
        last_updated: "Время последнего обновления"
+
+  will_paginate:
+        previous_label: "&#8592; Назад"
+        next_label: "Вперед &#8594;"
+        page_gap: "&hellip;"
+
 
