@@ -335,7 +335,7 @@ DEPENDENCIES
   rubyzip
   rvm-capistrano
   sdoc
-  selenium-webdriver (>= 2.39.0)
+  selenium-webdriver (>= 2.40.0)
   therubyracer
   turbolinks
   twitter-bootstrap-rails

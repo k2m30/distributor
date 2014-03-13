@@ -46,7 +46,7 @@ gem 'flamegraph'
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'delayed_job_web'
-gem 'selenium-webdriver', '>= 2.39.0'
+gem 'selenium-webdriver', '>= 2.40.0'
 gem 'watir-webdriver'
 gem 'headless'
 
