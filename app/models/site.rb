@@ -488,7 +488,7 @@ class Site < ActiveRecord::Base
       standard_price = url.item.get_standard_price
 
       url.check_for_violation(standard_price, allowed_error)
-    rescue
+    rescue => e
       logger.error "Method update_url " + self.name
       logger.error e.inspect
     end
