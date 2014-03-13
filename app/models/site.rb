@@ -82,7 +82,6 @@ class Site < ActiveRecord::Base
     self.touch
     self.get_items
     self.get_urls
-    self.get_violating_urls
     self.items.each do |item|
       item.get_standard_price
       item.get_standard_url
