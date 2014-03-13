@@ -209,7 +209,7 @@ class Site < ActiveRecord::Base
   def parsing_site_method1
     begin
       logger.warn "------ start parsing function method1 " + self.name + "------"
-      if ENV['RAILS_ENV'] == 'production'
+      if ENV['RACK_ENV'] == 'production'
         logger.error 'Headless started'
         headless = Headless.new
         headless.start
@@ -261,7 +261,7 @@ class Site < ActiveRecord::Base
       p result_array.size
 
       browser.close
-      if ENV['RAILS_ENV'] == 'production'
+      if ENV['RACK_ENV'] == 'production'
         headless.destroy
         logger.warn 'Headless destroyed'
       end

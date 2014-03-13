@@ -71,7 +71,7 @@ class UrlsController < ApplicationController
 
   def update_prices
     current_site = params[:site].nil? ? nil : Site.find(params[:site])
-    if ENV['RAILS_ENV'] == 'production'
+    if ENV['RACK_ENV'] == 'production'
       current_site.delay(run_at: 10.seconds.from_now).update_prices
     else
       current_site.update_prices
