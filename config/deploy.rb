@@ -26,6 +26,11 @@ namespace :deploy do
   %w[start stop restart].each do |command|
     desc "#{command} unicorn server"
     task command, roles: :app, except: {no_release: true} do
+      run "touch #{current_path}/log/production.log"
+      run "touch #{current_path}/log/unicorn.log"
+      run "touch #{current_path}/log/cron.log"
+      run "touch #{current_path}/log/delayed_job.log"
+
       run "rm #{current_path}/log/production.log"
       run "rm #{current_path}/log/unicorn.log"
       run "rm #{current_path}/log/cron.log"
