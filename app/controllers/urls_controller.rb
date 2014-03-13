@@ -69,22 +69,10 @@ class UrlsController < ApplicationController
     end
   end
 
-  def update_single_price
-    rate = current_user.settings.rate
-    css = @url.site.css
-    regexp = @url.site.regexp
-    @url.update_price(css, regexp, rate)
-
-    standard_site = Site.where(standard: true).first
-    standard_price = get_price(@url.item, standard_site)
-    @url.check_for_violation(standard_price, current_user.settings.allowed_error)
-    redirect_to logs_path
-  end
-
   def update_prices
     current_site = params[:site].nil? ? nil : Site.find(params[:site])
     current_site.delay(run_at: 10.seconds.from_now).update_prices
-    current_site.update_prices
+    #current_site.update_prices
     #sdf
     #LogMailer.update_report(current_site).deliver
 
