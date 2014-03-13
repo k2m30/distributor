@@ -506,7 +506,9 @@ class Site < ActiveRecord::Base
       raise NotLoadedYetError, 'trying again'
     end
     items.to_a.each_index do |index|
-      result_array << [items[index].text, items[index]['href'], prices[index].text] unless prices[index].nil?
+      href = items[index]['href'].include?(self.name) ? items[index]['href'] : 'http://' + self.name + items[index]['href']
+      result_array << [items[index].text, href, prices[index].text] unless prices[index].nil?
+      p href
     end
     result_array
   end

@@ -71,8 +71,11 @@ class UrlsController < ApplicationController
 
   def update_prices
     current_site = params[:site].nil? ? nil : Site.find(params[:site])
-    current_site.delay(run_at: 10.seconds.from_now).update_prices
-    #current_site.update_prices
+    if ENV['RAILS_ENV'] == 'production'
+      current_site.delay(run_at: 10.seconds.from_now).update_prices
+    else
+      current_site.update_prices
+    end
     #sdf
     #LogMailer.update_report(current_site).deliver
 
