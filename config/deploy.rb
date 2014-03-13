@@ -28,6 +28,8 @@ namespace :deploy do
     task command, roles: :app, except: {no_release: true} do
       run "rm #{current_path}/log/production.log"
       run "rm #{current_path}/log/unicorn.log"
+      run "rm #{current_path}/log/cron.log"
+      run "rm #{current_path}/log/delayed_job.log"
       run "/etc/init.d/unicorn_#{application} #{command}"
       #run "#{sudo} service memcached #{command}"
       run "RAILS_ENV=production #{current_path}/bin/delayed_job #{command}"
