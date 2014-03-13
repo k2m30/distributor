@@ -459,29 +459,39 @@ class Site < ActiveRecord::Base
   end
 
   def price_fit?(item, price)
-    standard_price = (item.urls & item.group.sites.where(standard: true).first.urls).first.price
-    if (standard_price/price.to_f - 1).abs < 0.4
-      true
-    else
-      false
+    begin
+      standard_price = (item.urls & item.group.sites.where(standard: true).first.urls).first.price
+      if (standard_price/price.to_f - 1).abs < 0.4
+        true
+      else
+        false
+      end
+    rescue => e
+      logger.error "Method price_fit " + self.name
+      logger.error e.inspect
     end
   end
 
   def update_url(price, url_str, item)
-    url = Url.new
-    url.site = self
-    url.item = item
-    url.url = url_str
-    url.price = price.to_f < item.group.settings.rate ? price.to_f*item.group.settings.rate : price.to_f
+    begin
+      url = Url.new
+      url.site = self
+      url.item = item
+      url.url = url_str
+      url.price = price.to_f < item.group.settings.rate ? price.to_f*item.group.settings.rate : price.to_f
 
-    url.save
+      url.save
 
-    allowed_error = url.item.group.settings.allowed_error
-    allowed_error = allowed_error.include?('%') ? allowed_error.gsub('%', '').to_f/100 * url.price : allowed_error.to_f
+      allowed_error = url.item.group.settings.allowed_error
+      allowed_error = allowed_error.include?('%') ? allowed_error.gsub('%', '').to_f/100 * url.price : allowed_error.to_f
 
-    standard_price = url.item.get_standard_price
+      standard_price = url.item.get_standard_price
 
-    url.check_for_violation(standard_price, allowed_error)
+      url.check_for_violation(standard_price, allowed_error)
+    rescue
+      logger.error "Method update_url " + self.name
+      logger.error e.inspect
+    end
 
   end
 

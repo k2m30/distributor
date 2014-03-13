@@ -55,8 +55,8 @@ group :development do
   gem 'binding_of_caller'
   gem 'letter_opener'
   gem 'quiet_assets'
-  gem 'bullet'
-  gem 'meta_request'
+  #gem 'bullet'
+  #gem 'meta_request'
 end
 
 group :test do
