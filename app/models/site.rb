@@ -119,7 +119,7 @@ class Site < ActiveRecord::Base
       self.check_for_violation
 
     rescue => e
-      logger.error 'Method update_prices' + e.inspect
+      logger.error 'Method update_prices' + e.inspect + e.backtrace.join("\n")
       Log.create!(message: 'Method update_prices' + e.inspect, log_type: :error, site_id: self.id)
       self.update_cache
       return [[], [], []]
