@@ -9,7 +9,7 @@
             <th class="span3 btn"><%= site.name %></th>
             <th class="span3 btn"> <%= site.company_name %></th>
             <th class="span2 btn">Товаров -
-              <%= site.urls.count %></th>
+              <%= site.get_urls_count(current_user) %></th>
             <th class="span2 btn site<%= site.id.to_s %>"></th>
           </table>
         </a>

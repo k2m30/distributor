@@ -17,6 +17,11 @@ class Site < ActiveRecord::Base
   has_and_belongs_to_many :groups
   has_many :logs
 
+  def get_urls_count(current_user)
+    user_items = Item.joins(group: :user).where(groups: {user_id: current_user.id})
+    (user_items & self.items).count
+  end
+
   def check_for_violation
     urls = self.urls.where(violator: true)
     self.violator = urls.empty? ? false : true
