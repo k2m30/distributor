@@ -30,15 +30,15 @@
               <%- groups = current_user.admin? ? Group.all.order(:name) : current_user.groups.order(:name) %>
               <% groups.each do |group| %>
                   <%- class_name = 'group' %>
-                  <% if current_page?(controller: 'groups', action: 'show', id: group.id) %>
+                  <% if !current_page?(controller: :registrations, action: :edit) && current_page?(controller: 'groups', action: 'show', id: group.id) %>
                       <%- class_name = class_name + ' active' %>
                   <% end %>
                   <li class=<%= class_name %>><%= link_to group.name, group_path(group) %></li>
 
               <% end %>
               <li class="divider-vertical"></li>
-              <li class=<%= 'active' if current_page?(controller: 'sites', action: 'stop_list') %>><%= link_to (t 'nav.stoplist'), stop_list_sites_path %></li>
-              <li class=<%= 'active' if current_page?(controller: 'sites', action: 'index') %>><%= link_to (t 'nav.sites'), sites_path %></li>
+              <li class=<%= 'active' if !current_page?(controller: :registrations, action: :edit) && current_page?(controller: 'sites', action: 'stop_list') %>><%= link_to (t 'nav.stoplist'), stop_list_sites_path %></li>
+              <li class=<%= 'active' if !current_page?(controller: :registrations, action: :edit) && current_page?(controller: 'sites', action: 'index') %>><%= link_to (t 'nav.sites'), sites_path %></li>
               <li class="divider-vertical"></li>
               <%= form_tag search_sites_path, method: :get, class: 'navbar-form pull-left' do %>
                   <div class="input-prepend">
@@ -56,7 +56,7 @@
 
         <ul class="nav pull-right">
           <% if user_signed_in? %>
-              <li class=<%= 'active' if current_page?(controller: 'settings', action: 'index') %>><%= link_to (t 'nav.settings'), settings_path %></li>
+              <li class=<%= 'active' if !current_page?(controller: :registrations, action: :edit) && current_page?(controller: 'settings', action: 'index') %>><%= link_to (t 'nav.settings'), settings_path %></li>
               <li><%= link_to((t('nav.logout')), destroy_user_session_path, :method => :delete) %></li>
           <% else %>
 
