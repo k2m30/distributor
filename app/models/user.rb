@@ -24,7 +24,10 @@ class User < ActiveRecord::Base
     if filename.include?('tmp')
       File.delete(filename)
     end
-    Site.all.each { |site| site.touch }
+    Site.all.each do |site|
+      site.touch
+      site.rows.destroy_all
+    end
   end
 
   def standard_site_import(filename)
@@ -54,9 +57,17 @@ class User < ActiveRecord::Base
           item.save
         end
       end
+      import_file_items = spreadsheet.column(3)
+      import_file_items = import_file_items[1..import_file_items.size].to_a.compact
+
+      group.items.each do |item|
+        item.destroy if not import_file_items.include?(item.name)
+      end
       group.settings.last_updated = Time.now
       group.settings.save
+      group.rows.destroy_all
     end
+
 
     if filename.include?('tmp')
       File.delete(filename)
@@ -85,7 +96,10 @@ class User < ActiveRecord::Base
     end
     Site.all.each { |site| site.touch }
     Item.all.each { |item| item.touch }
-    Group.all.each { |group| group.touch }
+    Group.all.each do |group|
+      group.touch
+      group.rows.destroy_all
+    end
   end
 
   private

@@ -115,6 +115,7 @@ class Site < ActiveRecord::Base
           result_array = self.parsing_site_method2
         else
           logger.error 'error case metod'
+          return
       end
 
       result_array = self.clear_result_array(result_array)

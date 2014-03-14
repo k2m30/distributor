@@ -1,2 +1,0 @@
-scp deployer@144.76.161.235:/home/deployer/apps/distributor/current/log/production.log ./production.log
-mate ./production.log
