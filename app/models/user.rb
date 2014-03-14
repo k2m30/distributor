@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :authentication_keys => [:username]
-  has_many :groups
+  has_many :groups, dependent: :destroy
 
   def get_all_items_json
     Item.order(:name).pluck(:name).to_json
@@ -19,7 +19,6 @@ class User < ActiveRecord::Base
       site = Site.where(name: row['name']).first || Site.new
 
       site.attributes = row.to_hash
-      #site.regexp = Regexp.new('\d{5,}').to_s
       site.save!
     end
     if filename.include?('tmp')
@@ -43,7 +42,7 @@ class User < ActiveRecord::Base
       (2..spreadsheet.last_row).each do |i|
         row = Hash[[@header, spreadsheet.row(i)].transpose]
         if !row['item_id'].nil?
-          item = group.items.where(name: row['item_id']).first || create_new_item(row['item_id'], group)
+          item = group.items.find_by(name: row['item_id']) || create_new_item(row['item_id'], group)
         else
           next
         end

@@ -11,11 +11,11 @@ class NotLoadedYetError < StandardError;
 end
 
 class Site < ActiveRecord::Base
-  has_many :urls
-  has_many :rows
+  has_many :urls, dependent: :destroy
+  has_many :rows, dependent: :destroy
   has_many :items, through: :urls
   has_and_belongs_to_many :groups
-  has_many :logs
+  has_many :logs, dependent: :destroy
 
   def get_urls_count(current_user)
     user_items = Item.joins(group: :user).where(groups: {user_id: current_user.id})

@@ -1,7 +1,7 @@
 class Item < ActiveRecord::Base
   include PgSearch
 
-  has_many :urls
+  has_many :urls, dependent: :destroy
   has_many :sites, through: :urls
   belongs_to :group
 

@@ -1,8 +1,8 @@
 class Group < ActiveRecord::Base
   belongs_to :user
-  has_many :items
-  has_many :rows
-  has_one :settings
+  has_many :items, dependent: :destroy
+  has_many :rows, dependent: :destroy
+  has_one :settings, dependent: :destroy
   has_and_belongs_to_many :sites
 
   def get_standard_site
