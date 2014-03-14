@@ -1,28 +1,37 @@
 <table class="table table-striped">
   <thead>
-    <th>Сайт</th>
-    <% @items.each do |item| %>
-        <th style="text-align: right">
-          <%= sortable(item.name, params[:item_search]) %>
-          <% if params[:sort].present? && params[:sort] == item.name %>
-              <%-arrow_class = 'icon-chevron-' %>
-              <%-arrow_class += params[:direction]=='asc' ? 'down' : 'up' %>
-              <i class=<%= arrow_class %>></i>
-          <% else %>
+  <th>Сайт</th>
+  <% @items.each do |item| %>
+      <th style="text-align: right">
+        <%= sortable(item.name, params[:item_search]) %>
+        <% if params[:sort].present? && params[:sort] == item.name %>
+            <%- arrow_class = 'icon-chevron-' %>
+            <%- arrow_class += params[:direction]=='asc' ? 'down' : 'up' %>
+            <i class=<%= arrow_class %>></i>
+        <% else %>
 
-          <% end %>
+        <% end %>
 
-        </th>
-    <% end %>
+      </th>
+  <% end %>
   </thead>
   <tbody>
   <% @item_sort.urls.order('urls.price ' + params[:direction]).each do |url| %>
-      <tr <%= (url.site.standard?) ? " class=\"success\"".html_safe : ''%> >
+      <tr <%= (url.site.standard?) ? " class=\"success\"".html_safe : '' %> >
         <td><%= link_to url.site.name, site_path(url.site) %></td>
         <% @items.each do |item| %>
-            <td class="num">
-              <%-next_url = get_url_str(item, url.site)  %>
-              <%= next_url.nil? || next_url.price.nil? ? '-' : link_to(spaces(next_url.price), next_url.url) %>
+            <td class="num muted">
+              <%- next_url = get_url_str(item, url.site) %>
+              <% if next_url.nil? || next_url.price.nil? %>
+                  <% if url.site.standard? %>
+                      <%= spaces item.standard_price %>
+                  <% else %>
+                      -
+                  <% end %>
+              <% else %>
+                  <%  css_class = !next_url.violator? ? 'muted' : 'text-error'  %>
+                  <%= link_to spaces(next_url.price), next_url.url, class: css_class %>
+              <% end %>
             </td>
         <% end %>
       </tr>

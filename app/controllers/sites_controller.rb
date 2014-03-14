@@ -32,7 +32,9 @@ class SitesController < ApplicationController
       queries.split(',').each do |query|
         items += Item.item_search(query)
       end
+      items.compact!
       @items = items.select { |item| item.group.user == current_user }
+      redirect_to :back, alert: "#{params[:item_search]} не найден" and return if @items.empty?
       params[:sort] = @items.map(&:name).include?(params[:sort]) ? params[:sort] : @items.first.name
       @item_sort = Item.find_by(name: params[:sort]) || @items.first
 
