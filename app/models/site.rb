@@ -208,7 +208,7 @@ class Site < ActiveRecord::Base
 
   def parsing_site_method1
     begin
-      logger.warn "------ start parsing function method1 " + self.name + "------"
+      logger.warn "------ start parsing function method1 " + self.name + "------" + ENV.to_hash
       if ENV['RACK_ENV'] == 'production'
         logger.error 'Headless started'
         headless = Headless.new
