@@ -136,12 +136,14 @@ class Site < ActiveRecord::Base
 
   def check_link(url, start_url) #исправление относительной ссылки
     begin
+      p "chek_link url = #{url}"
       site_name = start_url.scan(/(?:[-a-z_\d])+.(?:[-a-z])*(?:\.[a-z]{2,4})+/).first
-      site_name = "http://" + site_name
+      http_site_name = "http://" + site_name
       url_size = url[1..(url.size-1)].split('/').size
+      p "chek_link site_name = #{site_name}"
 
       if  url_size > 1 #проверка на редактируемого адреса
-        add_str = site_name
+        add_str = http_site_name
       else
         add_str = start_url
       end
