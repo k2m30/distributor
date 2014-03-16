@@ -328,10 +328,6 @@ class Site < ActiveRecord::Base
               str = check_link(product["href"], start_page)
             end
 
-            if start_page == "http://ydachnik.by" #затычка для ydachnik.by
-              str = str.gsub("http://ydachnik.by", "http://ydachnik.by/catalog")
-            end #затычка для ydachnik.by
-
             result_array << [product.text.strip, str, price_array[index].text]
 
             logger.warn product.text.strip
