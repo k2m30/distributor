@@ -83,3 +83,5 @@ gem 'unicorn'
 gem 'rvm-capistrano'
 gem 'capistrano', '~> 2.15'
 gem 'pg_search'
+
+gem 'tail'

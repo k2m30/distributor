@@ -1,4 +1,6 @@
 Distibutor::Application.routes.draw do
+  mount Tail::Engine, at: "/tail"
+
   get "main/index"
 
   resources :logs, only: [:index, :destroy] do
