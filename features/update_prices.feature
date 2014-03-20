@@ -11,7 +11,7 @@ Feature: update prices
     Then it is updated properly
   Examples:
     | site               |
-    | 21vek.by           |
+#    | 21vek.by           |
 #    | 24real.by          |
 #    | 24shop.by          |
 #    | 360.shop.by        |
@@ -59,13 +59,13 @@ Feature: update prices
 #    | slavno.by          |
 #    | star-sys.shop.by   |
 #    | stroitel.shop.by   |
-#    | suseki.by          |
+##    | suseki.by          |
 #    | svoiludi.by        |
 #    | technostil.by      |
 #    | torgsin.shop.by    |
 #    | ttn.by             |
-#    | udachno.by         |
-#    | upgrade.by         |
-#    | vitrina.shop.by    |
-#    | ydachnik.by        |
-#    | zeta.by            |
+    | udachno.by         |
+    | upgrade.by         |
+    | vitrina.shop.by    |
+    | ydachnik.by        |
+    | zeta.by            |

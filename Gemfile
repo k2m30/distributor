@@ -50,7 +50,7 @@ gem 'selenium-webdriver', '>= 2.40.0'
 gem 'watir-webdriver'
 gem 'headless'
 
-group :development do
+group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'letter_opener'

@@ -76,11 +76,8 @@ class UrlsController < ApplicationController
     else
       current_site.update_prices
     end
-    #sdf
     #LogMailer.update_report(current_site).deliver
-
     flash[:notice] = "Цены обновляются. Обычно это занимает 1-2 минуты для каждого сайта. Обновите страницу позже."
-
 
     redirect_to site_path(current_site)
 

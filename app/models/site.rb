@@ -4,10 +4,11 @@ require 'rubyXL'
 require 'axlsx'
 require 'watir-webdriver'
 require 'nokogiri'
-require 'open-uri'
 require 'headless'
 
 class NotLoadedYetError < StandardError;
+end
+class WrongCSSError < StandardError;
 end
 
 class Site < ActiveRecord::Base
@@ -119,13 +120,13 @@ class Site < ActiveRecord::Base
       end
 
       result_array = self.clear_result_array(result_array)
-
+      raise WrongCSSError, self.name if result_array.nil?
       self.update_urls(result_array)
 
       self.check_for_violation
 
     rescue => e
-      logger.error 'Method update_prices' + e.inspect + e.backtrace.join("\n")
+      log_error :update_prices, e
       Log.create!(message: 'Method update_prices' + e.inspect, log_type: :error, site_id: self.id)
       self.update_cache
       return [[], [], []]
@@ -136,11 +137,11 @@ class Site < ActiveRecord::Base
 
   def check_link(url, start_url) #исправление относительной ссылки
     begin
-      p "chek_link url = #{url}"
+      #p "chek_link url = #{url}"
       site_name = start_url.scan(/(?:[-a-z_\d])+.(?:[-a-z])*(?:\.[a-z]{2,4})+/).first
       http_site_name = "http://" + site_name
       url_size = url[1..(url.size-1)].split('/').size
-      p "chek_link site_name = #{site_name}"
+      #p "chek_link site_name = #{site_name}"
 
       if  url_size > 1 #проверка на редактируемого адреса
         add_str = http_site_name
@@ -163,8 +164,7 @@ class Site < ActiveRecord::Base
       return str
 
     rescue => e
-      logger.error "error check link"
-      logger.error e.inspect
+      log_error :check_link, e
       return nil
     end
   end
@@ -202,8 +202,8 @@ class Site < ActiveRecord::Base
           end
         end
 
-        logger.warn item_array[0]
-        logger.warn item_array[2].inspect
+        #logger.warn item_array[0]
+        #logger.warn item_array[2].inspect
 
       end
       result_array = result_array.sort_by { |item_array| item_array[2].to_f }
@@ -211,7 +211,7 @@ class Site < ActiveRecord::Base
       return result_array
     end
   rescue => e
-    logger.error "error clear_result_array: " + e.inspect
+    log_error :clear_result_array, e
   end
 
   def parsing_site_method1
@@ -240,7 +240,7 @@ class Site < ActiveRecord::Base
           begin #while
             begin # internal exception
               browser.element(:css => css_item).wait_until_present
-              result_array += scrap_page(Nokogiri::HTML(browser.html), css_item, css_price)
+              result_array += scrap_page(Nokogiri::HTML(browser.html, nil, 'utf-8'), css_item, css_price)
               if result_array.size != result_array.uniq.size
                 result_array = result_array.uniq
                 raise NotLoadedYetError, 'same page'
@@ -269,6 +269,7 @@ class Site < ActiveRecord::Base
       p result_array.size
 
       browser.close
+
       if ENV['RACK_ENV'] == 'production' || ENV['RAILS_ENV'] == 'production' || ENV['USER'] == 'deployer'
         headless.destroy
         logger.warn 'Headless destroyed'
@@ -277,8 +278,7 @@ class Site < ActiveRecord::Base
       logger.warn "------done parsing function method1 " + self.name + "------"
       return result_array
     rescue => e
-      logger.error "error method parsing_site_method1: " + self.name
-      logger.error e.inspect
+      log_error :parse_mehtod_one, e
       Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
       return [[], [], []]
     end
@@ -287,7 +287,6 @@ class Site < ActiveRecord::Base
   def parsing_site_method2 #функция парсинга сайта
     begin
       logger.warn "------ start parsing function " + self.name + "------"
-      p "------ start parsing function " + self.name + "------"
 
       css_page = self.css_pagination
       css_page = "no" if css_page.nil? || css_page.empty? #присвоение хоть чего нибудь, если значение не передано
@@ -298,7 +297,7 @@ class Site < ActiveRecord::Base
       site_urls_array = self.search_url.split(/[,]+/)
 
       site_urls_array.each do |site_url|
-
+        #site_url = URI.escape site_url
         url_site_start = site_url
         previous_page = open(site_url, "Referer" => referer)
         cookies = previous_page.meta["set-cookie"] || ""
@@ -309,17 +308,21 @@ class Site < ActiveRecord::Base
           logger.warn site_url
           last_page = site_url
 
-          page = open(site_url, "Cookie" => cookies, "Referer" => referer)
-          html = Nokogiri::HTML page
+          begin
+            page = open(site_url, "Cookie" => cookies, "Referer" => referer)
+          rescue => e
+            page = open(URI.escape(site_url), "Cookie" => cookies, "Referer" => referer)
+          end
+
+          html = Nokogiri::HTML(page.read, nil, 'utf-8')
 
           name_array = html.css(self.css_item)
-
           price_array = html.css(self.css_price)
 
           if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
             logger.warn "----------error---------"
-            logger.warn "amount name: " + name_array.size.to_s
-            logger.warn "amount price: " + price_array.size.to_s
+            logger.warn "amount name:  #{name_array.size.to_s}, #{self.css_item}"
+            logger.warn "amount price:  #{price_array.size.to_s}, #{self.css_price}"
             next
           end #проверка соответствия кол-ва товаров и цен
           name_array.each_with_index do |product, index|
@@ -332,7 +335,7 @@ class Site < ActiveRecord::Base
 
             result_array << [product.text.strip, str, price_array[index].text]
 
-            logger.warn product.text.strip
+            #logger.warn product.text.strip
 
           end #цикл по списку товаров на странице
 
@@ -349,8 +352,7 @@ class Site < ActiveRecord::Base
       return result_array
 
     rescue => e
-      logger.error "error method parsing_site_method2: " + self.name
-      logger.error e.inspect
+      log_error :parse_method_two, e
       Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
       return [[], [], []]
     end
@@ -359,74 +361,80 @@ class Site < ActiveRecord::Base
 #функция парсинга сайта
 
   def update_urls(result_array)
-    self.urls.destroy_all
+    begin
+      self.urls.destroy_all
 
-    user_array = User.all
-    site_groups=self.groups
+      user_array = User.all
+      site_groups=self.groups
 
-    user_array.each do |user|
-      result_groups = []
-      site_groups.each do |group|
-        if group.user_id == user.id
-          result_groups << group
-        end
-      end
-
-      items = []
-      result_groups.each do |group|
-        items += Item.joins(:group => :user).where(groups: {name: group.name}, users: {username: user.username}).readonly(false)
-      end
-
-      items = items.sort_by { |item| item.name.size }
-      items = items.reverse
-
-      result_urls = []
-      start_page = "http://" + self.name
-      result_urls = Url.joins(item: {group: :user}).where(items: {group_id: user.groups.map(&:id)})
-
-      result_array.each do |item_array|
-        url_str = item_array[1]
-        price = item_array[2]
-        price = price.to_f < items[0].group.settings.rate ? price.to_f*items[0].group.settings.rate : price.to_f
-
-        if url_str != start_page #проверка на нормальность ссылки
-          url = result_urls.where(url: url_str).first
+      user_array.each do |user|
+        result_groups = []
+        site_groups.each do |group|
+          if group.user_id == user.id
+            result_groups << group
+          end
         end
 
+        items = []
+        result_groups.each do |group|
+          items += Item.joins(:group => :user).where(groups: {name: group.name}, users: {username: user.username}).readonly(false)
+        end
 
-        if url.nil? || url_str == start_page
-          if price == 0
-            Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
-                        log_type: "No price", site_id: self.id)
-            next
+        items = items.sort_by { |item| item.name.size }
+        items = items.reverse
+
+        result_urls = []
+        start_page = "http://" + self.name
+        result_urls = Url.joins(item: {group: :user}).where(items: {group_id: user.groups.map(&:id)})
+
+        result_array.each do |item_array|
+          url_str = item_array[1]
+          price = item_array[2]
+          price = price.to_f < items[0].group.settings.rate ? price.to_f*items[0].group.settings.rate : price.to_f
+
+          if url_str != start_page #проверка на нормальность ссылки
+            url = result_urls.where(url: url_str).first
           end
 
-          item = find_item(item_array[0], price, items)
-          if item.nil?
-            Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
-                        log_type: "Item not found", site_id: self.id)
-            next
-          end
 
-          items.delete(item)
-          update_url(price, url_str, item)
-          p "OK " + item.name
-          Log.create!(message: item_array.to_s, price_found: price, name_found: item.name,
-                      log_type: "OK", site_id: self.id)
-        else
-          items.delete(url.item)
-          url.price = price
-          url.save if url.changed?
-          Log.create!(message: item_array.to_s, price_found: price, name_found: url.item.name,
-                      log_type: "OK found in DB", site_id: self.id)
+          if url.nil? || url_str == start_page
+            if price == 0
+              Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
+                          log_type: "No price", site_id: self.id)
+              next
+            end
+
+            item = find_item(item_array[0], price, items)
+            if item.nil?
+              Log.create!(message: item_array.to_s, price_found: price, name_found: nil,
+                          log_type: "Item not found", site_id: self.id)
+              next
+            end
+
+            items.delete(item)
+            update_url(price, url_str, item)
+            #p "OK " + item.name
+            Log.create!(message: item_array.to_s, price_found: price, name_found: item.name,
+                        log_type: "OK", site_id: self.id)
+          else
+            items.delete(url.item)
+            url.price = price
+            url.save if url.changed?
+            Log.create!(message: item_array.to_s, price_found: price, name_found: url.item.name,
+                        log_type: "OK found in DB", site_id: self.id)
+          end
         end
       end
+      logger.warn "------ update_urls DONE ------"
+      self.save
+    rescue => e
+      log_error(:update_urls, e)
     end
 
+  end
 
-    logger.warn "------ update_urls DONE ------"
-
-    self.save
+  def log_error(name, e)
+    logger.error "#{Time.now.strftime "%H:%M:%S %d/%m"}. Error #{self.name}: method #{name}\n  #{e.message}\n  #{e.backtrace[0..3].join("\n")}"
   end
 
   def find_item(text, price, items)
@@ -453,12 +461,11 @@ class Site < ActiveRecord::Base
         end
       end
 
-      logger.warn 'Не найдено: ' + compressed_text
+      #logger.warn 'Не найдено: ' + compressed_text
       return nil
 
     rescue => e
-      logger.error "Method find_item" + self.name
-      logger.error e.inspect
+      log_error :find_item, e
     end
   end
 
@@ -471,8 +478,7 @@ class Site < ActiveRecord::Base
         false
       end
     rescue => e
-      logger.error "Method price_fit " + self.name
-      logger.error e.inspect
+      log_error :price_fit, e
     end
   end
 
@@ -493,8 +499,7 @@ class Site < ActiveRecord::Base
 
       url.check_for_violation(standard_price, allowed_error)
     rescue => e
-      logger.error "Method update_url " + self.name
-      logger.error e.inspect
+      log_error :update_single_url, e
     end
 
   end
@@ -519,7 +524,7 @@ class Site < ActiveRecord::Base
 
   def self.spaces(x)
     str = x.to_i.to_s.reverse
-    str.gsub!(/([0-9]{3})/,"\\1 ")
+    str.gsub!(/([0-9]{3})/, "\\1 ")
     return str.gsub(/,$/, '').reverse
   end
 
