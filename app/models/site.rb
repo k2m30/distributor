@@ -353,8 +353,8 @@ class Site < ActiveRecord::Base
 
   def utf8(str)
     str.encode!('utf-8', invalid: :replace, undef: :replace, replace: '')
-    #file_contents.encode!('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
-    #file_contents.encode!('UTF-8', 'UTF-16')
+    str.encode!('UTF-16', 'UTF-8', invalid: :replace, undef: :replace, replace: '')
+    str.encode!('UTF-8', 'UTF-16')
   end
 
 #функция парсинга сайта
