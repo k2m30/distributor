@@ -328,7 +328,7 @@ class Site < ActiveRecord::Base
               str = check_link(product["href"], start_page)
             end
 
-            logger.warn product.text
+            logger.warn product.text.encode('utf-8', invalid: :replace)
             result_array << [product.text.encode('utf-8', invalid: :replace).strip, str.encode('utf-8', invalid: :replace), price_array[index].text.encode('utf-8', invalid: :replace)]
 
 
