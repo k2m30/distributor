@@ -106,9 +106,7 @@ class Site < ActiveRecord::Base
   def update_prices
     return if self.standard
     begin
-      logger.warn '------ start update_price ------'
-      logger.warn 'method: ' + self.method.to_s
-      self.logs.delete_all
+      self.logs.destroy_all
       case self.method.to_i
         when 1
           result_array = self.parsing_site_method1
@@ -127,7 +125,6 @@ class Site < ActiveRecord::Base
 
     rescue => e
       log_error :update_prices, e
-      Log.create!(message: 'Method update_prices' + e.inspect, log_type: :error, site_id: self.id)
       self.update_cache
       return [[], [], []]
     end
@@ -279,7 +276,6 @@ class Site < ActiveRecord::Base
       return result_array
     rescue => e
       log_error :parse_mehtod_one, e
-      Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
       return [[], [], []]
     end
   end
@@ -347,12 +343,10 @@ class Site < ActiveRecord::Base
 
       end #цикл по списку адресов с товаром сайта
 
-      logger.warn "------done parsing function " + self.name + "------"
       return result_array
 
     rescue => e
       log_error :parse_method_two, e
-      Log.create!(message: e.inspect, log_type: "Error", site_id: self.id)
       return [[], [], []]
     end
   end
@@ -424,7 +418,6 @@ class Site < ActiveRecord::Base
           end
         end
       end
-      logger.warn "------ update_urls DONE ------"
       self.save
     rescue => e
       log_error(:update_urls, e)

@@ -34,7 +34,7 @@ Feature: update prices
 #    | fazenda.shop.by    |
 #    | gepard.by          |
 #    | golden.by          |
-#    | k-center.by        |
+    | k-center.by        |
 #    | karcher-belarus.by |
 #    | kosilka.by         |
 #    | krama.by           |
@@ -46,7 +46,7 @@ Feature: update prices
 #    | multicom.by        |
 #    | nash-dom.shop.by   |
 #    | nextshop.by        |
-    | nvd.by             |
+#    | nvd.by             |
 #    | orion.shop.by      |
 #    | papa-karlo.shop.by |
 #    | pcbox.by           |
