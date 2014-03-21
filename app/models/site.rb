@@ -303,7 +303,6 @@ class Site < ActiveRecord::Base
         cookies = previous_page.meta["set-cookie"] || ""
         cookies = "" if start_page == "http://technostil.by" #затычка для technostil.by
 
-        logger.warn "------------"
         begin
           logger.warn site_url
           last_page = site_url
@@ -333,7 +332,7 @@ class Site < ActiveRecord::Base
               str = check_link(product["href"], start_page)
             end
 
-            result_array << [product.text.strip, str, price_array[index].text]
+            result_array << [product.text.encode('utf-8', invalid: :replace).strip, str.encode('utf-8', invalid: :replace), price_array[index].text.encode('utf-8', invalid: :replace)]
 
             #logger.warn product.text.strip
 

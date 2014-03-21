@@ -46,7 +46,7 @@ Feature: update prices
 #    | multicom.by        |
 #    | nash-dom.shop.by   |
 #    | nextshop.by        |
-#    | nvd.by             |
+    | nvd.by             |
 #    | orion.shop.by      |
 #    | papa-karlo.shop.by |
 #    | pcbox.by           |
@@ -64,8 +64,8 @@ Feature: update prices
 #    | technostil.by      |
 #    | torgsin.shop.by    |
 #    | ttn.by             |
-    | udachno.by         |
-    | upgrade.by         |
-    | vitrina.shop.by    |
-    | ydachnik.by        |
-    | zeta.by            |
+#    | udachno.by         |
+#    | upgrade.by         |
+#    | vitrina.shop.by    |
+#    | ydachnik.by        |
+#    | zeta.by            |
