@@ -30,6 +30,7 @@ end
 gem 'devise'
 gem 'mechanize'
 
+gem 'thread_safe', '0.2.0'
 gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
