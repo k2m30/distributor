@@ -328,9 +328,8 @@ class Site < ActiveRecord::Base
               str = check_link(product["href"], start_page)
             end
 
-            logger.warn product.text.encode('utf-8', invalid: :replace)
-            result_array << [product.text.encode('utf-8', invalid: :replace).strip, str.encode('utf-8', invalid: :replace), price_array[index].text.encode('utf-8', invalid: :replace)]
-
+            logger.warn utf8(product.text)
+            result_array << [utf8(product.text).strip, utf8(str), utf8(price_array[index].text)]
 
 
           end #цикл по списку товаров на странице
@@ -352,8 +351,13 @@ class Site < ActiveRecord::Base
     end
   end
 
-#функция парсинга сайта
+  def utf8(str)
+    str.encode!('utf-8', invalid: :replace, undef: :replace, replace: '')
+    #file_contents.encode!('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
+    #file_contents.encode!('UTF-8', 'UTF-16')
+  end
 
+#функция парсинга сайта
   def update_urls(result_array)
     begin
       self.urls.destroy_all
