@@ -198,13 +198,8 @@ class Site < ActiveRecord::Base
               item_array[2] = array[1]
           end
         end
-
-        #logger.warn item_array[0]
-        #logger.warn item_array[2].inspect
-
       end
       result_array = result_array.sort_by { |item_array| item_array[2].to_f }
-      logger.warn "------ clear_result_array done ------"
       return result_array
     end
   rescue => e
@@ -213,9 +208,9 @@ class Site < ActiveRecord::Base
 
   def parsing_site_method1
     begin
-      logger.warn "------ start parsing function method1 " + self.name + "------" + ENV.to_hash.to_s
+      logger.warn "------ start parsing function method1 " + self.name + "------"
       if ENV['RACK_ENV'] == 'production' || ENV['RAILS_ENV'] == 'production' || ENV['USER'] == 'deployer'
-        logger.error 'Headless started'
+        logger.warn 'Headless started'
         headless = Headless.new
         headless.start
       end
@@ -265,18 +260,16 @@ class Site < ActiveRecord::Base
       result_array = result_array.uniq
       p result_array.size
 
-      browser.close
-
-      if ENV['RACK_ENV'] == 'production' || ENV['RAILS_ENV'] == 'production' || ENV['USER'] == 'deployer'
-        headless.destroy
-        logger.warn 'Headless destroyed'
-      end
-
       logger.warn "------done parsing function method1 " + self.name + "------"
       return result_array
     rescue => e
       log_error :parse_mehtod_one, e
-      return [[], [], []]
+    ensure
+      browser.close
+      if ENV['RACK_ENV'] == 'production' || ENV['RAILS_ENV'] == 'production' || ENV['USER'] == 'deployer'
+        headless.destroy
+        logger.warn 'Headless destroyed'
+      end
     end
   end
 
@@ -293,53 +286,49 @@ class Site < ActiveRecord::Base
       site_urls_array = self.search_url.split(/[,]+/)
 
       site_urls_array.each do |site_url|
-        url_site_start = site_url
-        previous_page = open(site_url, "Referer" => referer)
-        cookies = previous_page.meta["set-cookie"] || ""
-        cookies = "" if start_page == "http://technostil.by" #затычка для technostil.by
-
         begin
-          logger.warn site_url
-          last_page = site_url
+          url_site_start = site_url
+          previous_page = open(site_url, "Referer" => referer)
+          cookies = previous_page.meta["set-cookie"] || ""
+          cookies = "" if start_page == "http://technostil.by" #затычка для technostil.by
 
           begin
-            page = open(site_url, "Cookie" => cookies, "Referer" => referer)
-          rescue => e
-            page = open(URI.escape(site_url), "Cookie" => cookies, "Referer" => referer)
-          end
-          html = Nokogiri::HTML(page.read, nil, self.encoding)
+            last_page = site_url
 
-          logger.error "Error: #{page.charset} - #{self.name}" if page.charset != self.encoding
-          name_array = html.css(self.css_item)
-          price_array = html.css(self.css_price)
-
-          if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
-            logger.warn "----------error---------"
-            logger.warn "amount name:  #{name_array.size.to_s}, #{self.css_item}"
-            logger.warn "amount price:  #{price_array.size.to_s}, #{self.css_price}"
-            next
-          end #проверка соответствия кол-ва товаров и цен
-          name_array.each_with_index do |product, index|
-
-            if product["href"].nil?
-              str = start_page
-            else
-              str = check_link(product["href"], start_page)
+            begin
+              page = open(site_url, "Cookie" => cookies, "Referer" => referer)
+            rescue => e
+              page = open(URI.escape(site_url), "Cookie" => cookies, "Referer" => referer)
             end
 
-            result_array << [utf8(product.text).strip, utf8(str), utf8(price_array[index].text)]
-            #result_array << [product.text.strip, str, price_array[index].text]
+            page = page.set_encoding 'utf-8'
+            html = Nokogiri::HTML(page.read, nil, 'utf-8')
+            name_array = html.css(self.css_item)
+            price_array = html.css(self.css_price)
 
+            if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
+              logger.error "amount name:  #{name_array.size.to_s}, #{self.css_item}"
+              logger.error "amount price:  #{price_array.size.to_s}, #{self.css_price}"
+              next
+            end #проверка соответствия кол-ва товаров и цен
 
-          end #цикл по списку товаров на странице
+            name_array.each_with_index do |product, index|
+              if product["href"].nil?
+                str = start_page
+              else
+                str = check_link(product["href"], start_page)
+              end
+              result_array << [utf8(product.text).strip, utf8(str), utf8(price_array[index].text)]
+            end #цикл по списку товаров на странице
 
-          if !html.at_css(css_page).nil? #проверка на наличие след. страницы
-            site_url = html.at_css(css_page)["href"]
-            site_url = check_link(site_url, url_site_start)
-          end #проверка на наличие след. страницы
-
-        end while !html.at_css(css_page).nil? && site_url != last_page #цикл пагинации
-
+            if !html.at_css(css_page).nil? #проверка на наличие след. страницы
+              site_url = html.at_css(css_page)["href"]
+              site_url = check_link(site_url, url_site_start)
+            end #проверка на наличие след. страницы
+          end while !html.at_css(css_page).nil? && site_url != last_page #цикл пагинации
+        rescue
+          next
+        end
       end #цикл по списку адресов с товаром сайта
 
       return result_array
