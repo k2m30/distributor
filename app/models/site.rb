@@ -116,9 +116,9 @@ class Site < ActiveRecord::Base
           logger.error 'error case metod'
           return
       end
-
+      logger.warn result_array
       result_array = self.clear_result_array(result_array)
-      raise WrongCSSError, self.name if result_array.nil?
+      raise WrongCSSError, "Wrong CSS? #{self.name}, item - #{self.css_item}, price - #{self.css_price}" if result_array.nil?
       self.update_urls(result_array)
 
       self.check_for_violation
@@ -293,7 +293,6 @@ class Site < ActiveRecord::Base
       site_urls_array = self.search_url.split(/[,]+/)
 
       site_urls_array.each do |site_url|
-        #site_url = URI.escape site_url
         url_site_start = site_url
         previous_page = open(site_url, "Referer" => referer)
         cookies = previous_page.meta["set-cookie"] || ""
@@ -308,11 +307,13 @@ class Site < ActiveRecord::Base
           rescue => e
             page = open(URI.escape(site_url), "Cookie" => cookies, "Referer" => referer)
           end
-
-          html = Nokogiri::HTML(page.read, nil, 'utf-8')
+          logger.warn page.charset
+          html = Nokogiri::HTML(page, nil, page.charset || 'utf-8')
 
           name_array = html.css(self.css_item)
           price_array = html.css(self.css_price)
+          logger.warn name_array
+          logger.warn price_array
 
           if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
             logger.warn "----------error---------"

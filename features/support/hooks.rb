@@ -13,6 +13,7 @@ def prepare_test_db
 
 end
 #User.destroy_all
+Rails.logger.flush
 p User.all.pluck(:id, :username)
 p Group.all.pluck(:id, :name)
 p Site.all.order(:name).pluck(:name)

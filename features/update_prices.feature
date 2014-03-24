@@ -26,7 +26,7 @@ Feature: update prices
 #    | bikord.of.by       |
 #    | camera.shop.by     |
 #    | clean.by           |
-#    | cleanhouse.by      |
+    | cleanhouse.by      |
 #    | delomastera.by     |
 #    | dvrka.by           |
 #    | elmarket.by        |
@@ -34,7 +34,7 @@ Feature: update prices
 #    | fazenda.shop.by    |
 #    | gepard.by          |
 #    | golden.by          |
-    | k-center.by        |
+#    | k-center.by        |
 #    | karcher-belarus.by |
 #    | kosilka.by         |
 #    | krama.by           |
