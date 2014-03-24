@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140217185451) do
+ActiveRecord::Schema.define(version: 20140324161200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 20140217185451) do
     t.boolean  "violator",       default: false
     t.string   "email"
     t.string   "company_name"
+    t.string   "encoding",       default: "utf-8"
   end
 
   add_index "sites", ["name"], name: "index_sites_on_name", using: :btree

@@ -26,7 +26,7 @@ Feature: update prices
 #    | bikord.of.by       |
 #    | camera.shop.by     |
 #    | clean.by           |
-    | cleanhouse.by      |
+#    | cleanhouse.by      |
 #    | delomastera.by     |
 #    | dvrka.by           |
 #    | elmarket.by        |
@@ -46,13 +46,13 @@ Feature: update prices
 #    | multicom.by        |
 #    | nash-dom.shop.by   |
 #    | nextshop.by        |
-#    | nvd.by             |
+    | nvd.by             |
 #    | orion.shop.by      |
 #    | papa-karlo.shop.by |
 #    | pcbox.by           |
 #    | pingvin.shop.by    |
 #    | premium.shop.by    |
-#    | pro-karcher.by     |
+#####    | pro-karcher.by     |
 #    | radiomarket.by     |
 #    | rodnoi.by          |
 #    | rsmarket.by        |

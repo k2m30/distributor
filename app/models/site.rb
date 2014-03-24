@@ -116,7 +116,6 @@ class Site < ActiveRecord::Base
           logger.error 'error case metod'
           return
       end
-      logger.warn result_array
       result_array = self.clear_result_array(result_array)
       raise WrongCSSError, "Wrong CSS? #{self.name}, item - #{self.css_item}, price - #{self.css_price}" if result_array.nil?
       self.update_urls(result_array)
@@ -126,7 +125,7 @@ class Site < ActiveRecord::Base
     rescue => e
       log_error :update_prices, e
       self.update_cache
-      return [[], [], []]
+      return
     end
     self.update_cache
     logger.warn '------ finished update_price ----- ' + self.name
@@ -307,13 +306,11 @@ class Site < ActiveRecord::Base
           rescue => e
             page = open(URI.escape(site_url), "Cookie" => cookies, "Referer" => referer)
           end
-          logger.warn page.charset
-          html = Nokogiri::HTML(page, nil, page.charset || 'utf-8')
+          html = Nokogiri::HTML(page, nil, self.encoding)
 
+          logger.error "Error: #{page.charset} - #{self.name}" if page.charset != self.encoding
           name_array = html.css(self.css_item)
           price_array = html.css(self.css_price)
-          logger.warn name_array
-          logger.warn price_array
 
           if name_array.size != price_array.size #проверка соответствия кол-ва товаров и цен
             logger.warn "----------error---------"
@@ -329,15 +326,18 @@ class Site < ActiveRecord::Base
               str = check_link(product["href"], start_page)
             end
 
-            logger.warn utf8(product.text)
             result_array << [utf8(product.text).strip, utf8(str), utf8(price_array[index].text)]
+            #result_array << [product.text.strip, str, price_array[index].text]
 
 
           end #цикл по списку товаров на странице
 
           if !html.at_css(css_page).nil? #проверка на наличие след. страницы
             site_url = html.at_css(css_page)["href"]
+            logger.warn site_url
             site_url = check_link(site_url, url_site_start)
+            logger.warn html.at_css(css_page)
+            logger.warn utf8(site_url)
           end #проверка на наличие след. страницы
 
         end while !html.at_css(css_page).nil? && site_url != last_page #цикл пагинации

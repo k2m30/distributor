@@ -13,7 +13,9 @@ def prepare_test_db
 
 end
 #User.destroy_all
-Rails.logger.flush
+f = File.open "#{Rails.root}/log/test.log", 'w+'
+f.close
+
 p User.all.pluck(:id, :username)
 p Group.all.pluck(:id, :name)
 p Site.all.order(:name).pluck(:name)
