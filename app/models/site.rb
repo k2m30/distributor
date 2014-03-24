@@ -1,3 +1,4 @@
+#encoding: UTF-8
 require 'rubygems'
 require 'open-uri'
 require 'rubyXL'
@@ -306,7 +307,7 @@ class Site < ActiveRecord::Base
           rescue => e
             page = open(URI.escape(site_url), "Cookie" => cookies, "Referer" => referer)
           end
-          html = Nokogiri::HTML(page, nil, self.encoding)
+          html = Nokogiri::HTML(page.read, nil, self.encoding)
 
           logger.error "Error: #{page.charset} - #{self.name}" if page.charset != self.encoding
           name_array = html.css(self.css_item)
@@ -334,10 +335,7 @@ class Site < ActiveRecord::Base
 
           if !html.at_css(css_page).nil? #проверка на наличие след. страницы
             site_url = html.at_css(css_page)["href"]
-            logger.warn site_url
             site_url = check_link(site_url, url_site_start)
-            logger.warn html.at_css(css_page)
-            logger.warn utf8(site_url)
           end #проверка на наличие след. страницы
 
         end while !html.at_css(css_page).nil? && site_url != last_page #цикл пагинации

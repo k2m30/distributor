@@ -14,7 +14,7 @@ Feature: update prices
 #    | 21vek.by           |
 #    | 24real.by          |
 #    | 24shop.by          |
-#    | 360.shop.by        |
+##    | 360.shop.by        |
 #    | 50.by              |
 #    | 7sotok.by          |
 #    | agro-shop.by       |
@@ -23,10 +23,10 @@ Feature: update prices
 #    | belmall.by         |
 #    | bes.shop.by        |
 #    | bez-nal.by         |
-#    | bikord.of.by       |
+##    | bikord.of.by       |
 #    | camera.shop.by     |
 #    | clean.by           |
-#    | cleanhouse.by      |
+    | cleanhouse.by      |
 #    | delomastera.by     |
 #    | dvrka.by           |
 #    | elmarket.by        |
@@ -46,13 +46,13 @@ Feature: update prices
 #    | multicom.by        |
 #    | nash-dom.shop.by   |
 #    | nextshop.by        |
-    | nvd.by             |
+#    | nvd.by             |
 #    | orion.shop.by      |
 #    | papa-karlo.shop.by |
 #    | pcbox.by           |
 #    | pingvin.shop.by    |
 #    | premium.shop.by    |
-#####    | pro-karcher.by     |
+##    | pro-karcher.by     |
 #    | radiomarket.by     |
 #    | rodnoi.by          |
 #    | rsmarket.by        |
