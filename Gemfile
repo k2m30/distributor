@@ -66,7 +66,7 @@ group :test do
   gem 'database_cleaner'
 end
 
-gem 'best_in_place', :git => 'https://github.com/aaronchi/best_in_place.git'
+# gem 'best_in_place', :git => 'https://github.com/aaronchi/best_in_place.git'
 
 gem 'whenever', :require => false
 
