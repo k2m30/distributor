@@ -69,20 +69,6 @@ class UrlsController < ApplicationController
     end
   end
 
-  def update_prices
-    current_site = params[:site].nil? ? nil : Site.find(params[:site])
-    if ENV['RACK_ENV'] == 'production' || ENV['RAILS_ENV'] == 'production' || ENV['USER'] == 'deployer'
-      current_site.delay(run_at: 10.seconds.from_now).update_prices
-    else
-      current_site.update_prices
-    end
-    #LogMailer.update_report(current_site).deliver
-    flash[:notice] = "Цены обновляются. Обычно это занимает 1-2 минуты для каждого сайта. Обновите страницу позже."
-
-    redirect_to site_path(current_site)
-
-  end
-
   def update_violators (redirect_to_root=true, site_id=nil)
     allowed_error = current_user.settings.allowed_error
     if site_id.nil?

@@ -4,6 +4,7 @@ class Group < ActiveRecord::Base
   has_many :rows, dependent: :destroy
   has_one :settings, dependent: :destroy
   has_and_belongs_to_many :sites
+  has_many :urls, through: :items
 
   def get_standard_site
     Rails.cache.fetch([self, 'standard_site']){self.sites.where(standard: true).first}

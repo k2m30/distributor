@@ -1,7 +1,7 @@
 Distibutor::Application.routes.draw do
-  mount Tail::Engine, at: "/tail"
+  mount Tail::Engine, at: '/tail'
 
-  get "main/index"
+  get 'main/index'
 
   resources :logs, only: [:index, :destroy] do
     collection do
@@ -36,7 +36,6 @@ Distibutor::Application.routes.draw do
       get 'upd' => 'urls#update_single_price'
     end
     collection do
-      get 'update_prices' => 'urls#update_prices'
       get 'update_violators' => 'urls#update_violators'
       get 'find_urls' => 'urls#find_urls'
     end
@@ -53,6 +52,7 @@ Distibutor::Application.routes.draw do
       get 'logs_submit'
       get 'violators'
       get 'row'
+      get 'update_prices' => 'sites#update_prices'
     end
 
   end

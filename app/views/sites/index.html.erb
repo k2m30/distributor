@@ -38,9 +38,8 @@
                         :data => {:confirm => t('.confirm', :default => t('helpers.links.confirm', :default => 'Are you sure?'))},
                         :class => 'btn btn-mini btn-danger' %>
         <% end %>
-        <% if !site.standard %>
-            <%= link_to t('.update_prices', :default => t('helpers.links.update_prices')),
-                        update_prices_urls_path(:site => site), :class => 'btn btn-mini' %>
+        <% unless site.standard? %>
+            <%= link_to 'Обновить цены', update_prices_site_path(site) ,class: 'btn btn-mini' %>
         <% end %>
       </td>
       </tr>

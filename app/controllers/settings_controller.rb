@@ -110,8 +110,8 @@ class SettingsController < ApplicationController
     begin
       current_user.standard_site_import(filename)
       redirect_to settings_path, success: 'Цены импортированы'
-    #rescue
-    #  redirect_to settings_path, alert: 'Произошла ошибка импорта.'
+    rescue
+      redirect_to settings_path, alert: 'Произошла ошибка импорта.'
     end
   end
 
@@ -129,32 +129,33 @@ class SettingsController < ApplicationController
   #параметры сайтов
 
   def all_sites_preview
+    begin
       @file = params[:sites]
       if @file.nil?
         redirect_to settings_path, alert: 'Выберите файл'
         return
       end
       #begin
-        spreadsheet = Roo::Excelx.new(@file.path, nil, :ignore)
-        @sites = []
+      spreadsheet = Roo::Excelx.new(@file.path, nil, :ignore)
+      @sites = []
 
-        @header = spreadsheet.row(1)
-        (2..spreadsheet.last_row).each do |i|
-          @sites << spreadsheet.row(i)
-        end
-        File.open('./tmp/sites_' + current_user.username + '.xlsx', 'w') do |tempfile|
-          tempfile.write(@file.tempfile.set_encoding('utf-8').read)
-        end
-      #rescue
-       # redirect_to settings_path, alert: 'Произошла ошибка импорта.'
-      #end
+      @header = spreadsheet.row(1)
+      (2..spreadsheet.last_row).each do |i|
+        @sites << spreadsheet.row(i)
+      end
+      File.open('./tmp/sites_' + current_user.username + '.xlsx', 'w') do |tempfile|
+        tempfile.write(@file.tempfile.set_encoding('utf-8').read)
+      end
+    rescue
+      redirect_to settings_path, alert: 'Произошла ошибка импорта.'
+    end
   end
 
-  #параметры сайтов
+#параметры сайтов
 
   def index
     @sites_exist = !Site.all.empty?
-    @user_standard_site_exists = !Site.joins(:groups).where(standard: true, groups: {'user' =>  current_user}).uniq.empty?
+    @user_standard_site_exists = !Site.joins(:groups).where(standard: true, groups: {'user' => current_user}).uniq.empty?
     if current_user.admin?
       @groups = Group.all
     else

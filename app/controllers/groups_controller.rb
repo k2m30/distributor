@@ -10,12 +10,11 @@ class GroupsController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
   def set_group
     if current_user.admin?
       @group = Group.find(params[:id])
     else
-      @group = Group.joins(:user).where(user: current_user, id: params[:id]).first
+      @group = current_user.groups.find(params[:id])
     end
     redirect_to root_path, alert: 'Некорректный адрес.' if @group.nil?
   end

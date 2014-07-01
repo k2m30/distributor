@@ -5,6 +5,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :authentication_keys => [:username]
   has_many :groups, dependent: :destroy
+  has_many :items, through: :groups
+  has_many :sites, through: :groups
+  has_many :urls, through: :groups
 
   def get_all_items_json
     Item.order(:name).pluck(:name).to_json

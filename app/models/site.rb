@@ -123,10 +123,10 @@ class Site < ActiveRecord::Base
 
       self.check_for_violation
 
-    rescue => e
-      log_error :update_prices, e
-      self.update_cache
-      return
+      # rescue => e
+      #   log_error :update_prices, e
+      #   self.update_cache
+      #   return
     end
     self.update_cache
     logger.warn '------ finished update_price ----- ' + self.name
@@ -209,7 +209,7 @@ class Site < ActiveRecord::Base
   def parsing_site_method1
     begin
       logger.warn "------ start parsing function method1 " + self.name + "------"
-      if ENV['RACK_ENV'] == 'production' || ENV['RAILS_ENV'] == 'production' || ENV['USER'] == 'deployer'
+      if Rails.env.production?
         logger.warn 'Headless started'
         headless = Headless.new
         headless.start
@@ -266,7 +266,7 @@ class Site < ActiveRecord::Base
       log_error :parse_mehtod_one, e
     ensure
       browser.close
-      if ENV['RACK_ENV'] == 'production' || ENV['RAILS_ENV'] == 'production' || ENV['USER'] == 'deployer'
+      if Rails.env.production?
         headless.destroy
         logger.warn 'Headless destroyed'
       end
@@ -321,7 +321,7 @@ class Site < ActiveRecord::Base
               result_array << [utf8(product.text).strip, utf8(str), utf8(price_array[index].text)]
             end #цикл по списку товаров на странице
 
-            if !html.at_css(css_page).nil? #проверка на наличие след. страницы
+            unless html.at_css(css_page).nil? #проверка на наличие след. страницы
               site_url = html.at_css(css_page)["href"]
               site_url = check_link(site_url, url_site_start)
             end #проверка на наличие след. страницы
@@ -350,28 +350,12 @@ class Site < ActiveRecord::Base
     begin
       self.urls.destroy_all
 
-      user_array = User.all
-      site_groups=self.groups
+      User.all.each do |user|
 
-      user_array.each do |user|
-        result_groups = []
-        site_groups.each do |group|
-          if group.user_id == user.id
-            result_groups << group
-          end
-        end
+        items = user.items.sort_by { |item| item.name.size }.reverse
 
-        items = []
-        result_groups.each do |group|
-          items += Item.joins(:group => :user).where(groups: {name: group.name}, users: {username: user.username}).readonly(false)
-        end
-
-        items = items.sort_by { |item| item.name.size }
-        items = items.reverse
-
-        result_urls = []
         start_page = "http://" + self.name
-        result_urls = Url.joins(item: {group: :user}).where(items: {group_id: user.groups.map(&:id)})
+        result_urls = user.urls
 
         result_array.each do |item_array|
           url_str = item_array[1]
@@ -412,8 +396,8 @@ class Site < ActiveRecord::Base
         end
       end
       self.save
-    rescue => e
-      log_error(:update_urls, e)
+      # rescue => e
+      #   log_error(:update_urls, e)
     end
 
   end
@@ -456,12 +440,7 @@ class Site < ActiveRecord::Base
 
   def price_fit?(item, price)
     begin
-      standard_price = (item.urls & item.group.sites.where(standard: true).first.urls).first.price
-      if (standard_price/price.to_f - 1).abs < 0.4
-        true
-      else
-        false
-      end
+      (item.get_standard_price/price.to_f - 1).abs < 0.4 ? true : false
     rescue => e
       log_error :price_fit, e
     end
@@ -469,19 +448,11 @@ class Site < ActiveRecord::Base
 
   def update_url(price, url_str, item)
     begin
-      url = Url.new
-      url.site = self
-      url.item = item
-      url.url = url_str
-      url.price = price.to_f < item.group.settings.rate ? price.to_f*item.group.settings.rate : price.to_f
-
-      url.save
+      Url.create(site: self, item: item, url: url_str, price: price.to_f < item.group.settings.rate ? price.to_f*item.group.settings.rate : price.to_f)
 
       allowed_error = url.item.group.settings.allowed_error
-      allowed_error = allowed_error.include?('%') ? allowed_error.gsub('%', '').to_f/100 * url.price : allowed_error.to_f
-
+      allowed_error = allowed_error.include?('%') ? allowed_error.gsub('%', '').to_f/100 * price : allowed_error.to_f
       standard_price = url.item.get_standard_price
-
       url.check_for_violation(standard_price, allowed_error)
     rescue => e
       log_error :update_single_url, e

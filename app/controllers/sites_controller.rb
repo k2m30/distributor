@@ -4,7 +4,7 @@ require 'axlsx'
 
 class SitesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_site, only: [:show, :edit, :update, :destroy, :logs, :logs_submit, :violators]
+  before_action :set_site, only: [:show, :edit, :update, :destroy, :logs, :logs_submit, :violators, :update_prices]
 
   def row
     render text: Site.get_row(params[:id], params[:group])
@@ -40,6 +40,18 @@ class SitesController < ApplicationController
 
     end
 
+  end
+
+  def update_prices
+    if Rails.env.production?
+      @site.delay(run_at: 10.seconds.from_now).update_prices
+    else
+      @site.update_prices
+    end
+    #LogMailer.update_report(current_site).deliver
+    flash[:notice] = "Цены обновляются. Обычно это занимает 1-2 минуты для каждого сайта. Обновите страницу позже."
+
+    redirect_to site_path(@site)
   end
 
   def logs_submit
