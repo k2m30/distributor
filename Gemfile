@@ -1,6 +1,5 @@
 source 'http://rubygems.org'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '>=4.1'
 
 gem 'pg'
@@ -38,7 +37,7 @@ gem 'twitter-bootstrap-rails'
 gem 'rubyXL'
 gem 'nokogiri'
 gem 'zip-zip'
-gem 'rubyzip'#, :require => 'zip/zip'
+gem 'rubyzip' #, :require => 'zip/zip'
 gem 'roo'
 
 gem 'axlsx'
@@ -51,6 +50,9 @@ gem 'selenium-webdriver', '>= 2.40.0'
 gem 'watir-webdriver'
 gem 'headless'
 
+gem 'spring', group: :development
+gem 'spring-commands-rspec', group: :development
+
 group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -58,11 +60,11 @@ group :development, :test do
   gem 'quiet_assets'
   #gem 'bullet'
   gem 'meta_request'
-end
-
-group :test do
-  gem 'rspec'
+  gem 'rspec-rails'
   gem 'cucumber-rails', :require => false
+  gem 'capybara'
+  gem 'guard-rspec', require: false
+  gem 'factory_girl_rails'
   gem 'database_cleaner'
 end
 
