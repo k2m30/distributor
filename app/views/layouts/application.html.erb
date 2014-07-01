@@ -82,12 +82,12 @@
 
 <div class="container-fluid">
   <div class="row-fluid">
-    <% if user_signed_in? %>
-        <% flash.each do |name, msg| %>
-            <div class="alert alert-<%= name == :notice ? 'success' : 'error' %>">
-              <button type="button" class="close"
-                      data-dismiss="alert">&times;</button> <%= msg %> </div>
-        <% end %>
+
+    <% flash.each do |name, msg| %>
+        <div class="alert alert-<%= name == :notice ? 'success' : 'error' %>">
+          <button type="button" class="close"
+                  data-dismiss="alert">&times;</button> <%= msg %> </div>
+
     <% end %>
 
 

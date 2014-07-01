@@ -52,6 +52,7 @@ gem 'headless'
 
 gem 'spring', group: :development
 gem 'spring-commands-rspec', group: :development
+gem 'spring-commands-cucumber', group: :development
 
 group :development, :test do
   gem 'better_errors'
