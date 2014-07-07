@@ -31,22 +31,22 @@
 <br>
 
 <% if current_user.admin? %>
-    <%= link_to 'Экспорт', export_shops_preview_settings_path, class: 'btn btn-primary' %>
+    <%= link_to 'Экспорт', export_shops_preview_settings_path, class: 'btn btn-primary', id: 'export' %>
     <br/>
     <%= form_tag all_settings_path, multipart: true do %>
         <%= file_field_tag 'sites' %>
-        <%= submit_tag 'Импорт настроек сайтов', :class => 'btn btn-primary' %>
+        <%= submit_tag 'Импорт настроек сайтов', class: 'btn btn-primary', id:'all_sites_button' %>
     <% end %>
 <% end %>
 
 <%= form_tag import_preview_settings_path, multipart: true do %>
     <%= file_field_tag 'file' %>
-    <%= submit_tag 'Импорт стандартных цен', :class => 'btn btn-primary', disabled: !@sites_exist%>
+    <%= submit_tag 'Импорт стандартных цен', class: 'btn btn-primary', disabled: !@sites_exist, id: 'standard_button'%>
 <% end %>
 
 
 
 <%= form_tag import_shops_preview_settings_path, multipart: true do %>
     <%= file_field_tag 'shops' %>
-    <%= submit_tag 'Импорт списка магазинов для групп товаров', :class => 'btn btn-primary', :disabled => !@sites_exist || !@user_standard_site_exists  %>
+    <%= submit_tag 'Импорт списка магазинов для групп товаров', class: 'btn btn-primary', disabled: !@sites_exist || !@user_standard_site_exists, id: 'shops_button'  %>
 <% end %>
