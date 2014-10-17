@@ -1,5 +1,6 @@
 #Deployment instructions
 #locally
+psql -U username -d postgres
 
 sudo mate /Users/Mikhail/.ssh/known_hosts
 
