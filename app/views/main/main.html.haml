@@ -21,10 +21,11 @@
         /
           Favicons
           \==================================================
-        %link{:href => "images/16.ico", :rel => "shortcut icon"}
-          %link{:href => "images/57.png", :rel => "apple-touch-icon"}
-            %link{:href => "images/72.png", :rel => "apple-touch-icon", :sizes => "72x72"}
-              %link{:href => "images/114.png", :rel => "apple-touch-icon", :sizes => "114x114"}
+        =favicon_link_tag '16.ico'
+        %link{:href => "/assets/16.ico", :rel => "shortcut icon"}
+          %link{:href => "/assets/57.png", :rel => "apple-touch-icon"}
+            %link{:href => "/assets/72.png", :rel => "apple-touch-icon", :sizes => "72x72"}
+              %link{:href => "/assets/114.png", :rel => "apple-touch-icon", :sizes => "114x114"}
   %body.home.page.page-id-5.page-template.page-template-template-one-page-php.computer.cssnav{"data-device" => "", "data-maxcols" => ""}
     #top
     #o_revolution_widget-2.o-widget-1.o-widget-first.o-widget-odd.widget_o_revolution_widget.o-widget.o-main-widget
@@ -39,69 +40,69 @@
                     / SLIDE
                     %li{"data-masterspeed" => "5000", "data-slotamount" => "7", "data-transition" => "random"}
                       / MAIN IMAGE
-                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => "themes/plugins/revslider/images/transparent.png"}
+                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => image_path('transparent.png')}
                         / LAYERS
                         / LAYER NR. 1
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-speed" => "300", "data-start" => "400", "data-voffset" => "-20", "data-x" => "-240", "data-y" => "center", :style => "z-index: 2"}
-                          %img{:alt => "", "data-hh" => "1245", "data-ww" => "1245", :src => "images/electionary.png"}
+                          =image_tag 'electionary.png', "data-hh" => "1245", "data-ww" => "1245"
                         / LAYER NR. 2
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-hoffset" => "-35", "data-speed" => "300", "data-start" => "1000", "data-voffset" => "-15", "data-x" => "right", "data-y" => "bottom", :style => "z-index: 3"}
-                          %img{:alt => "", :src => "images/13.png"}
+                          =image_tag '13.png'
                     / SLIDE
                     %li{"data-delay" => "5000", "data-masterspeed" => "300", "data-slotamount" => "7", "data-transition" => "random"}
                       / MAIN IMAGE
-                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => "themes/plugins/revslider/images/transparent.png"}
+                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => image_path('transparent.png')}
                         / LAYERS
                         / LAYER NR. 1
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-speed" => "300", "data-start" => "1000", "data-voffset" => "-70", "data-x" => "20", "data-y" => "center", :style => "z-index: 2"}
-                          %img{:alt => "", :src => "images/22.png"}
+                          =image_tag '22.png'
                         / LAYER NR. 2
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-speed" => "300", "data-start" => "400", "data-x" => "452", "data-y" => "53", :style => "z-index: 3"}
-                          %img{:alt => "", :src => "images/Apt.png"}
+                          =image_tag 'Apt.png'
                     / SLIDE
                     %li{"data-delay" => "5000", "data-masterspeed" => "300", "data-slotamount" => "7", "data-transition" => "random"}
                       / MAIN IMAGE
-                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => "themes/plugins/revslider/images/transparent.png"}
+                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => image_path('transparent.png')}
                         / LAYERS
                         / LAYER NR. 1
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-speed" => "300", "data-start" => "1000", "data-x" => "529", "data-y" => "25", :style => "z-index: 2"}
-                          %img{:alt => "", :src => "images/31.png"}
+                          =image_tag '31.png'
                         / LAYER NR. 2
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-speed" => "300", "data-start" => "400", "data-x" => "8", "data-y" => "124", :style => "z-index: 3"}
-                          %img{:alt => "", :src => "images/1.png"}
+                          =image_tag '1.png'
                     / SLIDE
                     %li{"data-delay" => "5000", "data-masterspeed" => "300", "data-slotamount" => "7", "data-transition" => "random"}
                       / MAIN IMAGE
-                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => "themes/plugins/revslider/images/transparent.png"}
+                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => image_path('transparent.png')}
                         / LAYERS
                         / LAYER NR. 1
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-speed" => "300", "data-start" => "1000", "data-x" => "35", "data-y" => "35", :style => "z-index: 2"}
-                          %img{:alt => "", :src => "images/41.png"}
+                          =image_tag '41.png'
                         / LAYER NR. 2
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-speed" => "300", "data-start" => "400", "data-x" => "2", "data-y" => "-70", :style => "z-index: 3"}
-                          %img{:alt => "", :src => "images/BE1.png"}
+                          =image_tag 'BE1.png'
                     / SLIDE
                     %li{"data-delay" => "5000", "data-masterspeed" => "300", "data-slotamount" => "7", "data-transition" => "random"}
                       / MAIN IMAGE
-                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => "themes/plugins/revslider/images/transparent.png"}
+                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => image_path('transparent.png')}
                         / LAYERS
                         / LAYER NR. 1
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-hoffset" => "-25", "data-speed" => "300", "data-start" => "1000", "data-x" => "right", "data-y" => "30", :style => "z-index: 2"}
-                          %img{:alt => "", :src => "images/51.png"}
+                          =image_tag '51.png'
                         / LAYER NR. 2
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-speed" => "300", "data-start" => "400", "data-x" => "-158", "data-y" => "-45", :style => "z-index: 3"}
-                          %img{:alt => "", :src => "images/AE1.png"}
+                          =image_tag 'AE1.png'
                     / SLIDE
                     %li{"data-delay" => "5000", "data-masterspeed" => "300", "data-slotamount" => "7", "data-transition" => "random"}
                       / MAIN IMAGE
-                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => "themes/plugins/revslider/images/transparent.png"}
+                      %img{:alt => "", "data-bgfit" => "cover", "data-bgposition" => "center top", "data-bgrepeat" => "no-repeat", :src => image_path('transparent.png')}
                         / LAYERS
                         / LAYER NR. 1
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-speed" => "300", "data-start" => "400", "data-x" => "134", "data-y" => "-318", :style => "z-index: 2"}
-                          %img{:alt => "", "data-hh" => "1245", "data-ww" => "1245", :src => "images/img_2.png"}
+                          =image_tag 'img_2.png', "data-hh" => "1245", "data-ww" => "1245"
                         / LAYER NR. 2
                         .tp-caption.tp-fade{"data-easing" => "Power3.easeInOut", "data-endspeed" => "300", "data-speed" => "300", "data-start" => "1000", "data-x" => "40", "data-y" => "50", :style => "z-index: 3"}
-                          %img{:alt => "", :src => "images/61.png"}
+                          =image_tag '61.png'
                   .tp-bannertimer
     .swiper-container.swiper-top
       .swiper-wrapper
