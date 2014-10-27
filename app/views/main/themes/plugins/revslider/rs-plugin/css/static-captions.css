@@ -1,0 +1,34 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,800,300,700);
+
+.tp-caption.roundedimage img {
+	-webkit-border-radius: 300px;
+    -moz-border-radius: 300px;
+    border-radius: 300px;
+}
+  
+@font-face {
+    font-family: 'GothamBold';
+    src: url('../font/gotham-bold.eot');
+    src: url('../font/gotham-bold.eot') format('embedded-opentype'),
+         url('../font/gotham-bold.woff') format('woff'),
+         url('../font/gotham-bold.ttf') format('truetype'),
+         url('../font/gotham-bold.svg#GothamBold') format('svg');
+}
+  
+@font-face {
+    font-family: 'GothamRegular';
+    src: url('../font/gotham-light.eot');
+    src: url('../font/gotham-light.eot') format('embedded-opentype'),
+         url('../font/gotham-light.woff') format('woff'),
+         url('../font/gotham-light.ttf') format('truetype'),
+         url('../font/gotham-light.svg#GothamRegular') format('svg');
+}
+
+@font-face {
+    font-family: 'GothamItalic';
+    src: url('../font/gotham-bookitalic.eot');
+    src: url('../font/gotham-bookitalic.eot') format('embedded-opentype'),
+         url('../font/gotham-bookitalic.woff') format('woff'),
+         url('../font/gotham-bookitalic.ttf') format('truetype'),
+         url('../font/gotham-bookitalic.svg#GothamItalic') format('svg');
+}

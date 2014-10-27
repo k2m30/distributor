@@ -54,6 +54,9 @@ gem 'spring', group: :development
 gem 'spring-commands-rspec', group: :development
 gem 'spring-commands-cucumber', group: :development
 
+gem 'haml'
+gem 'haml-rails'
+
 group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'

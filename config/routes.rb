@@ -2,6 +2,7 @@ Distibutor::Application.routes.draw do
   mount Tail::Engine, at: '/tail'
 
   get 'main/index'
+  get 'main/main'
 
   resources :logs, only: [:index, :destroy] do
     collection do

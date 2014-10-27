@@ -1,0 +1,587 @@
+body {
+  font-family: "Lato" !important;
+  font-size: 15px;
+  line-height: 25px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.flexslider .slider-legend .slider-legend-title,
+.box .title,
+.toggletitle,
+.accordiontoggler,
+.tabstitle {
+  font-family: "Lato" !important;
+  text-transform: inherit;
+  font-weight: 900 !important;
+}
+.btn,
+.btn-nav,
+.btn-nav li > a {
+  font-family: "Lato" !important;
+  text-transform: uppercase;
+}
+#header {
+  font-family: "Lato" !important;
+  text-transform: uppercase;
+  font-size: 15px;
+}
+body {
+  background: #f5f5f5;
+  color: #555;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #333;
+}
+blockquote {
+  border-left: 5px solid #005566;
+}
+a {
+  color: #005566;
+}
+a:hover {
+  color: #228888;
+}
+a h2:hover {
+  color: #228888;
+}
+.post-content ul li:before {
+  color: #005566;
+}
+.primarycolor {
+  color: #005566 !important;
+}
+.rslides_tabs .rslides_here a {
+  background-color: #005566;
+}
+.btn-nav li > a,
+.btn,
+.btn-primary,
+#respond input#submit,
+button.btn,
+.wp-pagenavi a,
+.wp-pagenavi span.current {
+  color: #ffffff;
+  background-color: #005566;
+}
+.btn-nav li > a:hover,
+a.btn:hover,
+.btn-primary,
+#respond input#submit:hover,
+button.btn:hover,
+.wp-pagenavi a:hover {
+  color: #ffffff;
+  background: #228888;
+}
+.btn.transparent:hover {
+  color: #005566;
+}
+.prevnext .btn:hover {
+  background: #228888;
+}
+.prevnext .btn a {
+  color: #ffffff;
+}
+.position h4 {
+  color: #005566;
+}
+.at-share-label,
+.at-vertical-menu.at-vertical-menu-right a:hover {
+  background-color: #005566;
+  color: #ffffff;
+}
+#copyright.cream-container,
+#header.cream-container {
+  background-color: #fff;
+}
+#copyright.coffee-container,
+#header.coffee-container {
+  background-color: #1C1C1C;
+}
+#scrolltop {
+  background: #005566;
+}
+#scrolltop .glyphicons,
+#scrolltop .glyphicons i:before {
+  color: #ffffff;
+}
+.actions a {
+  background: #005566;
+  color: #ffffff;
+}
+.actions a:hover {
+  background: #228888;
+}
+#sidebar .o-widget li:before {
+  color: #005566;
+}
+#searchform input#searchsubmit {
+  border: 1px solid #005566;
+  background: #005566 url(../images/search.png) center 3px no-repeat;
+  color: #ffffff;
+}
+#searchform input#searchsubmit:hover {
+  background-color: #228888;
+  border: 1px solid #228888;
+}
+.flexslider .flex-direction-nav li a {
+  background: #005566;
+  color: #ffffff;
+}
+::selection {
+  background: #005566 !important;
+  color: #ffffff !important;
+}
+::-moz-selection {
+  background: #005566 !important;
+  color: #ffffff !important;
+}
+#header {
+  background: #151515;
+}
+#header a {
+  color: #fff;
+}
+.mobinav > li {
+  border-bottom: 1px solid #272727;
+}
+#header ul.nav > li a,
+#header div.nav > ul > li a,
+.sidr a:hover {
+  color: #fff;
+}
+#header ul.nav > li:hover > a,
+#header div.nav > ul > li:hover > a {
+  color: #005566;
+}
+#header ul.nav > li.current-menu-item > a,
+#header ul.nav > li.current_page_parent > a,
+#header ul.nav > li.current-page-ancestor > a,
+#header ul.nav > li.current-menu-ancestor > a,
+#header ul.nav > li.current-menu-parent > a,
+#header div.nav > ul > li.current-menu-item > a,
+#header div.nav > ul > li.current_page_parent > a,
+#header div.nav > ul > li.current-page-ancestor > a,
+#header div.nav > ul > li.current-menu-ancestor > a,
+#header div.nav > ul > li.current-menu-parent > a {
+  color: #005566;
+}
+#header ul.nav ul,
+#header div.nav > ul ul {
+  background: #222;
+}
+#header ul.nav ul > li a,
+#header div.nav > ul ul > li a {
+  color: #ffffff;
+}
+#header ul.nav ul >	li a:hover,
+#header div.nav > ul ul >	li a:hover {
+  color: #005566;
+}
+#header ul.nav ul > li,
+#header div.nav > ul ul > li {
+  border-bottom: 1px dashed #444;
+}
+#header.scrolled {
+  background: #ec610e;
+}
+#header.scrolled a {
+  color: #ffffff;
+}
+#header.scrolled ul.nav > li a,
+#header.scrolled div.nav > ul > li a {
+  color: #ffffff;
+}
+#header.scrolled ul.nav > li:hover > a,
+#header.scrolled ul.nav > li > a:hover,
+#header.scrolled div.nav > ul > li:hover > a,
+#header.scrolled div.nav > ul > li > a:hover {
+  color: #111;
+}
+#header.scrolled ul.nav > li.current-menu-item > a,
+#header.scrolled ul.nav > li.current_page_parent > a,
+#header.scrolled ul.nav > li.current-page-ancestor > a,
+#header.scrolled ul.nav > li.current-menu-ancestor > a,
+#header.scrolled ul.nav > li.current-menu-parent > a,
+#header.scrolled div.nav > ul > li.current-menu-item > a,
+#header.scrolled div.nav > ul > li.current_page_parent > a,
+#header.scrolled div.nav > ul > li.current-page-ancestor > a,
+#header.scrolled div.nav > ul > li.current-menu-ancestor > a,
+#header.scrolled div.nav > ul > li.current-menu-parent > a {
+  color: #111;
+}
+#header.scrolled ul.nav > ul li:hover > a,
+#header.scrolled ul.nav ul > li > a:hover,
+#header.scrolled div.nav > ul > ul li:hover > a,
+#header.scrolled div.nav > ul ul > li > a:hover {
+  color: #005566;
+}
+.sidr ul li.active a,
+.sidr ul li.sidr-class-active a {
+  background: #005566;
+}
+.sugar-container {
+  background-color: #005566;
+  color: #431b04;
+}
+.sugar-container h1,
+.sugar-container h2,
+.sugar-container h3,
+.sugar-container h4,
+.sugar-container h5,
+.sugar-container h6 {
+  color: #ffffff;
+}
+.sugar-container a {
+  color: #ffffff;
+}
+.sugar-container a:hover,
+.sugar-container a h2:hover {
+  color: #732f07;
+}
+.sugar-container .post-content ol li:before,
+.sugar-container .post-content ul li:before {
+  color: #732f07;
+}
+.sugar-container #sidebar .o-widget li:before {
+  color: #228888;
+}
+.sugar-container .icon-container div {
+  background: #005566;
+  color: #ffffff;
+}
+.sugar-container .icon-bg .glyphicons {
+  color: #ffffff;
+}
+.sugar-container .rslides_tabs .rslides_here a {
+  background-color: #ffffff;
+}
+.sugar-container .btn-nav li > a,
+.sugar-container .btn,
+.sugar-container #respond input#submit,
+.sugar-container button.btn,
+.sugar-container .prevnext .btn a,
+.sugar-container .wp-pagenavi a {
+  background-color: #228888;
+  color: #ffffff;
+}
+.sugar-container .btn-nav li > a:hover,
+.sugar-container a.btn:hover,
+.sugar-container #respond input#submit:hover,
+.sugar-container button.btn:hover,
+.sugar-container .prevnext .btn:hover,
+.sugar-container .prevnext .btn a:hover,
+.sugar-container .wp-pagenavi a:hover {
+  background: #a3430a;
+  color: #ffffff;
+}
+.sugar-container .btn-nav li.active > a {
+  color: #ffffff !important;
+}
+.sugar-container .btn.transparent {
+  color: #ffffff;
+}
+.sugar-container .btn.transparent:hover {
+  color: #130801;
+}
+.sugar-container .position {
+  background: #f58e51;
+}
+.sugar-container .position h4 {
+  color: #130801;
+}
+.sugar-container .position .more .btn {
+  background: #228888;
+}
+.sugar-container .position .more .btn:hover {
+  background: #a3430a;
+}
+.sugar-container blockquote {
+  border-left: 5px solid #a3430a;
+}
+.sugar-container h2 a.rsswidget {
+  color: #ffffff !important;
+}
+.bg-sugar {
+  background: #005566 !important;
+  color: #ffffff !important;
+}
+a.bg-sugar:hover {
+  background: #228888 !important;
+  color: #ffffff !important;
+}
+a.bg-sugar.active {
+  background: #a3430a !important;
+  color: #ffffff !important;
+}
+.sugar-container .bg-sugar {
+  background: #228888 !important;
+  color: #ffffff !important;
+}
+.sugar-container a.bg-sugar:hover,
+.sugar-container a.bg-sugar.active {
+  background: #a3430a !important;
+  color: #ffffff !important;
+}
+.sugar-container #searchform input#searchsubmit {
+  border: 1px solid #a3430a;
+  background: #a3430a url(../images/search.png) center 3px no-repeat;
+  color: #ffffff;
+}
+.sugar-container #searchform input#searchsubmit:hover {
+  background-color: #732f07;
+  border: 1px solid #732f07;
+}
+.sugar-container .hr {
+  border-top: 1px solid #431b04;
+  border-bottom: 1px solid #fdece2;
+}
+.widget_o_intro_widget .sugar-container p {
+  color: #fff;
+}
+.sugar-container ::selection {
+  background: #a3430a !important;
+  color: #ffffff !important;
+}
+.sugar-container ::-moz-selection {
+  background: #a3430a !important;
+  color: #ffffff !important;
+}
+.sugar-container #scrolltop {
+  background: #a3430a;
+}
+#copyright.sugar-container,
+#header.sugar-container {
+  background-color: #ec610e;
+}
+.o-widget .sugar-container p.intro a {
+  color: #a3430a;
+}
+.o-widget .sugar-container p.intro a:hover {
+  color: #732f07;
+}
+.sugar-container .og-grid li.og-expanded > a::after {
+  border-bottom-color: #dd5b0d;
+}
+.sugar-container .og-expander {
+  background: #dd5b0d;
+}
+.pricingtable-lines li {
+  background: #fff;
+  color: #333;
+}
+.pricingtable-lines li.zebra {
+  background: #ececec;
+}
+.pt-coffee .pricingtable-head {
+  background: #181818;
+}
+.pt-coffee .pricingtable-price {
+  background: #1d1d1d;
+}
+.pt-coffee .pricingtable-head h3,
+.pt-coffee .pt-currency,
+.pt-coffee .pt-priceinfo {
+  color: #eee;
+}
+.pt-coffee .pt-price {
+  color: #fff;
+}
+.pt-coffee .pricingtable-button {
+  background: #1d1d1d;
+}
+.pt-cream .pricingtable-head {
+  background: #fff;
+}
+.pt-cream .pricingtable-price {
+  background: #f0f0f0;
+}
+.cream-container .pt-cream .pricingtable-price {
+  background: #e8e8e8;
+}
+.pt-cream .pricingtable-head h3,
+.pt-cream .pt-currency,
+.pt-cream .pt-priceinfo {
+  color: #333;
+}
+.pt-cream .pt-price {
+  color: #222;
+}
+.pt-cream .pricingtable-button {
+  background: #fff;
+}
+.pt-sugar .pricingtable-head {
+  background: #228888;
+}
+.sugar-container .pt-sugar .pricingtable-head {
+  background: #bc4d0b;
+}
+.pt-sugar .pricingtable-price {
+  background: #f16917;
+}
+.sugar-container .pt-sugar .pricingtable-price {
+  background: #228888;
+}
+.pt-sugar .pricingtable-head h3,
+.pt-sugar .pt-price,
+.pt-sugar .pt-currency,
+.pt-sugar .pt-priceinfo {
+  color: #fff;
+}
+.pt-sugar .pricingtable-button {
+  background: #228888;
+}
+.pt-sugar .pricingtable-button {
+  background: #bc4d0b;
+}
+.cream-container .inner-pricingtable {
+  border: 1px solid #ccc;
+}
+.bg-red {
+  background-color: #e0051e !important;
+  color: #FFFFFF !important;
+}
+a.bg-red:hover {
+  background-color: #ae0417 !important;
+  color: #FFFFFF !important;
+}
+.text-red {
+  color: #e0051e !important;
+}
+.bg-green {
+  background-color: #10a813 !important;
+  color: #FFFFFF !important;
+}
+a.bg-green:hover {
+  background-color: #0c790e !important;
+  color: #FFFFFF !important;
+}
+.text-green {
+  color: #10a813 !important;
+}
+.bg-blue {
+  background-color: #0785c0 !important;
+  color: #FFFFFF !important;
+}
+a.bg-blue:hover {
+  background-color: #05638f !important;
+  color: #FFFFFF !important;
+}
+.text-blue {
+  color: #0785c0 !important;
+}
+.bg-orange {
+  background-color: #fc681f !important;
+  color: #FFFFFF !important;
+}
+a.bg-orange:hover {
+  background-color: #e54e03 !important;
+  color: #FFFFFF !important;
+}
+.text-orange {
+  color: #fc681f !important;
+}
+.bg-grey {
+  background-color: #818181 !important;
+  color: #FFFFFF !important;
+}
+a.bg-grey:hover {
+  background-color: #686868 !important;
+  color: #FFFFFF !important;
+}
+.text-grey {
+  color: #818181 !important;
+}
+.bg-pink {
+  background-color: #ff4cf9 !important;
+  color: #FFFFFF !important;
+}
+a.bg-pink:hover {
+  background-color: #ff19f7 !important;
+  color: #FFFFFF !important;
+}
+.text-pink {
+  color: #ff4cf9 !important;
+}
+.bg-purple {
+  background-color: #7e0db1 !important;
+  color: #FFFFFF !important;
+}
+a.bg-purple:hover {
+  background-color: #5c0a81 !important;
+  color: #FFFFFF !important;
+}
+.text-purple {
+  color: #7e0db1 !important;
+}
+.bg-yellow {
+  background-color: #ffc335 !important;
+  color: #333333 !important;
+}
+a.bg-yellow:hover {
+  background-color: #ffb402 !important;
+  color: #333333 !important;
+}
+.text-yellow {
+  color: #ffc335 !important;
+}
+.bg-white {
+  background-color: #fcfcfc !important;
+  color: #333333 !important;
+}
+a.bg-white:hover {
+  background-color: #e3e3e3 !important;
+  color: #333333 !important;
+}
+.bg-black {
+  background-color: #222222 !important;
+  color: #FFFFFF !important;
+}
+a.bg-black:hover {
+  background-color: #090909 !important;
+  color: #FFFFFF !important;
+}
+.overlay {
+  background: url("../includes/rgba.php?r=0&g=0&b=0&a=50") repeat;
+  background: rgba(0,0,0,0.5);
+}
+.text-white {
+  color: #fff !important;
+}
+.text-black {
+  color: #000 !important;
+}
+.text-sugar {
+  color: #005566 !important;
+}
+.background-transparent {
+  background: none !important;
+}
+.background-white {
+  background-color: #fff !important;
+}
+.background-black {
+  background-color: #111 !important;
+}
+.background-sugar {
+  background-color: #005566 !important;
+}
+@media (max-width: 767px) {
+  .sugar-container .o-widget-odd {
+    background-color: #f16917 !important;
+  }
+  .cream-container .o-widget-odd {
+    background-color: #ececec !important;
+  }
+  .coffee-container .o-widget-odd {
+    background-color: #1a1a1a !important;
+  }
+}
