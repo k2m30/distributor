@@ -1,23 +1,28 @@
-#Deployment instructions
-#locally
-psql -U username -d postgres
-
+# Deployment instructions
+## locally
+```psql -U username -d postgres
 sudo mate /Users/Mikhail/.ssh/known_hosts
+```
 
-#server
+## server
 
-apt-get -y update
+``` apt-get -y update
 
 apt-get -y upgrade
 
 apt-get -y install curl git-core python-software-properties g++ mc htop memcached
+```
 
+# remove apache
 
-* remove apache
-
+```
 apt-get --purge remove apache*
 
-* change timezone && set locale
+```
+
+# change timezone && set locale
+
+```
 
 ln -sf /usr/share/zoneinfo/Europe/Minsk /etc/localtime
 
@@ -25,7 +30,11 @@ echo 'Europe/Minsk' >> /etc/timezone
 
 locale-gen ru_RU.UTF-8
 
-* /etc/default/locale
+```
+
+# Change locale in ```/etc/default/locale```
+
+```
 
 LANG="ru_RU.UTF-8"
 
@@ -49,11 +58,15 @@ LC_TELEPHONE="ru_RU.UTF-8"
 
 LC_MEASUREMENT="ru_RU.UTF-8"
 
-* -
+```
 
-reboot
+# Reboot
 
-* nginx
+```reboot```
+
+# nginx
+
+```
 
 add-apt-repository ppa:nginx/stable
 
@@ -63,8 +76,11 @@ apt-get -y install nginx
 
 service nginx start
 
-* PostgreSQL
+```
 
+# PostgreSQL
+
+```
 add-apt-repository ppa:pitti/postgresql
 
 apt-get -y update
@@ -82,17 +98,18 @@ create database distributor_production owner distributor;
 alter user distributor superuser createrole createdb replication;
 
 \q
+```
+# Add deployer user
 
-* Add deployer user
+```
 adduser deployer --ingroup root
-
 sudo usermod -a -G sudo deployer
-
 su deployer
-
 cd
 
-* Ruby with rvm
+```
+
+# Ruby with rvm
 
 sudo \curl -sSL https://get.rvm.io | bash -s stable --ruby --rails
 
