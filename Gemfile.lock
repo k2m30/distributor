@@ -112,7 +112,7 @@ GEM
     fast_stack (0.1.0)
       rake
       rake-compiler
-    ffi (1.9.3)
+    ffi (1.13.1)
     flamegraph (0.0.5)
       fast_stack
     formatador (0.2.5)
