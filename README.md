@@ -10,7 +10,7 @@ sudo mate /Users/Mikhail/.ssh/known_hosts
 
 apt-get -y upgrade
 
-apt-get -y install curl git-core python-software-properties g++ mc htop memcached
+apt-get -y install curl git-core g++ mc htop memcached net-tools
 ```
 
 # remove apache
@@ -104,6 +104,7 @@ alter user distributor superuser createrole createdb replication;
 ```
 adduser deployer --ingroup root
 sudo usermod -a -G sudo deployer
+adduser deployer sudo
 su deployer
 cd
 
