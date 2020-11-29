@@ -117,7 +117,7 @@ In the bottom of the file, add the following line:
 
 `$USER ALL=(ALL) NOPASSWD: ALL`
 
-
+Where $USER is your username on your system.
 
 # Ruby with rvm
 
