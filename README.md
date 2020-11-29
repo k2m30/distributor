@@ -107,8 +107,17 @@ sudo usermod -a -G sudo deployer
 adduser deployer sudo
 su deployer
 cd
-
 ```
+
+Open a Terminal window and type:
+
+`sudo visudo`
+
+In the bottom of the file, add the following line:
+
+`$USER ALL=(ALL) NOPASSWD: ALL`
+
+
 
 # Ruby with rvm
 
