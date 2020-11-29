@@ -10,7 +10,7 @@ sudo mate /Users/Mikhail/.ssh/known_hosts
 
 apt-get -y upgrade
 
-apt-get -y install curl git-core g++ mc htop memcached net-tools
+apt-get -y install curl git-core g++ mc htop memcached net-tools build-essential
 ```
 
 # remove apache
